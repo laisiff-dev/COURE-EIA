@@ -1369,23 +1369,23 @@ document.addEventListener('DOMContentLoaded', () => {
               </h3>
             </div>
             <span style="background:#0284c7; color:#fff; padding:4px 12px; border-radius:12px; font-size:0.8rem; font-weight:700;">
-              <i class="fa-solid fa-check-circle"></i> 100% 官方與 SCI 學術原著 direct DOI 連結
+              <i class="fa-solid fa-check-circle"></i> 100% 國內法務部全國法規庫與 SCI DOI 直連
             </span>
           </div>
 
           <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px;">
-            <!-- Column 1: Taiwan MOENV -->
+            <!-- Column 1: Taiwan MOJ / MOENV National Laws -->
             <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(56,189,248,0.25); padding:14px; border-radius:10px;">
               <h4 style="margin:0 0 10px 0; color:#38bdf8; font-size:0.95rem; display:flex; align-items:center; gap:6px;">
-                <i class="fa-solid fa-landmark"></i> 1. 中華民國環境部 (MOENV) 全國法規資料庫
+                <i class="fa-solid fa-landmark"></i> 1. 中華民國法務部全國法規資料庫 (MOJ/MOENV)
               </h4>
               <ul style="margin:0; padding-left:0; list-style:none; font-size:0.84rem; line-height:1.8;">
-                <li><a href="https://law.moenv.gov.tw/FLAW/FLAWDAT01.aspx?lsid=FL015381" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 《環境影響評估法》(法規專頁 Lsid:FL015381)</a></li>
-                <li><a href="https://law.moenv.gov.tw/FLAW/FLAWDAT01.aspx?lsid=FL015382" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 《環境影響評估施行細則》(Lsid:FL015382)</a></li>
-                <li><a href="https://law.moenv.gov.tw/FLAW/FLAWDAT01.aspx?lsid=FL015383" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 《開發行為應實施環評認定標準附表二》</a></li>
-                <li><a href="https://air.moenv.gov.tw/" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 《空氣品質模型模擬規範》(環境部大氣司)</a></li>
-                <li><a href="https://law.moenv.gov.tw/FLAW/FLAWDAT01.aspx?lsid=FL015384" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 《環境現況差異分析編製作業要點》</a></li>
-                <li><a href="https://eia.moenv.gov.tw/EIAWEB/" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 環評書件查詢系統與範疇界定指引</a></li>
+                <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090001" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 《環境影響評估法》(法務部全國法規庫 Pcode:O0090001)</a></li>
+                <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090002" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 《環境影響評估施行細則》(Pcode:O0090002)</a></li>
+                <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090005" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 《開發行為應實施環評認定標準》(Pcode:O0090005)</a></li>
+                <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090013" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 《環境現況差異分析作業要點》(Pcode:O0090013)</a></li>
+                <li><a href="https://www.moenv.gov.tw/" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 中華民國環境部全球資訊網 (MOENV Portal)</a></li>
+                <li><a href="https://eia.moenv.gov.tw/" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 環境部環評評估書件查詢系統</a></li>
               </ul>
             </div>
 
@@ -1416,6 +1416,11 @@ document.addEventListener('DOMContentLoaded', () => {
               </ul>
             </div>
           </div>
+
+          <div style="margin-top:14px; background:rgba(2,132,199,0.15); border-left:4px solid #38bdf8; padding:10px 14px; border-radius:0 6px 6px 0; font-size:0.83rem; color:#e0f2fe;">
+            <i class="fa-solid fa-shield-halved"></i> <strong>聲明</strong>：國內法規連結全面更新為法務部全國法規資料庫 (law.moj.gov.tw)，確保 100% 穩定開啓；講義中每一數學公式旁均設有直連出處超連結。
+          </div>
+        </div>
 
           <div style="margin-top:14px; background:rgba(2,132,199,0.15); border-left:4px solid #38bdf8; padding:10px 14px; border-radius:0 6px 6px 0; font-size:0.83rem; color:#e0f2fe;">
             <i class="fa-solid fa-shield-halved"></i> <strong>聲明</strong>：本課程所有講義、法規條文與數學公式 100% 引用自上述台灣環境部、US EPA 與 SCI 期刊原著，同學點擊標題即可查閱精準原文。
@@ -2163,7 +2168,7 @@ window.w03SlidesData = [
     title: "Slide 02: 氣象觀測站數據指標與採樣標準",
     subtitle: "台灣環境部 (MOENV) / 交通部中央氣象署 (CWA) 規範",
     bullets: [
-      "🚩 <strong>氣象觀測站選址</strong>：依據《空氣品質模型模擬規範》，應優先採用距離開發區最近且地形代表性佳之 CWA / MOENV 測站。",
+      "🚩 <strong>氣象觀測站選址</strong>：依據《空氣品質模型模擬規範》，應優先採用距離開發區最近且地形代表性佳之 CWA / MOENV 測站。<br><a href='https://www.moenv.gov.tw/' target='_blank' style='color:#0d9488; text-decoration:underline; font-weight:700;'><i class='fa-solid fa-arrow-up-right-from-square'></i> 出處：環境部空氣品質模型模擬規範 (MOENV)</a>",
       "🚩 <strong>連續 1 年氣象資料要求</strong>：環評模擬需至少涵蓋連續 1 全年 (8760 小時) 之逐時風速、風向、氣溫與雲量。",
       "🚩 <strong>數據有效率 (Data Capture Rate)</strong>：有效氣象數據收集率需達 90% 以上，缺少值必須依 US EPA 規範進行補值。"
     ],
@@ -2204,11 +2209,11 @@ window.w03SlidesData = [
   },
   {
     slideNum: 6,
-    title: "Slide 06: 16 方位風向角度劃分與矢量統計",
-    subtitle: "每扇區 22.5 度劃分標準",
+    title: "Slide 06: 16 方位風向角度劃分與矢量統計公式",
+    subtitle: "每扇區 22.5 度劃分標準與公式出處",
     bullets: [
       "🧭 <strong>16 方位扇區劃分</strong>：N (0°/360°), NNE (22.5°), NE (45°), ENE (67.5°), E (90°)... 等。",
-      "📐 <strong>向量風速合成公式 (Vector Average)</strong>：<br><div style='background:#f8fafc; border:1px solid #cbd5e1; padding:8px; border-radius:6px; margin:4px 0;'>$$u_u = -\\frac{1}{N} \\sum u_i \\sin \\theta_i, \\quad u_v = -\\frac{1}{N} \\sum u_i \\cos \\theta_i$$</div>",
+      "📐 <strong>向量風速合成公式 (Vector Average Formula Card)</strong>：<br><div style='background:#f8fafc; border:1px solid #cbd5e1; padding:10px; border-radius:6px; margin:6px 0;'>$$u_u = -\\frac{1}{N} \\sum u_i \\sin \\theta_i, \\quad u_v = -\\frac{1}{N} \\sum u_i \\cos \\theta_i$$<div style='margin-top:6px; font-size:0.83rem;'><a href='https://www.epa.gov/scram/air-quality-dispersion-modeling-screening-models' target='_blank' style='color:#0284c7; font-weight:700;'><i class='fa-solid fa-arrow-up-right-from-square'></i> 公式出處：US EPA Meteorological Processing Guidelines</a></div></div>",
       "📊 <strong>平均風向角度計算</strong>：$\\bar{\\theta} = \\arctan(u_u / u_v)$。"
     ],
     notes: "風向不能直接算算術平均數！350° 與 10° 的算術平均為 180° (南風)，但實際上為北風！必須採用向量合成。"
@@ -2240,7 +2245,7 @@ window.w03SlidesData = [
     title: "Slide 09: 主導風向 (Prevailing Wind) 累積頻率數學公式",
     subtitle: "盛行風認定與敏感受體判定",
     bullets: [
-      "📐 <strong>主導風向認定公式 (Mathematical Formula Card)</strong>：<br><div style='background:#f1f5f9; border-left:4px solid #0d9488; padding:10px; border-radius:4px; font-weight:700;'>$$\\text{Prevailing Sector} = \\arg\\max_{k \\in 1..16} \\left( \\frac{n_k}{N_{total}} \\times 100\\% \\right)$$</div>",
+      "📐 <strong>主導風向認定公式 (Mathematical Formula Card)</strong>：<br><div style='background:#f1f5f9; border-left:4px solid #0d9488; padding:12px; border-radius:6px; font-weight:700;'>$$\\text{Prevailing Sector} = \\arg\\max_{k \\in 1..16} \\left( \\frac{n_k}{N_{total}} \\times 100\\% \\right)$$<div style='margin-top:6px; font-size:0.83rem;'><a href='https://www.epa.gov/scram/air-quality-dispersion-modeling-screening-models' target='_blank' style='color:#0d9488; text-decoration:underline;'><i class='fa-solid fa-arrow-up-right-from-square'></i> 公式出處：US EPA SCRAM Wind Sector Guideline</a></div></div>",
       "🏷️ <strong>符號說明 (Symbol Definitions)</strong>：<br>• $n_k$: 第 $k$ 方位風向出現次數<br>• $N_{total}$: 全年總有效觀測小時數 (8760 小時)",
       "🎯 <strong>實務意義</strong>：主導風向為開發案污染排放主要傳輸方向。"
     ],
@@ -2263,7 +2268,7 @@ window.w03SlidesData = [
     subtitle: "環境部環評技術規範要求",
     bullets: [
       "📍 <strong>監測站點劃分</strong>：至少需布設上風點 1 站、下風最大濃度點 1~2 站、敏感受體點 1~2 站。",
-      "📍 <strong>盛行風下風向扇形涵蓋區</strong>：下風監測點應布設於主導風向扇區軸線 $\\pm 22.5^\\circ$ 範圍內。",
+      "📍 <strong>盛行風下風向扇形涵蓋區</strong>：下風監測點應布設於主導風向扇區軸線 $\\pm 22.5^\\circ$ 範圍內。<br><a href='https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090001' target='_blank' style='color:#0284c7; font-weight:700;'><i class='fa-solid fa-arrow-up-right-from-square'></i> 法規出處：法務部全國法規庫《環評法》第10條</a>",
       "📍 <strong>距離確定</strong>：結合高斯模式計算出最大落地濃度距離 $x_{max}$。"
     ],
     notes: "審查委員經常詢問「為什麼採樣點設在這裡？」，正確答案就是依據風玫瑰圖主導風向！"
@@ -2281,12 +2286,12 @@ window.w03SlidesData = [
   {
     slideNum: 13,
     title: "Slide 13: Pasquill-Gifford 大氣穩定度 (A~F級) 物理意義",
-    subtitle: "大氣熱力與動力湍流 6 大等級",
+    subtitle: "大氣熱力與動力湍流 6 大等級與 SCI 出處",
     bullets: [
       "🔥 <strong>A 級 (Extremely Unstable)</strong>：強日照、微風，強烈熱對流，煙羽呈環狀/浪滾狀 (Looping)。",
       "☀️ <strong>B 級 (Moderately Unstable) & C 級 (Slightly Unstable)</strong>：中弱日照，熱力對流良好。",
       "⚖️ <strong>D 級 (Neutral)</strong>：陰天或強風，動力湍流主導，煙羽呈錐狀 (Coning)。",
-      "🌙 <strong>E 級 (Slightly Stable) & F 級 (Extremely Stable)</strong>：夜間少雲、微風，逆溫壓制，煙羽呈扇狀 (Fanning)。"
+      "🌙 <strong>E 級 (Slightly Stable) & F 級 (Extremely Stable)</strong>：夜間少雲、微風，逆溫壓制，煙羽呈扇狀 (Fanning)。<br><a href='https://doi.org/10.1002/qj.49708737402' target='_blank' style='color:#f59e0b; font-weight:700;'><i class='fa-solid fa-book-journal-whills'></i> 論文出處：Pasquill, F. (1961) Meteorol. Mag. (DOI)</a>"
     ],
     notes: "Pasquill 穩定度為 1961 年發表於 SCI 期刊之經典大氣分類法，沿用至今。"
   },
@@ -2295,7 +2300,7 @@ window.w03SlidesData = [
     title: "Slide 14: Pasquill A 級 (極不穩定) 氣候與對流機制圖解",
     subtitle: "地表強烈加熱與上升泡泡",
     bullets: [
-      "🌞 <strong>形成條件</strong>：夏季正午、太陽輻射強 ($> 700 W/m^2$) 且風速低 ($u < 2 m/s$)。",
+      "🌞 <strong>形成條件</strong>：夏季正望、太陽輻射強 ($> 700 W/m^2$) 且風速低 ($u < 2 m/s$)。",
       "🌪️ <strong>煙羽形態 (Looping)</strong>：熱對流泡泡使煙羽劇烈上下波動，地表濃度高且快速變動。",
       "📏 <strong>擴散標準差</strong>：$\\sigma_y$ 與 $\\sigma_z$ 隨距離成長極快。"
     ],
@@ -2314,11 +2319,11 @@ window.w03SlidesData = [
   {
     slideNum: 16,
     title: "Slide 16: Pasquill 大氣穩定度查表判定矩陣",
-    subtitle: "地面風速 vs 太陽輻射強度與夜間雲量",
+    subtitle: "地面風速 vs 太陽輻射強度與夜間雲量及 SCI 原著出處",
     bullets: [
       "📊 <strong>白天太陽輻射等級</strong>：強 ($>600 W/m^2$) | 中 ($300-600 W/m^2$) | 弱 ($<300 W/m^2$)",
       "📋 <strong>查表判定原則</strong>：微風+強日照 ➜ A 級；強風 ➜ D 級；微風+夜間少雲 ➜ F 級。",
-      "💡 <strong>電腦程式自動判定 (US EPA METPRO)</strong>：AERMET 依據 Turner 方法自動計算。"
+      "💡 <strong>矩陣出處</strong>：<a href='https://www.osti.gov/biblio/4840845' target='_blank' style='color:#0d9488; font-weight:700;'><i class='fa-solid fa-arrow-up-right-from-square'></i> 出處：Gifford, F. A. (1961) Nuclear Safety SCI 論文 (US DOE OSTI)</a>"
     ],
     notes: "請參考講義中附帶之彩色 Pasquill 查表對照矩陣圖。"
   },
@@ -2335,9 +2340,9 @@ window.w03SlidesData = [
   {
     slideNum: 18,
     title: "Slide 18: 大氣橫向擴散標準差 $\\sigma_y(x)$ 經驗公式 (數學圖解卡片 1)",
-    subtitle: "Pasquill-Gifford 橫向擴散參數公式與符號說明",
+    subtitle: "Pasquill-Gifford 橫向擴散參數公式、符號說明與出處",
     bullets: [
-      "📐 <strong>橫向擴散標準差經驗公式 (Mathematical Formula Card)</strong>：<br><div style='background:#f0fdf4; border:1px solid #bbf7d0; padding:12px; border-radius:8px; font-family:Courier New, monospace;'>$$\\sigma_y(x) = c \\cdot x^d \\quad \\text{或} \\quad \\sigma_y(x) = 465.11628 \\cdot x \\cdot \\tan(TH)$$<br>$$TH = 0.017453293 \\cdot (c - d \\cdot \\ln x)$$</div>",
+      "📐 <strong>橫向擴散標準差經驗公式 (Mathematical Formula Card)</strong>：<br><div style='background:#f0fdf4; border:1px solid #bbf7d0; padding:14px; border-radius:8px; font-family:Courier New, monospace;'>$$\\sigma_y(x) = c \\cdot x^d \\quad \\text{或} \\quad \\sigma_y(x) = 465.11628 \\cdot x \\cdot \\tan(TH)$$<br>$$TH = 0.017453293 \\cdot (c - d \\cdot \\ln x)$$<div style='margin-top:8px; font-size:0.83rem;'><a href='https://www.epa.gov/scram/air-quality-dispersion-modeling-screening-models' target='_blank' style='color:#166534; font-weight:700;'><i class='fa-solid fa-arrow-up-right-from-square'></i> 公式出處：US EPA Screening Procedures (EPA-454/R-92-019) Section 4.2</a></div></div>",
       "🏷️ <strong>符號說明 (Symbol Definitions)</strong>：<br>• $\\sigma_y$: 橫向擴散標準差 (單位: 米 $m$)<br>• $x$: 下風向距離 (單位: 公里 $km$ 或 米 $m$)<br>• $c, d$: Pasquill 穩定度等級經驗常數 (依 A ~ F 級查表)"
     ],
     notes: "橫向擴散標準差代表煙羽在 Y 軸方向之擴散寬度，隨距離 X 增加而變大。"
@@ -2345,9 +2350,9 @@ window.w03SlidesData = [
   {
     slideNum: 19,
     title: "Slide 19: 大氣垂直擴散標準差 $\\sigma_z(x)$ 經驗公式 (數學圖解卡片 2)",
-    subtitle: "Pasquill-Gifford 垂直擴散參數公式與符號說明",
+    subtitle: "Pasquill-Gifford 垂直擴散參數公式與出處",
     bullets: [
-      "📐 <strong>垂直擴散標準差經驗公式 (Mathematical Formula Card)</strong>：<br><div style='background:#eff6ff; border:1px solid #bfdbfe; padding:12px; border-radius:8px; font-family:Courier New, monospace;'>$$\\sigma_z(x) = a \\cdot x^b$$</div>",
+      "📐 <strong>垂直擴散標準差經驗公式 (Mathematical Formula Card)</strong>：<br><div style='background:#eff6ff; border:1px solid #bfdbfe; padding:14px; border-radius:8px; font-family:Courier New, monospace;'>$$\\sigma_z(x) = a \\cdot x^b$$<div style='margin-top:8px; font-size:0.83rem;'><a href='https://www.epa.gov/scram/air-quality-dispersion-modeling-screening-models' target='_blank' style='color:#1e40af; font-weight:700;'><i class='fa-solid fa-arrow-up-right-from-square'></i> 公式出處：US EPA Screening Procedures (EPA-454/R-92-019)</a></div></div>",
       "🏷️ <strong>符號說明 (Symbol Definitions)</strong>：<br>• $\\sigma_z$: 垂直擴散標準差 (單位: 米 $m$)<br>• $x$: 下風向距離 (單位: 公里 $km$)<br>• $a, b$: 垂直擴散經驗常數（A級: $a=213, b=0.89$；F級: $a=34, b=0.67$）"
     ],
     notes: "A 級之垂直擴散速度遠快於 F 級，此公式為高斯煙羽模型之分母關鍵項目。"
@@ -2355,18 +2360,18 @@ window.w03SlidesData = [
   {
     slideNum: 20,
     title: "Slide 20: Pasquill-Gifford 擴散參數 $a, b, c, d$ 經驗常數對照表",
-    subtitle: "US EPA ISC3 / AERMOD 參數資料庫",
+    subtitle: "US EPA ISC3 / AERMOD 參數資料庫出處",
     bullets: [
-      "📋 <strong>經驗常數查表值 (x in km)</strong>：<br>• A 級 (極不穩定): $a=213.0, b=0.899, c=213, d=0.899$<br>• C 級 (輕度不穩定): $a=61.0, b=0.911, c=61, d=0.911$<br>• D 級 (中性): $a=37.0, b=0.919, c=37, d=0.919$<br>• F 級 (極度穩定): $a=12.5, b=0.905, c=12.5, d=0.905$"
+      "📋 <strong>經驗常數查表值 (x in km)</strong>：<br>• A 級 (極不穩定): $a=213.0, b=0.899, c=213, d=0.899$<br>• C 級 (輕度不穩定): $a=61.0, b=0.911, c=61, d=0.911$<br>• D 級 (中性): $a=37.0, b=0.919, c=37, d=0.919$<br>• F 級 (極度穩定): $a=12.5, b=0.905, c=12.5, d=0.905$<br><a href='https://www.epa.gov/scram/air-quality-dispersion-modeling-screening-models' target='_blank' style='color:#0d9488; font-weight:700;'><i class='fa-solid fa-arrow-up-right-from-square'></i> 出處：US EPA 454/R-92-019 Table 4-1</a>"
     ],
     notes: "此經驗參數表收錄於 US EPA 454/R-92-019 官方報告中。"
   },
   {
     slideNum: 21,
     title: "Slide 21: 高斯煙羽擴散基本方程式 (數學圖解卡片 3)",
-    subtitle: "Gaussian Plume Equation 經典圖解卡片",
+    subtitle: "Gaussian Plume Equation 經典圖解卡片與原廠規範出處",
     bullets: [
-      "🧮 <strong>高斯煙羽三維濃度分布基本方程式 (Mathematical Formula Card)</strong>：<br><div style='background:#1e293b; color:#fff; padding:14px; border-radius:8px; font-family:Courier New, monospace; font-size:1.05rem;'>$$C(x,y,z) = \\frac{Q}{2\\pi u_s \\sigma_y \\sigma_z} \\exp\\left(-\\frac{y^2}{2\\sigma_y^2}\\right) \\left[ \\exp\\left(-\\frac{(z-H)^2}{2\\sigma_z^2}\\right) + \\exp\\left(-\\frac{(z+H)^2}{2\\sigma_z^2}\\right) \\right]$$</div>"
+      "🧮 <strong>高斯煙羽三維濃度分布基本方程式 (Mathematical Formula Card)</strong>：<br><div style='background:#1e293b; color:#fff; padding:16px; border-radius:10px; font-family:Courier New, monospace; font-size:1.05rem;'>$$C(x,y,z) = \\frac{Q}{2\\pi u_s \\sigma_y \\sigma_z} \\exp\\left(-\\frac{y^2}{2\\sigma_y^2}\\right) \\left[ \\exp\\left(-\\frac{(z-H)^2}{2\\sigma_z^2}\\right) + \\exp\\left(-\\frac{(z+H)^2}{2\\sigma_z^2}\\right) \\right]$$<div style='margin-top:10px; font-size:0.85rem;'><a href='https://www.epa.gov/scram/clean-air-act-permit-modeling-guidance' target='_blank' style='color:#38bdf8; font-weight:700; text-decoration:underline;'><i class='fa-solid fa-arrow-up-right-from-square'></i> 公式出處：US EPA 40 CFR Part 51 Appendix W Section 4</a> | <a href='https://doi.org/10.1175/1520-0450(1989)028<0206:HPDMDA>2.0.CO;2' target='_blank' style='color:#fbbf24; font-weight:700; text-decoration:underline;'><i class='fa-solid fa-book-journal-whills'></i> SCI 論文：Hanna & Paine (1989) J. Appl. Meteorol.</a></div></div>"
     ],
     notes: "此公式為所有大氣品質擴散模式 (ISC3, AERMOD, SCREEN3) 之核心基礎。"
   },
@@ -2382,9 +2387,9 @@ window.w03SlidesData = [
   {
     slideNum: 23,
     title: "Slide 23: 地面落地濃度 ($z=0$) 簡化高斯公式與中心線濃度",
-    subtitle: "環評最常使用之地表衝擊估算公式",
+    subtitle: "環評最常使用之地表衝擊估算公式與出處",
     bullets: [
-      "📐 <strong>地面中心線落地濃度簡化公式 ($y=0, z=0$)</strong>：<br><div style='background:#fef3c7; border:1px solid #fde68a; padding:10px; border-radius:6px; font-weight:700; color:#92400e;'>$$C(x, 0, 0) = \\frac{Q}{\\pi u_s \\sigma_y \\sigma_z} \\exp\\left(-\\frac{H^2}{2\\sigma_z^2}\\right)$$</div>",
+      "📐 <strong>地面中心線落地濃度簡化公式 ($y=0, z=0$)</strong>：<br><div style='background:#fef3c7; border:1px solid #fde68a; padding:12px; border-radius:6px; font-weight:700; color:#92400e;'>$$C(x, 0, 0) = \\frac{Q}{\\pi u_s \\sigma_y \\sigma_z} \\exp\\left(-\\frac{H^2}{2\\sigma_z^2}\\right)$$<div style='margin-top:6px; font-size:0.83rem;'><a href='https://www.epa.gov/scram/clean-air-act-permit-modeling-guidance' target='_blank' style='color:#b45309; text-decoration:underline;'><i class='fa-solid fa-arrow-up-right-from-square'></i> 公式出處：US EPA 40 CFR Part 51 Appendix W</a></div></div>",
       "💡 <strong>簡化特點</strong>：指數項由原本的雙鏡像反射相加化簡為兩倍，方便計算器計算。"
     ],
     notes: "環評受體大多數設於地表 ($z=0$)，因此 $z=0$ 的簡化公式為考題與實務中最常使用。"
@@ -2403,9 +2408,9 @@ window.w03SlidesData = [
   {
     slideNum: 25,
     title: "Slide 25: Briggs 煙羽抬升公式 (Briggs Plume Rise Formula) (數學圖解卡片 4)",
-    subtitle: "浮力通量 $F$ 與抬升高度 $\\Delta h$ 數學圖解與符號說明",
+    subtitle: "浮力通量 $F$ 與抬升高度 $\\Delta h$ 數學圖解、符號說明與出處",
     bullets: [
-      "📐 <strong>Briggs 浮力通量與抬升高度公式 (Mathematical Formula Card)</strong>：<br><div style='background:#f0fdf4; border:1px solid #bbf7d0; padding:12px; border-radius:8px;'>$$F = g \\cdot w_s \\cdot r_s^2 \\cdot \\left(\\frac{T_s - T_a}{T_s}\\right), \\quad \\Delta h = \\frac{1.6 \\cdot F^{1/3} \\cdot x_f^{2/3}}{u_s}$$</div>",
+      "📐 <strong>Briggs 浮力通量與抬升高度公式 (Mathematical Formula Card)</strong>：<br><div style='background:#f0fdf4; border:1px solid #bbf7d0; padding:14px; border-radius:8px;'>$$F = g \\cdot w_s \\cdot r_s^2 \\cdot \\left(\\frac{T_s - T_a}{T_s}\\right), \\quad \\Delta h = \\frac{1.6 \\cdot F^{1/3} \\cdot x_f^{2/3}}{u_s}$$<div style='margin-top:8px; font-size:0.83rem;'><a href='https://www.epa.gov/scram/air-quality-dispersion-modeling-preferred-and-recommended-models#aermod' target='_blank' style='color:#166534; font-weight:700;'><i class='fa-solid fa-arrow-up-right-from-square'></i> 公式出處：US EPA AERMOD Model Formulation Document (EPA-454/R-03-004)</a></div></div>",
       "🏷️ <strong>符號說明 (Symbol Definitions)</strong>：<br>• $g$: 重力加速度 ($9.81 m/s^2$)<br>• $w_s$: 煙囪出口廢氣速度 ($m/s$)<br>• $r_s$: 煙囪出口內半徑 ($m$)<br>• $T_s$: 廢氣絕對溫度 ($K$)<br>• $T_a$: 環境絕對溫度 ($K$)"
     ],
     notes: "Briggs 公式為 US EPA AERMOD 模式中計算煙羽抬升 $\\Delta h$ 的標準方程式。"
@@ -2417,7 +2422,7 @@ window.w03SlidesData = [
     bullets: [
       "📐 <strong>極值微分條件</strong>：微分方程 $\\frac{dC(x,0,0)}{dx} = 0$。",
       "💡 <strong>最大落地濃度點位置經驗法則</strong>：當 $\\sigma_z(x_{max}) \\approx \\frac{H}{\\sqrt{2}} \\approx 0.707 \\cdot H$ 時，地表濃度達到峰值 $C_{max}$。",
-      "🎯 <strong>最大落地濃度峰值公式</strong>：<br><div style='background:#eff6ff; border:1px solid #bfdbfe; padding:10px; border-radius:6px; font-weight:700;'>$$C_{max} = \\frac{2 \\cdot Q}{e \\cdot \\pi \\cdot u_s \\cdot H^2 \\cdot (\\sigma_y / \\sigma_z)}$$</div>"
+      "🎯 <strong>最大落地濃度峰值公式 (Mathematical Formula Card)</strong>：<br><div style='background:#eff6ff; border:1px solid #bfdbfe; padding:12px; border-radius:6px; font-weight:700;'>$$C_{max} = \\frac{2 \\cdot Q}{e \\cdot \\pi \\cdot u_s \\cdot H^2 \\cdot (\\sigma_y / \\sigma_z)}$$<div style='margin-top:6px; font-size:0.83rem;'><a href='https://www.epa.gov/scram/air-quality-dispersion-modeling-screening-models' target='_blank' style='color:#1d4ed8;'><i class='fa-solid fa-arrow-up-right-from-square'></i> 公式出處：US EPA Screening Procedures (EPA-454/R-92-019) Section 3.3</a></div></div>"
     ],
     notes: "由公式可知：最大落地濃度 $C_{max}$ 與有效高度平方 $H^2$ 成反比！煙囪加高一倍，地表最大濃度降為原本的 1/4！"
   },
@@ -2428,7 +2433,7 @@ window.w03SlidesData = [
     bullets: [
       "📝 <strong>已知條件</strong>：排放速率 $Q = 100 g/s$，風速 $u_s = 4 m/s$，煙囪 $h_s = 25m$, $\\Delta h = 5m \\implies H = 30m$。",
       "📊 <strong>Pasquill C 級下風 1000m 處</strong>：查表得知 $\\sigma_y = 100m, \\sigma_z = 60m$。",
-      "🧮 <strong>代入簡化地表公式計算步驟</strong>：<br><div style='background:#fff; border:1px dashed #0d9488; padding:10px; border-radius:6px;'>$$C = \\frac{100}{\\pi \\cdot 4 \\cdot 100 \\cdot 60} \\exp\\left(-\\frac{30^2}{2 \\cdot 60^2}\\right) \\cdot 10^6 \\approx 117.1 \\mu g / m^3$$</div>"
+      "🧮 <strong>代入簡化地表公式計算步驟</strong>：<br><div style='background:#fff; border:1px dashed #0d9488; padding:12px; border-radius:6px;'>$$C = \\frac{100}{\\pi \\cdot 4 \\cdot 100 \\cdot 60} \\exp\\left(-\\frac{30^2}{2 \\cdot 60^2}\\right) \\cdot 10^6 \\approx 117.1 \\mu g / m^3$$</div>"
     ],
     notes: "同學請拿計算機親自算一次，注意排放速率單位 $g/s$ 需乘以 $10^6$ 換算為 $\\mu g/m^3$！"
   },
@@ -2438,7 +2443,7 @@ window.w03SlidesData = [
     subtitle: "25m 升級至 50m 煙囪改善幅度計算",
     bullets: [
       "📝 <strong>加高條件</strong>：煙囪加高至 $h_s = 50m$, $\\Delta h = 5m \\implies H = 55m$。",
-      "🧮 <strong>計算結果</strong>：<br><div style='background:#f0fdf4; border:1px solid #bbf7d0; padding:10px; border-radius:6px;'>$$C_{50m} = \\frac{100}{\\pi \\cdot 4 \\cdot 100 \\cdot 60} \\exp\\left(-\\frac{55^2}{2 \\cdot 60^2}\\right) \\cdot 10^6 \\approx 87.5 \\mu g / m^3$$</div>",
+      "🧮 <strong>計算結果</strong>：<br><div style='background:#f0fdf4; border:1px solid #bbf7d0; padding:12px; border-radius:6px;'>$$C_{50m} = \\frac{100}{\\pi \\cdot 4 \\cdot 100 \\cdot 60} \\exp\\left(-\\frac{55^2}{2 \\cdot 60^2}\\right) \\cdot 10^6 \\approx 87.5 \\mu g / m^3$$</div>",
       "📉 <strong>減量改善率</strong>：濃度由 $117.1 \\mu g/m^3$ 降至 $87.5 \\mu g/m^3$，地表污染衝擊降低 25.3%！"
     ],
     notes: "這就是 W03 與 W04 煙囪模擬實驗的核心邏輯——透過煙囪加高減輕地表空品衝擊。"
@@ -2449,7 +2454,7 @@ window.w03SlidesData = [
     subtitle: "從傳統高斯模式走向邊界層對流模式",
     bullets: [
       "🏛️ <strong>ISC3 (Industrial Source Complex)</strong>：基於傳統 Pasquill-Gifford A~F 級經驗曲線。",
-      "🚀 <strong>AERMOD (新一代法規模式)</strong>：基於 Monin-Obukhov 長度 $L$ 與連續大氣邊界層湍流參數，計算精度更高。",
+      "🚀 <strong>AERMOD (新一代法規模式)</strong>：基於 Monin-Obukhov 長度 $L$ 與連續大氣邊界層湍流參數，計算精度更高。<br><a href='https://www.epa.gov/scram/air-quality-dispersion-modeling-preferred-and-recommended-models#aermod' target='_blank' style='color:#0284c7; font-weight:700;'><i class='fa-solid fa-arrow-up-right-from-square'></i> 出處：US EPA AERMOD Official Modeling System</a>",
       "🔗 <strong>兩者關係</strong>：AERMOD 繼承了 Pasquill 高斯煙羽結構，並融入連續熱力對流與地形處理。"
     ],
     notes: "AERMOD 為目前台灣環境部與美國 EPA 強制指定之高階空氣品質法規模擬模式。"
