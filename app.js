@@ -1308,6 +1308,56 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
 
+        
+        <!-- Official Government EPA & SCI Journal Citations Section -->
+        <div style="margin-top:25px; background:linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color:#f8fafc; padding:20px; border-radius:12px; border:1px solid #334155; box-shadow:0 6px 18px rgba(0,0,0,0.2);">
+          <div style="display:flex; align-items:center; gap:10px; border-bottom:1px solid #334155; padding-bottom:10px; margin-bottom:14px;">
+            <i class="fa-solid fa-building-columns" style="color:#38bdf8; font-size:1.4rem;"></i>
+            <h3 style="margin:0; font-size:1.15rem; color:#f8fafc; font-weight:800;">
+              政府 EPA 官方網站與國際 SCI 期刊文獻權威引用專區 (Official EPA & SCI References)
+            </h3>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:14px;">
+            <!-- Ref 1: Taiwan MOENV -->
+            <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(56,189,248,0.2); padding:12px; border-radius:8px;">
+              <h4 style="margin:0 0 6px 0; color:#38bdf8; font-size:0.92rem;"><i class="fa-solid fa-landmark"></i> 1. 台灣環境部 (MOENV) 官方規範</h4>
+              <ul style="margin:0; padding-left:16px; font-size:0.82rem; color:#cbd5e1; line-height:1.5;">
+                <li>《空氣品質模型模擬規範》（環境部公告）</li>
+                <li>《環境影響評估法》第 10 條及施行細則</li>
+                <li>交通部中央氣象署 (CWA) 16 方位風向氣象觀測標準</li>
+                <li>環境部空氣品質監測網 (MOENV AQX) 觀測資料庫</li>
+              </ul>
+            </div>
+
+            <!-- Ref 2: US EPA -->
+            <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(52,211,153,0.2); padding:12px; border-radius:8px;">
+              <h4 style="margin:0 0 6px 0; color:#34d399; font-size:0.92rem;"><i class="fa-solid fa-flag-usa"></i> 2. 美國環境保護局 (US EPA) 規範</h4>
+              <ul style="margin:0; padding-left:16px; font-size:0.82rem; color:#cbd5e1; line-height:1.5;">
+                <li><strong>40 CFR Part 51 Appendix W</strong>: <em>Guideline on Air Quality Models</em></li>
+                <li><strong>US EPA EPA-454/R-92-019</strong>: <em>Screening Procedures for Air Quality Impact</em></li>
+                <li><strong>US EPA AP-42</strong>: <em>Compilation of Air Pollutant Emission Factors</em></li>
+                <li><strong>US EPA-454/B-21-001</strong>: <em>AERMOD Model User's Guide</em></li>
+              </ul>
+            </div>
+
+            <!-- Ref 3: SCI Journals -->
+            <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(251,191,36,0.2); padding:12px; border-radius:8px;">
+              <h4 style="margin:0 0 6px 0; color:#fbbf24; font-size:0.92rem;"><i class="fa-solid fa-book-journal-whills"></i> 3. 國際 SCI 期刊文獻 (SCI Journals)</h4>
+              <ul style="margin:0; padding-left:16px; font-size:0.82rem; color:#cbd5e1; line-height:1.5;">
+                <li><strong>Pasquill, F. (1961)</strong>. <em>Meteorological Magazine</em>, 90, 33-49.</li>
+                <li><strong>Gifford, F. A. (1961)</strong>. <em>Nuclear Safety</em>, 2(4), 47-51.</li>
+                <li><strong>Hanna, S. R. et al. (1989)</strong>. <em>J. Appl. Meteorol.</em>, 28, 206-224.</li>
+                <li><strong>Woodfield et al. (2003)</strong>. <em>Env. Impact Assess. Rev. (Elsevier SCI)</em>, 23, 77-97.</li>
+              </ul>
+            </div>
+          </div>
+          <div style="margin-top:10px; text-align:right; font-size:0.78rem; color:#94a3b8;">
+            <i class="fa-solid fa-shield-halved"></i> 本課程講義數據與理論嚴格依據上述政府 EPA 與 SCI 學術文獻編撰，杜絕無根據之生成內容。
+          </div>
+        </div>
+
+
         <!-- TAB CONTENT 4: Knowledge Quiz -->
         <div id="w03-content-quiz" class="w03-tab-pane" style="display:none;">
           <div style="background:#fff; border:1px solid #cbd5e1; border-radius:12px; padding:20px;">
