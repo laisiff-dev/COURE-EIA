@@ -361,18 +361,32 @@ document.addEventListener('DOMContentLoaded', () => {
           slideNum: window.currentSlideIdx + 1,
           title: `簡報頁次 ${window.currentSlideIdx + 1}`,
           category: isW2 ? 'W02 法規解碼' : 'W01 基礎講義',
-          content: ['講義內容載入中...']
+          bullets: ['講義內容載入中...'],
+          notes: ''
         };
+
+        const bulletsList = slide.bullets || slide.content || [];
+        const notesStr = slide.notes || slide.note || '';
+        const sectionBadge = slide.section || slide.category || (isW2 ? 'W02 法規解碼' : 'W01 基礎講義');
 
         return `
           <div id="slideModalContainer" style="background:#0f172a; color:#f8fafc; border-radius:12px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
             <!-- Slide Header Bar -->
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:12px; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
-              <div>
-                <span style="background:#0284c7; color:#fff; padding:3px 10px; border-radius:12px; font-size:0.8rem; font-weight:700;">${slide.category || '簡報講義'}</span>
-                <strong style="font-size:1.05rem; color:#38bdf8; margin-left:8px;">${weekTitleStr}</strong>
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:12px; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                <span style="background:#0284c7; color:#fff; padding:4px 12px; border-radius:12px; font-size:0.82rem; font-weight:700;">${sectionBadge}</span>
+                <strong style="font-size:1.05rem; color:#38bdf8;">${weekTitleStr}</strong>
               </div>
-              <div style="display:flex; align-items:center; gap:10px;">
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <!-- Jump to Slide Selector -->
+                <select onchange="window.jumpToSlide(this.value)" style="background:#1e293b; color:#f59e0b; border:1px solid #0284c7; padding:4px 10px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer;">
+                  ${slides.map((s, idx) => `
+                    <option value="${idx}" ${idx === window.currentSlideIdx ? 'selected' : ''}>
+                      頁次 ${(s.slideNum || idx+1) < 10 ? '0'+(s.slideNum || idx+1) : (s.slideNum || idx+1)}: ${(s.title || '').replace(/<[^>]*>/g, '').substring(0, 24)}...
+                    </option>
+                  `).join('')}
+                </select>
+
                 <span style="font-size:0.9rem; font-weight:700; color:#94a3b8;">
                   頁次：<span id="slideCounter" style="color:#f59e0b; font-size:1.1rem;">${window.currentSlideIdx + 1}</span> / ${totalCount}
                 </span>
@@ -383,35 +397,38 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <!-- Slide Content Card Area -->
-            <div id="slideMainCard" style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:24px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; transition:all 0.2s;">
+            <div id="slideMainCard" style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:24px; min-height:360px; max-height:550px; overflow-y:auto; display:flex; flex-direction:column; justify-content:space-between; transition:all 0.2s;">
               <div>
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-                  <h3 id="slideTitle" style="font-size:1.25rem; color:#f1f5f9; font-weight:700; margin:0;">
-                    ${slide.title}
-                  </h3>
-                  <span style="font-size:0.8rem; background:#334155; color:#94a3b8; padding:2px 8px; border-radius:4px;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+                  <div>
+                    <h3 id="slideTitle" style="font-size:1.25rem; color:#f1f5f9; font-weight:700; margin:0 0 4px 0;">
+                      ${slide.title}
+                    </h3>
+                    ${slide.subtitle ? `<div style="font-size:0.88rem; color:#38bdf8; font-weight:600;">${slide.subtitle}</div>` : ''}
+                  </div>
+                  <span style="font-size:0.8rem; background:#0284c7; color:#fff; padding:3px 10px; border-radius:12px; font-weight:700;">
                     SLIDE #${slide.slideNum || (window.currentSlideIdx + 1)}
                   </span>
                 </div>
 
-                <div id="slideContentBody" style="font-size:0.98rem; line-height:1.75; color:#cbd5e1;">
-                  ${Array.isArray(slide.content) ? `
-                    <ul style="padding-left:20px; margin:0;">
-                      ${slide.content.map(pt => `<li style="margin-bottom:8px;">${pt}</li>`).join('')}
+                <div id="slideContentBody" style="font-size:0.96rem; line-height:1.8; color:#cbd5e1; margin-top:12px;">
+                  ${Array.isArray(bulletsList) && bulletsList.length > 0 ? `
+                    <ul style="padding-left:22px; margin:0;">
+                      ${bulletsList.map(pt => `<li style="margin-bottom:10px;">${pt}</li>`).join('')}
                     </ul>
-                  ` : `<div>${slide.content}</div>`}
+                  ` : `<div>${typeof bulletsList === 'string' ? bulletsList : '無詳細內文'}</div>`}
                 </div>
               </div>
 
-              ${slide.note ? `
-                <div style="margin-top:16px; background:rgba(2,132,199,0.15); border-left:4px solid #0284c7; padding:10px 14px; border-radius:4px; font-size:0.88rem; color:#e0f2fe;">
-                  <i class="fa-solid fa-lightbulb" style="color:#f59e0b; margin-right:6px;"></i> <strong>授課重點說明：</strong> ${slide.note}
+              ${notesStr ? `
+                <div style="margin-top:18px; background:rgba(2,132,199,0.15); border-left:4px solid #0284c7; padding:12px 16px; border-radius:6px; font-size:0.88rem; color:#e0f2fe; line-height:1.6;">
+                  <i class="fa-solid fa-lightbulb" style="color:#f59e0b; margin-right:6px;"></i> <strong>授課重點與備忘錄說明：</strong> ${notesStr}
                 </div>
               ` : ''}
             </div>
 
             <!-- Slide Control Bar -->
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:18px; pt:12px; border-top:1px dashed #334155;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:18px; padding-top:12px; border-top:1px dashed #334155;">
               <button id="prevSlideBtn" onclick="window.navSlide(-1)" ${window.currentSlideIdx === 0 ? 'disabled style="opacity:0.4; cursor:not-allowed; background:#334155; color:#94a3b8; border:none; padding:8px 18px; border-radius:6px;"' : 'style="background:#0284c7; color:#fff; border:none; padding:8px 18px; border-radius:6px; font-weight:700; cursor:pointer;"'}>
                 <i class="fa-solid fa-chevron-left"></i> 上一頁 (Left)
               </button>
@@ -427,6 +444,14 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         `;
       }
+
+      window.jumpToSlide = function(idxStr) {
+        const idx = parseInt(idxStr, 10);
+        if (!isNaN(idx) && idx >= 0 && idx < totalCount) {
+          window.currentSlideIdx = idx;
+          modalBody.innerHTML = renderInteractiveSlideViewer();
+        }
+      };
 
       window.navSlide = function(dir) {
         window.currentSlideIdx += dir;
@@ -447,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       contentHtml = renderInteractiveSlideViewer();
-    } else if (modalType === 'instructor_profile' || cardId === 'w01-c0') {
+    } } else if (modalType === 'instructor_profile' || cardId === 'w01-c0') {
       const prof = window.EIA_COURSE_DATA.instructorProfile;
       contentHtml = `
         <div class="instructor-profile-card">
