@@ -1129,7 +1129,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:12px; padding:20px; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:#1e293b; color:#fff; padding:12px 18px; border-radius:8px;">
               <div>
-                <span id="w03-slide-idx-badge" style="background:#0d9488; padding:2px 8px; border-radius:4px; font-weight:700; font-size:0.85rem;">Slide 1 / 10</span>
+                <span id="w03-slide-idx-badge" style="background:#0d9488; padding:2px 8px; border-radius:4px; font-weight:700; font-size:0.85rem;">Slide 1 / 30</span>
                 <span style="margin-left:10px; font-weight:700; font-size:0.95rem; color:#94a3b8;">W03 大氣擴散與氣象背景數據理論 (2小時簡報)</span>
               </div>
               <div style="display:flex; gap:8px;">
@@ -1585,7 +1585,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
       `;
-    } else if (modalType === 'lecture' || cardId === 'w01-c2' || cardId === 'w03-c1' || cardId === 'w05-c1' || cardId === 'w07-c1' || cardId === 'w10-c1' || cardId === 'w11-c1' || cardId === 'w15-c1') {
+    } else if (modalType === 'lecture' || cardId === 'w01-c2' || cardId === 'w05-c1' || cardId === 'w07-c1' || cardId === 'w10-c1' || cardId === 'w11-c1' || cardId === 'w15-c1') {
       contentHtml = `
         <h2 class="modal-title" style="color:#0b3c5d;"><i class="fa-solid fa-scale-balanced" style="color:#0284c7;"></i> 環評法規體系總覽與官方網路連結點</h2>
         <p class="modal-subtitle">輔英科技大學 《環境影響評估》課程授課講義與法規檢索門戶 (授課教師：賴文亮 教授)</p>
@@ -1843,6 +1843,14 @@ document.addEventListener('DOMContentLoaded', () => {
       modalBody.innerHTML = contentHtml;
       modalBackdrop.classList.add('active');
       document.body.style.overflow = 'hidden';
+
+      if (modalType === 'w03_guide' || cardId === 'w03-c1' || modalType === 'w03_lecture') {
+        setTimeout(function() {
+          if (typeof window.renderW03Slide === 'function') {
+            window.renderW03Slide(0);
+          }
+        }, 50);
+      }
     }
   }
 
