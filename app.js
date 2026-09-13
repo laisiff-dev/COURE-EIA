@@ -555,17 +555,100 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     } else if (modalType === 'guide') {
       contentHtml = `
-        <h2 class="modal-title"><i class="fa-solid fa-compass"></i> W01 課程修課指南與學期地圖</h2>
-        <p class="modal-subtitle">輔英科技大學 環境工程與科學系 賴文亮教授 (星期三 3-4 節)</p>
-        <div style="font-size: 0.95rem; line-height: 1.7; color: #334155;">
-          <p><strong>一、課程定位與核心目標：</strong></p>
-          <p>本課程旨在引導學生掌握環境影響評估（EIA）核心法理、空氣與水品質衝擊模式，並引入生成式 AI（NotebookLM, ChatGPT）輔助非結構化大檔拆解與決策分析。</p>
-          <br>
-          <p><strong>二、60/40 戰略評量機制：</strong></p>
-          <ul style="padding-left: 20px;">
-            <li><strong>60% 平時開放區：</strong>開放大膽使用 AI 工具，但需完整保留 Prompt 提問日誌與人為校正紀錄。</li>
-            <li><strong>40% 核心禁區：</strong>期末實體閉卷筆試，嚴格檢驗專業法理與工程原則是否真正內化。</li>
-          </ul>
+        <div style="background: linear-gradient(135deg, #0b3c5d 0%, #0284c7 100%); color:#fff; padding:20px; border-radius:12px; margin-bottom:20px; box-shadow:0 6px 18px rgba(2,132,199,0.25);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div>
+              <span style="background:rgba(255,255,255,0.2); color:#fff; padding:3px 10px; border-radius:12px; font-size:0.8rem; font-weight:700;">
+                <i class="fa-solid fa-volume-high"></i> AI 語音導讀專區
+              </span>
+              <h2 style="font-size:1.35rem; margin:8px 0 4px 0; color:#fff; font-weight:800;">
+                <i class="fa-solid fa-compass"></i> W01 課程修課指南 (賴文亮教授 語音親錄導讀)
+              </h2>
+              <p style="font-size:0.88rem; color:#e0f2fe; margin:0;">
+                輔英科技大學 環境工程與科學系《環境影響評估》 (星期三 第3-4節)
+              </p>
+            </div>
+            <span id="speechStatusTag" style="background:#f59e0b; color:#78350f; font-weight:800; padding:6px 14px; border-radius:20px; font-size:0.88rem;">
+              ▶️ 點擊下方播放語音導讀
+            </span>
+          </div>
+
+          <!-- Speech Control Panel -->
+          <div style="background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25); border-radius:10px; padding:14px; margin-top:16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <button id="btnPlaySpeech" onclick="window.playGuideSpeech()" style="background:#10b981; color:#fff; border:none; padding:8px 18px; border-radius:6px; font-weight:700; font-size:0.92rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 2px 8px rgba(16,185,129,0.3);">
+                <i class="fa-solid fa-play"></i> 播放語音導讀
+              </button>
+              <button id="btnPauseSpeech" onclick="window.pauseGuideSpeech()" style="background:#f59e0b; color:#fff; border:none; padding:8px 18px; border-radius:6px; font-weight:700; font-size:0.92rem; cursor:pointer; display:none; align-items:center; gap:6px;">
+                <i class="fa-solid fa-pause"></i> 暫停 / 繼續
+              </button>
+              <button id="btnStopSpeech" onclick="window.stopGuideSpeech()" style="background:#ef4444; color:#fff; border:none; padding:8px 18px; border-radius:6px; font-weight:700; font-size:0.92rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+                <i class="fa-solid fa-square"></i> 停止
+              </button>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; color:#f0f9ff;">
+              <span><i class="fa-solid fa-gauge-high"></i> 語速調整：</span>
+              <button onclick="window.setGuideSpeechRate(0.85)" style="background:rgba(255,255,255,0.2); color:#fff; border:none; padding:3px 8px; border-radius:4px; font-weight:600; cursor:pointer;">0.85x 慢速</button>
+              <button onclick="window.setGuideSpeechRate(1.0)" style="background:#38bdf8; color:#0f172a; border:none; padding:3px 8px; border-radius:4px; font-weight:700; cursor:pointer;">1.0x 標準</button>
+              <button onclick="window.setGuideSpeechRate(1.2)" style="background:rgba(255,255,255,0.2); color:#fff; border:none; padding:3px 8px; border-radius:4px; font-weight:600; cursor:pointer;">1.2x 快速</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full Audio Narration Text Script -->
+        <div id="guideTextScript" style="font-size: 0.95rem; line-height: 1.8; color: #334155; background:#f8fafc; border:1px solid #cbd5e1; border-radius:10px; padding:20px;">
+          
+          <div class="speech-section" style="margin-bottom:16px; padding-bottom:12px; border-bottom:1px dashed #e2e8f0;">
+            <h4 style="color:#0b3c5d; font-size:1.05rem; margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+              <span style="background:#0284c7; color:#fff; width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.8rem;">1</span>
+              歡迎詞與授課教師簡介
+            </h4>
+            <p style="margin:0; color:#475569;">
+              同學你好！歡迎來到輔英科技大學環境工程與科學系《環境影響評估》課程，我是授課教師賴文亮教授。本課程上課時段為每星期三第 3 至 4 節（10 點 10 分至 12 點）。
+            </p>
+          </div>
+
+          <div class="speech-section" style="margin-bottom:16px; padding-bottom:12px; border-bottom:1px dashed #e2e8f0;">
+            <h4 style="color:#0b3c5d; font-size:1.05rem; margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+              <span style="background:#0284c7; color:#fff; width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.8rem;">2</span>
+              課程定位與核心目標
+            </h4>
+            <p style="margin:0; color:#475569;">
+              本課程旨在引導大家全面掌握我國《環境影響評估法》母法、施行細則與開發行為認定標準。同時，我們特別導入最新的生成式 AI 工具，包含 NotebookLM 與 ChatGPT，協助同學秒級拆解非結構化的龐大環評說明書，快速完成評估範疇界定與減輕對策設計。
+            </p>
+          </div>
+
+          <div class="speech-section" style="margin-bottom:16px; padding-bottom:12px; border-bottom:1px dashed #e2e8f0;">
+            <h4 style="color:#0b3c5d; font-size:1.05rem; margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+              <span style="background:#0284c7; color:#fff; width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.8rem;">3</span>
+              18 週學期地圖規劃
+            </h4>
+            <p style="margin:0; color:#475569;">
+              全學期分為兩大主軸：前九週聚焦一階環評與四大部分環境影響評估（包含物理化學、生態、水質廢棄物及空氣品質 AERMOD 模擬與期中報告）；後九週涵蓋二階段環評範疇界定、EMP 減輕對策 AI 生成、ISO 14064 碳足跡整合與第 18 週期末成果發表。
+            </p>
+          </div>
+
+          <div class="speech-section" style="margin-bottom:16px; padding-bottom:12px; border-bottom:1px dashed #e2e8f0;">
+            <h4 style="color:#0b3c5d; font-size:1.05rem; margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+              <span style="background:#0284c7; color:#fff; width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.8rem;">4</span>
+              60/40 戰略評量機制
+            </h4>
+            <p style="margin:0; color:#475569;">
+              本課程採取獨特的 60/40 戰略評量：60% 為平時開放區，鼓勵大膽使用 AI 工具輔助專案分析，但需完整繳交 Prompt 提問日誌與人為校正紀錄；40% 為核心禁區，為期末實體閉卷筆試，嚴格檢驗大家的專業法理與工程基礎原則。
+            </p>
+          </div>
+
+          <div class="speech-section">
+            <h4 style="color:#0b3c5d; font-size:1.05rem; margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+              <span style="background:#0284c7; color:#fff; width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.8rem;">5</span>
+              期末專案需求與總結
+            </h4>
+            <p style="margin:0; color:#475569;">
+              期末專案將以實務開發案例進行小組演練，同學需產出完整的環境影響說明書大綱，並於第 18 週進行分組成果發表。請同學們先仔細閱讀本指南，預祝大家學期學習順利！
+            </p>
+          </div>
+
         </div>
       `;
     } else if (modalType.startsWith('ai_module_')) {
@@ -597,7 +680,96 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Modal Close Listeners
   if (modalCloseBtn && modalBackdrop) {
-    modalCloseBtn.addEventListener('click', () => modalBackdrop.classList.remove('active'));
+    
+  // Web Speech API Synthesis Engine for W01 Course Guide
+  window.guideSpeechRate = 1.0;
+  window.guideUtterance = null;
+
+  window.setGuideSpeechRate = function(rate) {
+    window.guideSpeechRate = rate;
+    if (window.speechSynthesis && window.speechSynthesis.speaking) {
+      window.playGuideSpeech(); // Restart with new rate
+    }
+  };
+
+  window.playGuideSpeech = function() {
+    if (!('speechSynthesis' in window)) {
+      alert('您的瀏覽器不支援語音合成功能，建議使用 Chrome 或 Edge 瀏覽器！');
+      return;
+    }
+
+    window.speechSynthesis.cancel(); // Stop any active speech
+
+    const scriptContainer = document.getElementById('guideTextScript');
+    if (!scriptContainer) return;
+
+    const fullText = scriptContainer.innerText;
+    const utterance = new SpeechSynthesisUtterance(fullText);
+
+    utterance.lang = 'zh-TW';
+    utterance.rate = window.guideSpeechRate || 1.0;
+    utterance.pitch = 1.0;
+
+    utterance.onstart = function() {
+      const tag = document.getElementById('speechStatusTag');
+      const btnPlay = document.getElementById('btnPlaySpeech');
+      const btnPause = document.getElementById('btnPauseSpeech');
+      if (tag) tag.innerHTML = '🔊 語音導讀進行中...';
+      if (tag) tag.style.background = '#10b981';
+      if (tag) tag.style.color = '#fff';
+      if (btnPlay) btnPlay.style.display = 'none';
+      if (btnPause) btnPause.style.display = 'inline-flex';
+    };
+
+    utterance.onend = function() {
+      const tag = document.getElementById('speechStatusTag');
+      const btnPlay = document.getElementById('btnPlaySpeech');
+      const btnPause = document.getElementById('btnPauseSpeech');
+      if (tag) tag.innerHTML = '✓ 語音導讀已播放完成';
+      if (tag) tag.style.background = '#0284c7';
+      if (tag) tag.style.color = '#fff';
+      if (btnPlay) btnPlay.style.display = 'inline-flex';
+      if (btnPause) btnPause.style.display = 'none';
+    };
+
+    utterance.onerror = function(err) {
+      console.warn('Speech synthesis error:', err);
+    };
+
+    window.guideUtterance = utterance;
+    window.speechSynthesis.speak(utterance);
+  };
+
+  window.pauseGuideSpeech = function() {
+    if (!window.speechSynthesis) return;
+
+    const tag = document.getElementById('speechStatusTag');
+    if (window.speechSynthesis.speaking) {
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+        if (tag) tag.innerHTML = '🔊 語音導讀進行中...';
+      } else {
+        window.speechSynthesis.pause();
+        if (tag) tag.innerHTML = '⏸️ 語音導讀已暫停';
+      }
+    }
+  };
+
+  window.stopGuideSpeech = function() {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+
+    const tag = document.getElementById('speechStatusTag');
+    const btnPlay = document.getElementById('btnPlaySpeech');
+    const btnPause = document.getElementById('btnPauseSpeech');
+    if (tag) tag.innerHTML = '▶️ 點擊播放語音導讀';
+    if (tag) tag.style.background = '#f59e0b';
+    if (tag) tag.style.color = '#78350f';
+    if (btnPlay) btnPlay.style.display = 'inline-flex';
+    if (btnPause) btnPause.style.display = 'none';
+  };
+
+  modalCloseBtn.addEventListener('click', () => modalBackdrop.classList.remove('active'));
     modalBackdrop.addEventListener('click', (e) => {
       if (e.target === modalBackdrop) modalBackdrop.classList.remove('active');
     });
