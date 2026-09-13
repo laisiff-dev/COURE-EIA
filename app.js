@@ -1086,8 +1086,8 @@ document.addEventListener('DOMContentLoaded', () => {
               <h2 style="font-size:1.35rem; margin:8px 0 4px 0; color:#fff; font-weight:800;">
                 <i class="fa-solid fa-scale-balanced"></i> W02 環評法與施行細則解碼（含語音導讀）
               </h2>
-              <p style="font-size:0.88rem; color:#e0f2fe; margin:0;">
-                輔英科技大學 《環境影響評估》 (授課教師：賴文亮 教授) ‧ 第二週法規講義與認定標準專題
+              <p style="font-size:0.92rem; color:#fef3c7; font-weight:700; margin:4px 0 0 0;">
+                法規講義：解析一階與二階環評程序、認定標準附表二、環現差與範疇界定指引法章體系。
               </p>
             </div>
             <span id="w02SpeechStatusTag" style="background:#f59e0b; color:#78350f; font-weight:800; padding:6px 14px; border-radius:20px; font-size:0.88rem;">
@@ -1127,54 +1127,54 @@ document.addEventListener('DOMContentLoaded', () => {
             🎙️ 賴文亮教授親錄 W02 授課導讀逐字稿：
           </h4>
           <p style="margin-bottom:10px;">
-            各位同學們好，我是賴文亮教授。歡迎來到第二週《我國環境影響評估法規體系與認定標準解析》。本週我們的核心學習目標，是幫助大家建立完整且清晰的環評法章體系與實務防線認知。
+            各位同學們好，我是賴文亮教授。歡迎來到第二週《我國環境影響評估法規體系與認定標準解析》。本週講義我們將深入解析一階與二階環評程序、認定標準附表二、環現差與範疇界定指引法章體系。
           </p>
           <p style="margin-bottom:10px;">
-            我國《環境影響評估法》自民國83年公布施行以來，即確立了『預防重於治療』的核心法理。依據第1條規定，環評目的在於預防及減輕開發行為對環境造成之不良影響。其中最關鍵的條文為第14條的『環評否決權』——若環評審查結論未獲通過，目的事業主管機關即不得許可該開發行為，這是環保法規中最具法律強制力的防線。
+            我國《環境影響評估法》自民國83年公布施行以來，即確立了『預防重於治療』的核心法理。依據第1條規定，環評目的在於預防及減輕開發行為對環境造成之不良影響。其中最關鍵的條文為第14條的『環評否決權』——若環評審查結論未獲通過，目的事業主管機關即不得許可該開發行為。
           </p>
           <p style="margin-bottom:0;">
-            本週講義我們將深入剖析第一階段環境影響說明書 (EIR) 與第二階段評估報告書 (EIS) 的程序差異，並配合《開發行為應實施環境影響評估細目及範圍認定標準》附表一與附表二，學習如何計算工業區、高科技園區與水資源工程的量化門檻。請大家對照簡報與本講義指引切實研讀！
+            本週講義我們深入剖析第一階段環境影響說明書 (EIR) 與第二階段評估報告書 (EIS) 的程序差異，並配合《開發行為應實施環境影響評估細目及範圍認定標準》附表一與認定標準附表二，學習如何計算工業區、高科技園區與水資源工程的量化門檻、環現差與範疇界定指引。請大家切實對照學習！
           </p>
         </div>
 
         <!-- Structured Lecture Notes Body (規劃原則上課講義) -->
         <div style="background:#fff; border:1px solid #cbd5e1; border-radius:10px; padding:20px; margin-bottom:20px;">
           <h3 style="font-size:1.15rem; color:#0b3c5d; font-weight:800; margin:0 0 16px 0; border-bottom:2px solid #0284c7; padding-bottom:8px;">
-            📚 W02 依規劃原則進行之系統化上課講義內容
+            📚 W02 依規劃原則進行之系統化上課講義內容 (解析一階與二階環評程序、認定標準附表二、環現差與範疇界定指引法章體系)
           </h3>
 
           <!-- Unit 1 -->
           <div style="background:#f0f9ff; border-left:4px solid #0284c7; padding:14px 16px; border-radius:6px; margin-bottom:14px;">
             <h4 style="margin:0 0 8px 0; color:#0369a1; font-size:1rem; font-weight:800;">
-              ⚖️ 單元一：環評法規金字塔與核心法條解碼 (第1條~第24條)
+              ⚖️ 單元一：解析一階與二階環評程序與核心法條解碼 (第1條~第24條)
             </h4>
             <ul style="margin:0; padding-left:18px; font-size:0.9rem; color:#334155; line-height:1.7;">
-              <li><strong>第1條（立法目的）</strong>：預防及減輕開發行為對環境造成之不良影響，達成永續發展。</li>
-              <li><strong>第7條（第一階段環評）</strong>：開發單位應編製環境影響說明書 (EIR)，向主管機關申請審查。</li>
-              <li><strong>第8條~第13條（第二階段環評）</strong>：對環境有重大影響之虞者，應進行現場勘察、範疇界定、公聽會及編製評估報告書 (EIS)。</li>
-              <li><strong>第14條（否決權機制）</strong>：審查結論未通過者，不得許可開發。違法許可者無效。</li>
-              <li><strong>第15條與第18條（環現差與追蹤驗收）</strong>：通過後超過3年未動工者，應提報『環境現況差異分析及對策檢討報告』。</li>
+              <li><strong>第一階段環評程序 (EIR)</strong>：依據第 7 條規定，開發單位應編製環境影響說明書，向目的事業主管機關申請審查。</li>
+              <li><strong>第二階段環評程序 (EIS)</strong>：依據第 8 條~第 13 條規定，對環境有重大影響之虞者，應進行現場勘察、範疇界定、公聽會及編製評估報告書。</li>
+              <li><strong>環評否決權機制 (第14條)</strong>：環評審查結論未通過者，目的事業主管機關不得許可開發。違法許可者無效。</li>
+              <li><strong>環現差 (環境現況差異分析) (第16條與第18條)</strong>：通過環評後超過 3 年未動工者，應提報『環境現況差異分析及對策檢討報告』。</li>
             </ul>
           </div>
 
           <!-- Unit 2 -->
           <div style="background:#fef3c7; border-left:4px solid #f59e0b; padding:14px 16px; border-radius:6px; margin-bottom:14px;">
             <h4 style="margin:0 0 8px 0; color:#b45309; font-size:1rem; font-weight:800;">
-              🔍 單元二：開發行為應實施環評認定標準 (附表一與附表二門檻實務拆解)
+              🔍 單元二：開發行為應實施環評認定標準 (附表一與認定標準附表二實務拆解)
             </h4>
             <ul style="margin:0; padding-left:18px; font-size:0.9rem; color:#334155; line-height:1.7;">
-              <li><strong>工業區與科技園區開發</strong>：園區擴建或新建面積達 10 公頃以上，或部位於敏感地質/水質保護區者。</li>
-              <li><strong>水資源與水庫工程</strong>：堰堤蓄水容量、水道變更長度達一定規模，或涉及特定保育類動物棲地者。</li>
-              <li><strong>高架道路與交通工程</strong>：快速道路拓寬達 5 公里以上，或跨越一級環境敏感區者。</li>
+              <li><strong>認定標準附表二解析</strong>：工業區與高科技園區開發擴建或新建面積達 10 公頃以上，或部位於敏感地質/水質保護區者。</li>
+              <li><strong>水資源與水庫工程附表門檻</strong>：堰堤蓄水容量、水道變更長度達一定規模，或涉及特定保育類動物棲地者。</li>
+              <li><strong>交通與能源設施認定</strong>：快速道路拓寬達 5 公里以上，或跨越一級環境敏感區者應實施環評。</li>
             </ul>
           </div>
 
           <!-- Unit 3 -->
           <div style="background:#f0fdf4; border-left:4px solid #10b981; padding:14px 16px; border-radius:6px; margin-bottom:14px;">
             <h4 style="margin:0 0 8px 0; color:#047857; font-size:1rem; font-weight:800;">
-              🛠️ 單元三：範疇界定指引與四大環境因子評估體系
+              🛠️ 單元三：範疇界定指引法章體系與四大環境因子評估
             </h4>
             <ul style="margin:0; padding-left:18px; font-size:0.9rem; color:#334155; line-height:1.7;">
+              <li><strong>範疇界定指引法章體系</strong>：依作業準則選定應進行調查之環境項目、替代方案及評估範疇。</li>
               <li><strong>物理與化學因子</strong>：空氣品質 (AERMOD 模擬)、水質 (RPI 指標)、噪音振動與土壤地下水。</li>
               <li><strong>生態與景觀因子</strong>：陸域/水域生物調查、特有種棲地評價、景觀視覺衝擊。</li>
               <li><strong>社會經濟與健康風險</strong>：居民問卷、文化資產保護、健康風險評估 (HRA) 四步驟。</li>
@@ -1200,8 +1200,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
       `;
-    }
-    else if (modalType === 'lecture' || cardId === 'w01-c2' || cardId === 'w03-c1' || cardId === 'w05-c1' || cardId === 'w07-c1' || cardId === 'w10-c1' || cardId === 'w11-c1' || cardId === 'w15-c1') {
+    } else if (modalType === 'lecture' || cardId === 'w01-c2' || cardId === 'w03-c1' || cardId === 'w05-c1' || cardId === 'w07-c1' || cardId === 'w10-c1' || cardId === 'w11-c1' || cardId === 'w15-c1') {
       contentHtml = `
         <h2 class="modal-title" style="color:#0b3c5d;"><i class="fa-solid fa-scale-balanced" style="color:#0284c7;"></i> 環評法規體系總覽與官方網路連結點</h2>
         <p class="modal-subtitle">輔英科技大學 《環境影響評估》課程授課講義與法規檢索門戶 (授課教師：賴文亮 教授)</p>
