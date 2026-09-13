@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
               <div>
                 <strong style="font-size:1rem; color:#fff; font-weight:800;">W01 修課指南 AI 語音導讀播放器 (Web Speech API)</strong>
-                <div style="font-size:0.83rem; color:#e0f2fe; margin-top:2px;">賴文亮教授親錄導讀 ‧ 課程定位、18週地圖、60/40戰略方式</div>
+                <div style="font-size:0.83rem; color:#e0f2fe; margin-top:2px;">賴文亮教授親錄導讀 ‧ 期中考25%/期末考25%/實作成品20%/資訊學習15%/出席率10%/問卷5%</div>
               </div>
             </div>
             <button onclick="window.openCardModal('guide', 'w01-c1')" style="background:#f59e0b; color:#78350f; border:none; padding:8px 18px; border-radius:8px; font-weight:800; font-size:0.9rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 2px 8px rgba(0,0,0,0.2);">
@@ -651,10 +651,10 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="speech-section" style="margin-bottom:16px; padding-bottom:12px; border-bottom:1px dashed #e2e8f0;">
             <h4 style="color:#0b3c5d; font-size:1.05rem; margin-bottom:6px; display:flex; align-items:center; gap:8px;">
               <span style="background:#0284c7; color:#fff; width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.8rem;">4</span>
-              60/40 戰略評量機制與學期評分計算詳細說明
+              學期評分標準與成績計算詳細說明 (官方 6 項權重配分 100%)
             </h4>
             <p style="margin:0 0 10px 0; color:#475569; line-height:1.7;">
-              本課程學期總成績採用「60/40 戰略評量機制」進行精密計算：平時成績佔 60%，開放同學大膽使用 AI 工具協助分析；期末評量佔 40%，為實體閉卷會考，嚴格檢驗專業法理內化。
+              本課程學期總成績包含六大評分維度：期中考 25%、期末考 25%、實作成品 20%、資訊學習 15%、出席率 10%、問卷填寫與教學回饋 5%，合計 100%。
             </p>
 
             <!-- Detailed Score Calculation Table -->
@@ -663,49 +663,55 @@ document.addEventListener('DOMContentLoaded', () => {
                 <i class="fa-solid fa-calculator" style="color:#0284c7;"></i> 學期總成績評分計算公式與權重配分表：
               </h5>
 
-              <div style="background:#e0f2fe; border:1px solid #7dd3fc; border-radius:6px; padding:10px 14px; font-weight:700; color:#0369a1; font-size:0.92rem; margin-bottom:12px;">
-                🎓 學期總分 (100%) = (平時 KAB 問卷 × 10%) + (AI 歷程作業 × 20%) + (期中專案報告 × 20%) + (出席互動 × 10%) + (期末實體閉卷筆試 × 40%)
+              <div style="background:#e0f2fe; border:1px solid #7dd3fc; border-radius:6px; padding:10px 14px; font-weight:700; color:#0369a1; font-size:0.9rem; margin-bottom:12px; line-height:1.6;">
+                🎓 學期總成績 (100%) = 期中考 (25%) + 期末考 (25%) + 實作成品 (20%) + 資訊學習 (15%) + 出席率 (10%) + 問卷填寫與教學回饋 (5%)
               </div>
 
               <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.88rem; color:#334155;">
                 <thead>
                   <tr style="background:#f0f9ff; border-bottom:2px solid #bae6fd; color:#0b3c5d;">
-                    <th style="padding:8px 10px; width:22%;">評量大類</th>
+                    <th style="padding:8px 10px; width:22%;">評量項目</th>
                     <th style="padding:8px 10px; width:15%;">佔比權重</th>
-                    <th style="padding:8px 10px; width:35%;">評分項目內容與規範</th>
-                    <th style="padding:8px 10px; width:28%;">AI 工具規範</th>
+                    <th style="padding:8px 10px; width:38%;">評分規範與執行內容</th>
+                    <th style="padding:8px 10px; width:25%;">工具與方式</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr style="border-bottom:1px solid #f1f5f9; background:#fefce8;">
-                    <td style="padding:8px 10px; font-weight:700; color:#b45309;">1. KAB 成長問卷</td>
-                    <td style="padding:8px 10px; font-weight:700; color:#b45309;">10%</td>
-                    <td style="padding:8px 10px;">完成期初 Pre-test 與期末 Post-test KAB 學習自評問卷填寫。</td>
-                    <td style="padding:8px 10px; color:#059669; font-weight:600;">自行認真填寫</td>
-                  </tr>
                   <tr style="border-bottom:1px solid #f1f5f9; background:#f0fdf4;">
-                    <td style="padding:8px 10px; font-weight:700; color:#15803d;">2. AI 歷程作業</td>
-                    <td style="padding:8px 10px; font-weight:700; color:#15803d;">20%</td>
-                    <td style="padding:8px 10px;">NotebookLM / ChatGPT 數據拆解、AERMOD 氣質模擬與 EMP AI 對策生成。</td>
-                    <td style="padding:8px 10px; color:#15803d; font-weight:600;">✅ 開放 AI 輔助 (需附 Prompt 提問日誌)</td>
+                    <td style="padding:8px 10px; font-weight:700; color:#15803d;">1. 期中考</td>
+                    <td style="padding:8px 10px; font-weight:700; color:#15803d; font-size:0.95rem;">25%</td>
+                    <td style="padding:8px 10px;">第 9 週一階環評說明書範疇與四大環境因子小組專案簡報與答詢。</td>
+                    <td style="padding:8px 10px; color:#15803d; font-weight:600;">簡報發表評分</td>
                   </tr>
-                  <tr style="border-bottom:1px solid #f1f5f9; background:#f0fdf4;">
-                    <td style="padding:8px 10px; font-weight:700; color:#15803d;">3. 期中專案報告</td>
-                    <td style="padding:8px 10px; font-weight:700; color:#15803d;">20%</td>
-                    <td style="padding:8px 10px;">第 9 週一階環評說明書範疇與四大環境因子小組簡報發表。</td>
-                    <td style="padding:8px 10px; color:#15803d; font-weight:600;">✅ 開放 AI 工具輔助製作簡報</td>
+                  <tr style="border-bottom:1px solid #f1f5f9; background:#fff1f2;">
+                    <td style="padding:8px 10px; font-weight:700; color:#be123c;">2. 期末考</td>
+                    <td style="padding:8px 10px; font-weight:700; color:#be123c; font-size:0.95rem;">25%</td>
+                    <td style="padding:8px 10px; color:#9f1239;">第 18 週實體閉卷會考，驗收《環評法》母法、細則、認定標準與工程法理。</td>
+                    <td style="padding:8px 10px; color:#be123c; font-weight:600;">⛔ 實體閉卷筆試</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid #f1f5f9; background:#e0f2fe;">
+                    <td style="padding:8px 10px; font-weight:700; color:#0369a1;">3. 實作成品</td>
+                    <td style="padding:8px 10px; font-weight:700; color:#0369a1; font-size:0.95rem;">20%</td>
+                    <td style="padding:8px 10px;">各單元開發行為範疇界定矩陣、EMP 減輕對策與環評說明書大綱成品。</td>
+                    <td style="padding:8px 10px; color:#0284c7; font-weight:600;">專案成果報告</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid #f1f5f9; background:#faf5ff;">
+                    <td style="padding:8px 10px; font-weight:700; color:#7e22ce;">4. 資訊學習</td>
+                    <td style="padding:8px 10px; font-weight:700; color:#7e22ce; font-size:0.95rem;">15%</td>
+                    <td style="padding:8px 10px;">NotebookLM 數據拆解、AERMOD 模擬與 AI 提問 Prompt 歷程日誌作業。</td>
+                    <td style="padding:8px 10px; color:#7e22ce; font-weight:600;">✅ AI / 資訊作業</td>
                   </tr>
                   <tr style="border-bottom:1px solid #f1f5f9; background:#f8fafc;">
-                    <td style="padding:8px 10px; font-weight:700; color:#0369a1;">4. 出席互動討論</td>
-                    <td style="padding:8px 10px; font-weight:700; color:#0369a1;">10%</td>
-                    <td style="padding:8px 10px;">每週三第 3-4 節課堂實體點名、問答互動與小組實事討論。</td>
-                    <td style="padding:8px 10px; color:#64748b;">課堂即時互動</td>
+                    <td style="padding:8px 10px; font-weight:700; color:#334155;">5. 出席率</td>
+                    <td style="padding:8px 10px; font-weight:700; color:#334155; font-size:0.95rem;">10%</td>
+                    <td style="padding:8px 10px;">每週三第 3-4 節課堂實體點名、問答互動與課堂紀律。</td>
+                    <td style="padding:8px 10px; color:#64748b; font-weight:600;">課堂實體點名</td>
                   </tr>
-                  <tr style="background:#fff1f2; font-weight:700;">
-                    <td style="padding:8px 10px; color:#be123c;">5. 期末實體筆試</td>
-                    <td style="padding:8px 10px; color:#be123c;">40%</td>
-                    <td style="padding:8px 10px; color:#9f1239;">第 18 週實體閉卷考試，驗收《環評法》母法、細則、認定標準與工程法理。</td>
-                    <td style="padding:8px 10px; color:#be123c;">⛔ 嚴格禁止使用任何 AI 與電子設備</td>
+                  <tr style="background:#fefce8;">
+                    <td style="padding:8px 10px; font-weight:700; color:#b45309;">6. 問卷填寫與教學回饋</td>
+                    <td style="padding:8px 10px; font-weight:700; color:#b45309; font-size:0.95rem;">5%</td>
+                    <td style="padding:8px 10px;">完成期初 Pre-test、期末 Post-test KAB 學習自評問卷與課後教學回饋。</td>
+                    <td style="padding:8px 10px; color:#b45309; font-weight:600;">線上問卷填寫</td>
                   </tr>
                 </tbody>
               </table>
