@@ -495,7 +495,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       contentHtml = renderInteractiveSlideViewer();
-        } else if (modalType === 'kab_survey' || cardId === 'kab-survey' || modalType === 'survey') {
+            } else if (modalType === 'kab_survey' || cardId === 'kab-survey' || modalType === 'survey') {
       function renderKabSurveyView() {
         let surveyState = localStorage.getItem('eia_kab_survey_state') || 'unfilled_pre';
         let preData = JSON.parse(localStorage.getItem('eia_kab_pre_data') || 'null');
@@ -516,7 +516,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let htmlContent = '';
 
         if (surveyState === 'unfilled_pre') {
-          // --- STEP 1: Fill Pre-Test Form ---
           htmlContent = `
             <div style="background:#0b3c5d; color:#fff; padding:18px 20px; border-radius:10px; margin-bottom:20px;">
               <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
@@ -556,7 +555,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </form>
           `;
         } else if (surveyState === 'completed_pre') {
-          // --- STEP 2: Show Pre-Test Real-time Analytics ---
           const kAvg = computeDimAvg(preData, ['q1','q2','q3']);
           const aAvg = computeDimAvg(preData, ['q4','q5','q6']);
           const bAvg = computeDimAvg(preData, ['q7','q8','q9']);
@@ -621,7 +619,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           `;
         } else if (surveyState === 'filling_post') {
-          // --- STEP 3: Fill Post-Test Form ---
           htmlContent = `
             <div style="background:#0b3c5d; color:#fff; padding:18px 20px; border-radius:10px; margin-bottom:20px;">
               <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
@@ -661,7 +658,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </form>
           `;
         } else if (surveyState === 'completed_post') {
-          // --- STEP 4: Show Post-Test Analytics & Pre-vs-Post Difference Analysis ---
           const kPre = computeDimAvg(preData, ['q1','q2','q3']);
           const aPre = computeDimAvg(preData, ['q4','q5','q6']);
           const bPre = computeDimAvg(preData, ['q7','q8','q9']);
@@ -685,7 +681,6 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             </div>
 
-            <!-- Metric Cards: Pre vs Post -->
             <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-bottom:20px;">
               <div style="background:#fff; border:1px solid #bae6fd; padding:16px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
                 <div style="font-size:0.85rem; color:#0369a1; font-weight:700;">🧠 知識 (Knowledge) 成長</div>
@@ -718,7 +713,6 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             </div>
 
-            <!-- Detailed Question-by-Question Pre vs Post Difference Table -->
             <div style="background:#fff; border:1px solid #cbd5e1; padding:20px; border-radius:10px; margin-bottom:20px;">
               <h4 style="font-size:1.05rem; color:#0b3c5d; font-weight:800; margin:0 0 16px 0; border-bottom:2px solid #0284c7; padding-bottom:8px;">
                 📊 各提問 (Q1~Q9) 期初 vs 期末差別指標分析與成長對比
@@ -745,7 +739,6 @@ document.addEventListener('DOMContentLoaded', () => {
                       </div>
                     </div>
 
-                    <!-- Comparison Progress Bars -->
                     <div style="display:flex; flex-direction:column; gap:6px;">
                       <div style="display:flex; align-items:center; gap:10px;">
                         <span style="font-size:0.75rem; font-weight:700; color:#64748b; width:45px;">期初</span>
@@ -826,6 +819,80 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       contentHtml = renderKabSurveyView();
+    } else if (modalType === 'case') {
+      contentHtml = `
+        <div style="padding:10px;">
+          <div style="background:#fff7ed; border-left:4px solid #f97316; padding:16px; border-radius:8px; margin-bottom:16px;">
+            <h3 style="margin:0 0 6px 0; color:#c2410c; font-size:1.15rem;"><i class="fa-solid fa-triangle-exclamation"></i> 環評重大爭議與標竿案例分析個案</h3>
+            <p style="margin:0; font-size:0.9rem; color:#7c2d12;">本案例探討開發行為於水質保護區、敏感地質帶或居民權益交會處之衝突處置與環評審查歷程。</p>
+          </div>
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:16px; border-radius:8px; font-size:0.92rem; line-height:1.7; color:#334155;">
+            <h4 style="font-size:1rem; color:#0b3c5d; margin:0 0 8px 0; font-weight:800;">🔍 案例核心爭點與分析步驟：</h4>
+            <ol style="padding-left:20px; margin:0 0 12px 0;">
+              <li style="margin-bottom:6px;"><strong>基線調查範疇界定：</strong> 盤點歷史生態與環境監測數據之完整性與可靠度。</li>
+              <li style="margin-bottom:6px;"><strong>衝擊定量化評估：</strong> 運用氣候、水利與空氣擴散數值模式計算開發前後增量影響。</li>
+              <li style="margin-bottom:6px;"><strong>減輕對策 (EMP) 承諾：</strong> 提出可量測、可追蹤之工程預防措施與生態補償機制。</li>
+            </ol>
+            <div style="background:#e0f2fe; color:#0369a1; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:700;">
+              💡 課堂應用：請組員根據 eclass 個案評析指引，進行範疇界定矩陣實作與組間質詢對抗。
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (modalType === 'lab') {
+      contentHtml = `
+        <div style="padding:10px;">
+          <div style="background:#f0fdf4; border-left:4px solid #10b981; padding:16px; border-radius:8px; margin-bottom:16px;">
+            <h3 style="margin:0 0 6px 0; color:#047857; font-size:1.15rem;"><i class="fa-solid fa-flask"></i> 環境模擬實驗與軟體電腦實作全紀錄</h3>
+            <p style="margin:0; font-size:0.9rem; color:#065f46;">本單元包含大氣高斯擴散模式、水質 RPI 模式與污染傳播模擬之實驗數據處理與實機操作。</p>
+          </div>
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:16px; border-radius:8px; font-size:0.92rem; line-height:1.7; color:#334155;">
+            <h4 style="font-size:1rem; color:#0b3c5d; margin:0 0 8px 0; font-weight:800;">⚙️ 實驗與軟體操作要點：</h4>
+            <ul style="padding-left:20px; margin:0 0 12px 0;">
+              <li style="margin-bottom:6px;"><strong>輸入參數校正：</strong> 氣象背景資料 (Wind Rose)、排放源高與煙氣上升量 (Plume Rise)。</li>
+              <li style="margin-bottom:6px;"><strong>網格計算與等濃線劃設：</strong> 模擬最大地面濃度著地距離與敏感點濃度影響。</li>
+              <li style="margin-bottom:6px;"><strong>數據品質保證 (QA/QC)：</strong> 實測值與模式模擬值之比對校正與誤差分析。</li>
+            </ul>
+            <div style="background:#ecfdf5; color:#047857; padding:10px 14px; border-radius:6px; font-size:0.85rem; font-weight:700;">
+              🛠️ 軟體環境：AERMOD / ISCST3 / River Water Quality Model 模擬軟體已配置於 C527 電腦教室。
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (modalType === 'tutorial') {
+      contentHtml = `
+        <div style="padding:10px;">
+          <div style="background:#eff6ff; border-left:4px solid #3b82f6; padding:16px; border-radius:8px; margin-bottom:16px;">
+            <h3 style="margin:0 0 6px 0; color:#1d4ed8; font-size:1.15rem;"><i class="fa-solid fa-laptop-code"></i> 環評技術演練與實務手把手教學</h3>
+            <p style="margin:0; font-size:0.9rem; color:#1e40af;">提供高科技園區、開發案空氣品質與水質影響評估之完整實作步驟指南與數據庫說明。</p>
+          </div>
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:16px; border-radius:8px; font-size:0.92rem; line-height:1.7; color:#334155;">
+            <h4 style="font-size:1rem; color:#0b3c5d; margin:0 0 8px 0; font-weight:800;">📋 實作練習指引：</h4>
+            <ol style="padding-left:20px; margin:0 0 12px 0;">
+              <li style="margin-bottom:6px;">登入 eclass 課程專區下載範例數據套件與座標格式檔案。</li>
+              <li style="margin-bottom:6px;">依據《開發行為環境影響評估作業準則》規定進行範疇篩選與推估。</li>
+              <li style="margin-bottom:6px;">撰寫 2 頁精簡專案報告並上傳至課程系統進行同儕互評。</li>
+            </ol>
+          </div>
+        </div>
+      `;
+    } else if (modalType === 'live_review') {
+      contentHtml = `
+        <div style="padding:10px;">
+          <div style="background:#fef2f2; border-left:4px solid #ef4444; padding:16px; border-radius:8px; margin-bottom:16px;">
+            <h3 style="margin:0 0 6px 0; color:#b91c1c; font-size:1.15rem;"><i class="fa-solid fa-users-rectangle"></i> 現場模擬環評審查大會攻防實錄</h3>
+            <p style="margin:0; font-size:0.9rem; color:#991b1b;">模擬環境部環評審查委員會議，包含開發單位簡報、委員質詢、公民團體發言與審查結論決議。</p>
+          </div>
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:16px; border-radius:8px; font-size:0.92rem; line-height:1.7; color:#334155;">
+            <h4 style="font-size:1rem; color:#0b3c5d; margin:0 0 8px 0; font-weight:800;">🏛️ 模擬會議角色與審查流程：</h4>
+            <ul style="padding-left:20px; margin:0 0 12px 0;">
+              <li style="margin-bottom:6px;"><strong>開發單位：</strong> 15 分鐘簡報開發計畫內容與環境保護對策 (EMP)。</li>
+              <li style="margin-bottom:6px;"><strong>環評委員與專家：</strong> 提出針對健康風險、大氣與地下水衝擊之專業質詢。</li>
+              <li style="margin-bottom:6px;"><strong>審查結論決議：</strong> 閉門會議評定（通過 / 補正再審 / 進入二階環評 / 不應開發）。</li>
+            </ul>
+          </div>
+        </div>
+      `;
     } else if (modalType === 'instructor_profile' || cardId === 'w01-c0') {
       const prof = window.EIA_COURSE_DATA.instructorProfile;
       contentHtml = `
