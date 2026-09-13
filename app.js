@@ -367,6 +367,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Open Card Modal Function
   function openCardModal(modalType, cardId) {
+    const modalBody = document.getElementById('modalBody');
+    const modalBackdrop = document.getElementById('modalBackdrop');
     let contentHtml = '';
 
     if (modalType === 'w01_slides' || cardId === 'w01-slides' || modalType === 'w02_slides' || cardId === 'w02-slides') {
@@ -1128,6 +1130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modalBody && modalBackdrop) {
       modalBody.innerHTML = contentHtml;
       modalBackdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
     }
   }
 
