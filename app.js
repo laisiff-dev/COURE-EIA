@@ -1074,7 +1074,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </ul>
         </div>
       `;
-        } else if (modalType === 'w02_guide' || cardId === 'w02-c1') {
+        } else if (modalType === 'w02_guide' || cardId === 'w02-c1' || modalType === 'w02_lecture') {
       contentHtml = `
         <!-- W02 Voice Guide Header & Player -->
         <div style="background: linear-gradient(135deg, #0b3c5d 0%, #0284c7 100%); color:#fff; padding:20px; border-radius:12px; margin-bottom:20px; box-shadow:0 6px 18px rgba(2,132,199,0.25);">
