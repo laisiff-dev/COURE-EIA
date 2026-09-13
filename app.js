@@ -1074,7 +1074,278 @@ document.addEventListener('DOMContentLoaded', () => {
           </ul>
         </div>
       `;
-        } else if (modalType === 'w02_guide' || cardId === 'w02-c1' || modalType === 'w02_lecture') {
+        } 
+    else if (modalType === 'w03_guide' || cardId === 'w03-c1' || modalType === 'w03_lecture') {
+      contentHtml = `
+        <!-- W03 Voice Guide Header & Player -->
+        <div style="background: linear-gradient(135deg, #064e3b 0%, #0d9488 50%, #0284c7 100%); color:#fff; padding:20px; border-radius:12px; margin-bottom:20px; box-shadow:0 6px 18px rgba(13,148,136,0.25);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div>
+              <span style="background:rgba(255,255,255,0.2); color:#fff; padding:3px 10px; border-radius:12px; font-size:0.8rem; font-weight:700;">
+                <i class="fa-solid fa-volume-high"></i> W03 專屬 AI 語音導讀播放器
+              </span>
+              <h2 style="font-size:1.35rem; margin:8px 0 4px 0; color:#fff; font-weight:800;">
+                <i class="fa-solid fa-wind"></i> W03 大氣擴散與氣象背景數據理論（2小時PPT上課講義）
+              </h2>
+              <p style="font-size:0.92rem; color:#ccfbf1; font-weight:700; margin:4px 0 0 0;">
+                深入解析：氣象觀測站數據特徵、風玫瑰圖 (Wind Rose) 與 Pasquill 大氣穩定度 (A~F級) 劃分理論
+              </p>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <button onclick="window.w03PlayVoice()" class="btn-primary" style="background:#f59e0b; border:none; color:#fff; padding:8px 16px; border-radius:20px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:6px; box-shadow:0 4px 10px rgba(0,0,0,0.15);">
+                <i class="fa-solid fa-circle-play"></i> 播放導讀
+              </button>
+              <button onclick="window.w03PauseVoice()" class="btn-secondary" style="background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; padding:8px 14px; border-radius:20px; font-weight:700; cursor:pointer;">
+                <i class="fa-solid fa-pause"></i> 暫停
+              </button>
+              <button onclick="window.w03StopVoice()" class="btn-secondary" style="background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.4); color:#fff; padding:8px 14px; border-radius:20px; font-weight:700; cursor:pointer;">
+                <i class="fa-solid fa-stop"></i> 停止
+              </button>
+            </div>
+          </div>
+          <div style="margin-top:12px; font-size:0.85rem; color:#e0f2fe; display:flex; align-items:center; gap:8px;">
+            <i class="fa-solid fa-headphones"></i> <span id="w03_speech_status">語音播放器準備就緒 (點擊「播放導讀」開始)</span>
+          </div>
+        </div>
+
+        <!-- Section Navigation Tabs -->
+        <div style="display:flex; gap:8px; margin-bottom:18px; border-bottom:2px solid #e2e8f0; padding-bottom:8px; overflow-x:auto;">
+          <button id="w03-tab-ppt" onclick="window.switchW03Tab('ppt')" class="w03-tab-btn active" style="padding:8px 16px; border:none; background:#0d9488; color:#fff; border-radius:8px; font-weight:700; cursor:pointer;">
+            <i class="fa-solid fa-file-powerpoint"></i> 2小時 PPT 投影片播放器
+          </button>
+          <button id="w03-tab-h1" onclick="window.switchW03Tab('h1')" class="w03-tab-btn" style="padding:8px 16px; border:none; background:#f1f5f9; color:#334155; border-radius:8px; font-weight:700; cursor:pointer;">
+            <i class="fa-solid fa-compass"></i> 第1小時：氣象數據與風玫瑰圖
+          </button>
+          <button id="w03-tab-h2" onclick="window.switchW03Tab('h2')" class="w03-tab-btn" style="padding:8px 16px; border:none; background:#f1f5f9; color:#334155; border-radius:8px; font-weight:700; cursor:pointer;">
+            <i class="fa-solid fa-chart-area"></i> 第2小時：Pasquill 穩定度與高斯模式
+          </button>
+          <button id="w03-tab-quiz" onclick="window.switchW03Tab('quiz')" class="w03-tab-btn" style="padding:8px 16px; border:none; background:#f1f5f9; color:#334155; border-radius:8px; font-weight:700; cursor:pointer;">
+            <i class="fa-solid fa-circle-question"></i> 觀念測驗
+          </button>
+        </div>
+
+        <!-- TAB CONTENT 1: PPT Slide Deck Viewer -->
+        <div id="w03-content-ppt" class="w03-tab-pane" style="display:block;">
+          <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:12px; padding:20px; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:#1e293b; color:#fff; padding:12px 18px; border-radius:8px;">
+              <div>
+                <span id="w03-slide-idx-badge" style="background:#0d9488; padding:2px 8px; border-radius:4px; font-weight:700; font-size:0.85rem;">Slide 1 / 10</span>
+                <span style="margin-left:10px; font-weight:700; font-size:0.95rem; color:#94a3b8;">W03 大氣擴散與氣象背景數據理論 (2小時簡報)</span>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button onclick="window.w03PrevSlide()" style="background:#334155; border:none; color:#fff; padding:6px 14px; border-radius:6px; font-weight:700; cursor:pointer;">
+                  <i class="fa-solid fa-arrow-left"></i> 上一張
+                </button>
+                <button onclick="window.w03NextSlide()" style="background:#0d9488; border:none; color:#fff; padding:6px 14px; border-radius:6px; font-weight:700; cursor:pointer;">
+                  下一張 <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Slide Body Display -->
+            <div id="w03-slide-container" style="background:#fff; border:2px solid #e2e8f0; border-radius:10px; min-height:360px; padding:25px; box-shadow:inset 0 2px 4px rgba(0,0,0,0.02);">
+              <!-- Rendered via JS -->
+            </div>
+
+            <!-- Speaker Notes -->
+            <div style="margin-top:15px; background:#fef3c7; border-left:4px solid #f59e0b; padding:12px 16px; border-radius:0 8px 8px 0; font-size:0.9rem; color:#92400e;">
+              <strong><i class="fa-solid fa-chalkboard-user"></i> 授課教師講稿 (Speaker Notes)：</strong>
+              <span id="w03-speaker-notes">請切換投影片查看對應講稿說明。</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB CONTENT 2: Hour 1 Weather Station & Wind Rose -->
+        <div id="w03-content-h1" class="w03-tab-pane" style="display:none;">
+          <div style="background:#fff; border:1px solid #cbd5e1; border-radius:12px; padding:20px;">
+            <h3 style="color:#0f766e; font-size:1.2rem; border-bottom:2px solid #ccfbf1; padding-bottom:8px; margin-top:0;">
+              <i class="fa-solid fa-compass"></i> 第 1 小時：氣象觀測站數據特徵擷取與風玫瑰圖 (Wind Rose) 繪製解析
+            </h3>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-top:15px;">
+              <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:15px; border-radius:8px;">
+                <h4 style="margin:0 0 8px 0; color:#166534;"><i class="fa-solid fa-tower-observation"></i> 1.1 氣象觀測站數據特徵 (Meteorological Data)</h4>
+                <ul style="margin:0; padding-left:20px; font-size:0.9rem; color:#15803d; line-height:1.6;">
+                  <li><strong>風速 ($u$, m/s)</strong>：影響污染物稀釋能力，風速愈大稀釋效應愈顯著。</li>
+                  <li><strong>風向 ($\theta$, 角度/方位)</strong>：決定污染煙羽 (Plume) 漂移傳輸下風向區域。</li>
+                  <li><strong>氣溫 ($T$, °C) 與大氣壓 ($P$, hPa)</strong>：影響大氣密度與熱力上升氣流。</li>
+                  <li><strong>日照時數與輻射量 ($W/m^2$)</strong>：決定白天大氣熱力不穩定度。</li>
+                  <li><strong>混合層高度 ($h_m$, m)</strong>：污染物在大氣垂直方向可擴散之上限容量。</li>
+                </ul>
+              </div>
+
+              <div style="background:#eff6ff; border:1px solid #bfdbfe; padding:15px; border-radius:8px;">
+                <h4 style="margin:0 0 8px 0; color:#1e40af;"><i class="fa-solid fa-fan"></i> 1.2 風玫瑰圖 (Wind Rose Diagram) 理論</h4>
+                <ul style="margin:0; padding-left:20px; font-size:0.9rem; color:#1d4ed8; line-height:1.6;">
+                  <li><strong>16 方位風向頻率</strong>：將 360° 劃分為 N, NNE, NE, ENE... 等 16 方位扇區。</li>
+                  <li><strong>風速級距分類 (Wind Speed Bands)</strong>：
+                    <ul>
+                      <li>靜風 (Calm): $u < 0.5 \text{ m/s}$</li>
+                      <li>微風: $0.5 \le u < 2.1 \text{ m/s}$</li>
+                      <li>和風: $2.1 \le u < 3.6 \text{ m/s}$</li>
+                      <li>清風: $3.6 \le u < 5.7 \text{ m/s}$</li>
+                      <li>強風: $u \ge 5.7 \text{ m/s}$</li>
+                    </ul>
+                  </li>
+                  <li><strong>主導風向 (Prevailing Wind)</strong>：出現頻率最高之風向，為環評空品受體 (Sensitive Receivers) 評估首要重點。</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Wind Rose Interactive Graphic representation -->
+            <div style="margin-top:20px; background:#f8fafc; border:1px dashed #0d9488; padding:16px; border-radius:10px; text-align:center;">
+              <h4 style="margin:0 0 10px 0; color:#0f766e;"><i class="fa-solid fa-chart-pie"></i> 風玫瑰圖 (Wind Rose) 示意圖與環評監測點位布設</h4>
+              <div style="display:flex; justify-content:space-around; align-items:center; flex-wrap:wrap; gap:15px;">
+                <div style="width:200px; height:200px; border-radius:50%; border:4px dashed #0d9488; display:flex; justify-content:center; align-items:center; position:relative; background:#ffffff;">
+                  <span style="position:absolute; top:8px; font-weight:800; color:#0f766e;">N (北)</span>
+                  <span style="position:absolute; bottom:8px; font-weight:800; color:#0f766e;">S (南)</span>
+                  <span style="position:absolute; right:8px; font-weight:800; color:#0f766e;">E (東)</span>
+                  <span style="position:absolute; left:8px; font-weight:800; color:#0f766e;">W (西)</span>
+                  <div style="width:120px; height:120px; background:rgba(13,148,136,0.25); clip-path: polygon(50% 50%, 90% 10%, 100% 50%, 70% 80%); border-radius:50%;"></div>
+                  <span style="font-size:0.75rem; font-weight:700; color:#0f766e; background:rgba(255,255,255,0.9); padding:2px 4px; border-radius:4px;">主導風向：NE 季風</span>
+                </div>
+                <div style="max-width:400px; text-align:left; font-size:0.88rem; color:#334155; line-height:1.6;">
+                  <p><strong><i class="fa-solid fa-circle-info"></i> 環評空品監測佈點要領：</strong></p>
+                  <ol style="margin:0; padding-left:20px;">
+                    <li><strong>上風向背景點 (Upwind Control Point)</strong>：設定於主導風向之地向上風處，代表未受開發案影響之基線品質。</li>
+                    <li><strong>下風向最大濃度點 (Downwind Peak Impact Point)</strong>：依據風玫瑰圖出現頻率最高之風向，配合高斯模式計算最大落地濃度距離。</li>
+                    <li><strong>敏感受體點 (Sensitive Receptor Points)</strong>：下風處之學校、醫院與居民區。</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB CONTENT 3: Hour 2 Pasquill Stability & Gaussian Model -->
+        <div id="w03-content-h2" class="w03-tab-pane" style="display:none;">
+          <div style="background:#fff; border:1px solid #cbd5e1; border-radius:12px; padding:20px;">
+            <h3 style="color:#1e40af; font-size:1.2rem; border-bottom:2px solid #dbeafe; padding-bottom:8px; margin-top:0;">
+              <i class="fa-solid fa-chart-area"></i> 第 2 小時：Pasquill 大氣穩定度 (A~F級) 劃分準則與大氣擴散理論
+            </h3>
+
+            <!-- Pasquill Matrix Table -->
+            <h4 style="color:#1e3a8a; margin:15px 0 8px 0;"><i class="fa-solid fa-table"></i> Pasquill-Gifford 大氣穩定度劃分對照表 (Atmospheric Stability Matrix)</h4>
+            <div style="overflow-x:auto;">
+              <table style="width:100%; border-collapse:collapse; font-size:0.85rem; text-align:center;">
+                <thead>
+                  <tr style="background:#1e3a8a; color:#fff;">
+                    <th style="padding:8px; border:1px solid #cbd5e1;" rowspan="2">地面風速 $u$ (m/s)</th>
+                    <th style="padding:8px; border:1px solid #cbd5e1;" colspan="3">白天太陽輻射強度 (Daytime Solar Radiation)</th>
+                    <th style="padding:8px; border:1px solid #cbd5e1;" colspan="2">夜間雲量 (Nighttime Cloud Cover)</th>
+                  </tr>
+                  <tr style="background:#3b82f6; color:#fff;">
+                    <th style="padding:6px; border:1px solid #cbd5e1;">強 (Strong)</th>
+                    <th style="padding:6px; border:1px solid #cbd5e1;">中 (Moderate)</th>
+                    <th style="padding:6px; border:1px solid #cbd5e1;">弱 (Slight)</th>
+                    <th style="padding:6px; border:1px solid #cbd5e1;">雲量 $\ge 4/8$</th>
+                    <th style="padding:6px; border:1px solid #cbd5e1;">雲量 $\le 3/8$</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="background:#fef2f2;">
+                    <td style="padding:8px; border:1px solid #cbd5e1; font-weight:700;">$< 2$</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; font-weight:700; color:#dc2626;">A (極不穩定)</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#ea580c;">A - B</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#d97706;">B</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#475569;">E (輕度穩定)</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; font-weight:700; color:#1e293b;">F (極度穩定)</td>
+                  </tr>
+                  <tr style="background:#fff7ed;">
+                    <td style="padding:8px; border:1px solid #cbd5e1; font-weight:700;">$2 - 3$</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#ea580c;">A - B</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#d97706;">B</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#ca8a04;">C</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#475569;">E</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#1e293b;">F</td>
+                  </tr>
+                  <tr style="background:#fefce8;">
+                    <td style="padding:8px; border:1px solid #cbd5e1; font-weight:700;">$3 - 5$</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#d97706;">B</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#ca8a04;">B - C</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#ca8a04;">C</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#0284c7;">D (中性)</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#475569;">E</td>
+                  </tr>
+                  <tr style="background:#f0fdf4;">
+                    <td style="padding:8px; border:1px solid #cbd5e1; font-weight:700;">$5 - 6$</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#ca8a04;">C</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#0284c7;">C - D</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#0284c7;">D</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#0284c7;">D</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#0284c7;">D</td>
+                  </tr>
+                  <tr style="background:#f0f9ff;">
+                    <td style="padding:8px; border:1px solid #cbd5e1; font-weight:700;">$> 6$</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#0284c7;">C</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#0284c7;">D</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#0284c7;">D</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#0284c7;">D</td>
+                    <td style="padding:8px; border:1px solid #cbd5e1; color:#0284c7;">D</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Gaussian Model Formula -->
+            <div style="margin-top:20px; background:#1e293b; color:#fff; padding:18px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.15);">
+              <h4 style="margin:0 0 10px 0; color:#38bdf8;"><i class="fa-solid fa-square-root-variable"></i> 高斯煙羽擴散基本方程式 (Gaussian Plume Equation)</h4>
+              <div style="background:#0f172a; padding:14px; border-radius:8px; text-align:center; font-family:'Courier New', monospace; font-size:1.05rem; color:#f1f5f9; overflow-x:auto;">
+                $$C(x,y,z) = \frac{Q}{2\pi u \sigma_y \sigma_z} \exp\left(-\frac{y^2}{2\sigma_y^2}\right) \left[ \exp\left(-\frac{(z-H)^2}{2\sigma_z^2}\right) + \exp\left(-\frac{(z+H)^2}{2\sigma_z^2}\right) \right]$$
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; font-size:0.85rem; color:#cbd5e1;">
+                <div>
+                  <p style="margin:2px 0;">• <strong>$C(x,y,z)$</strong>: 下風向座標 $(x,y,z)$ 之大氣污染物濃度 ($\mu g/m^3$)</p>
+                  <p style="margin:2px 0;">• <strong>$Q$</strong>: 煙Chimney排放速率 ($g/s$)</p>
+                  <p style="margin:2px 0;">• <strong>$u$</strong>: 煙囪頂端平均風速 ($m/s$)</p>
+                </div>
+                <div>
+                  <p style="margin:2px 0;">• <strong>$\sigma_y, \sigma_z$</strong>: 隨 Pasquill 穩定度等級變動之橫向與垂直擴散標準差 ($m$)</p>
+                  <p style="margin:2px 0;">• <strong>$H = h_s + \Delta h$</strong>: 煙囪有效高度 (實體高度 $h_s$ + 熱力浮力抬升 $\Delta h$)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB CONTENT 4: Knowledge Quiz -->
+        <div id="w03-content-quiz" class="w03-tab-pane" style="display:none;">
+          <div style="background:#fff; border:1px solid #cbd5e1; border-radius:12px; padding:20px;">
+            <h3 style="color:#d97706; font-size:1.2rem; border-bottom:2px solid #fef3c7; padding-bottom:8px; margin-top:0;">
+              <i class="fa-solid fa-circle-question"></i> W03 隨堂觀念測驗 (Quiz & Assessment)
+            </h3>
+            
+            <div id="w03-quiz-box" style="margin-top:15px;">
+              <div style="background:#fffbeb; border:1px solid #fde68a; padding:15px; border-radius:8px; margin-bottom:12px;">
+                <p style="font-weight:700; color:#92400e; margin:0 0 8px 0;">Q1: 白天強烈日照且風速微弱 (< 2 m/s) 時，Pasquill 大氣穩定度屬於哪一級？</p>
+                <div style="display:flex; flex-direction:column; gap:6px; font-size:0.9rem;">
+                  <label style="cursor:pointer;"><input type="radio" name="w03_q1" value="A"> (A) A 級 (極不穩定)</label>
+                  <label style="cursor:pointer;"><input type="radio" name="w03_q1" value="B"> (B) D 級 (中性)</label>
+                  <label style="cursor:pointer;"><input type="radio" name="w03_q1" value="C"> (C) F 級 (極度穩定)</label>
+                </div>
+              </div>
+
+              <div style="background:#fffbeb; border:1px solid #fde68a; padding:15px; border-radius:8px; margin-bottom:12px;">
+                <p style="font-weight:700; color:#92400e; margin:0 0 8px 0;">Q2: 風玫瑰圖 (Wind Rose) 中出現頻率最高之風向稱為？</p>
+                <div style="display:flex; flex-direction:column; gap:6px; font-size:0.9rem;">
+                  <label style="cursor:pointer;"><input type="radio" name="w03_q2" value="A"> (A) 陣風風向</label>
+                  <label style="cursor:pointer;"><input type="radio" name="w03_q2" value="B"> (B) 主導風向 (Prevailing Wind)</label>
+                  <label style="cursor:pointer;"><input type="radio" name="w03_q2" value="C"> (C) 海陸風向</label>
+                </div>
+              </div>
+
+              <button onclick="window.checkW03Quiz()" style="background:#d97706; color:#fff; border:none; padding:10px 20px; border-radius:8px; font-weight:700; cursor:pointer;">
+                提交答案並查看解析
+              </button>
+
+              <div id="w03-quiz-result" style="margin-top:12px; display:none; padding:12px; border-radius:8px;"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    else if (modalType === 'w02_guide' || cardId === 'w02-c1' || modalType === 'w02_lecture') {
       contentHtml = `
         <!-- W02 Voice Guide Header & Player -->
         <div style="background: linear-gradient(135deg, #0b3c5d 0%, #0284c7 100%); color:#fff; padding:20px; border-radius:12px; margin-bottom:20px; box-shadow:0 6px 18px rgba(2,132,199,0.25);">
@@ -1664,3 +1935,277 @@ function attachCardClickDelegation() {
       if (tag) tag.innerHTML = '▶️ 點擊播放語音導讀';
     }
   };
+
+
+// W03 Voice Audio Guide & PPT Controller Scripts
+window.w03VoiceUtterance = null;
+
+window.w03PlayVoice = function() {
+  if (!('speechSynthesis' in window)) {
+    alert('您的瀏覽器不支援 Web Speech API 語音朗讀。');
+    return;
+  }
+  window.speechSynthesis.cancel();
+
+  const textToRead = "歡迎來到第03週大氣擴散與氣象背景數據理論課程。本單元包含兩小時核心教學PPT。第一小時重點探討氣象觀測站數據指標特徵，包括風速、風向、氣溫與混合層高度，並深入解析十六方位風玫瑰圖 Wind Rose 的繪製、風速級距統計與主導風向判讀，作為環評空品受體佈點基礎。第二小時深入 Pasquill 大氣穩定度 A 到 F 級劃分矩陣，結合白天太陽輻射量與夜間雲量判定大氣熱力與動力狀態，並介紹高斯煙羽擴散基本方程式與煙囪有效高度抬升計算。點擊簡報投影片切換按鈕，即可觀看十張完整 PPT 上課簡報與教師講稿說明。";
+
+  const utter = new SpeechSynthesisUtterance(textToRead);
+  utter.lang = 'zh-TW';
+  utter.rate = 1.0;
+
+  utter.onstart = function() {
+    const status = document.getElementById('w03_speech_status');
+    if (status) status.innerHTML = '<span style="color:#4ade80; font-weight:800;"><i class="fa-solid fa-volume-high fa-beat"></i> 語音導讀播放中...</span>';
+  };
+
+  utter.onend = function() {
+    const status = document.getElementById('w03_speech_status');
+    if (status) status.innerHTML = '語音導讀播放完成。';
+  };
+
+  utter.onerror = function() {
+    const status = document.getElementById('w03_speech_status');
+    if (status) status.innerHTML = '語音導讀播放完畢或終止。';
+  };
+
+  window.w03VoiceUtterance = utter;
+  window.speechSynthesis.speak(utter);
+};
+
+window.w03PauseVoice = function() {
+  if (window.speechSynthesis) {
+    if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+      window.speechSynthesis.pause();
+      const status = document.getElementById('w03_speech_status');
+      if (status) status.innerHTML = '<span style="color:#fde047;">語音導讀已暫停</span>';
+    } else if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+      const status = document.getElementById('w03_speech_status');
+      if (status) status.innerHTML = '<span style="color:#4ade80;">語音導讀繼續播放...</span>';
+    }
+  }
+};
+
+window.w03StopVoice = function() {
+  if (window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+    const status = document.getElementById('w03_speech_status');
+    if (status) status.innerHTML = '語音導讀已停止。';
+  }
+};
+
+window.switchW03Tab = function(tabName) {
+  document.querySelectorAll('.w03-tab-btn').forEach(btn => {
+    btn.style.background = '#f1f5f9';
+    btn.style.color = '#334155';
+    btn.classList.remove('active');
+  });
+  document.querySelectorAll('.w03-tab-pane').forEach(pane => {
+    pane.style.display = 'none';
+  });
+
+  const activeBtn = document.getElementById('w03-tab-' + tabName);
+  const activePane = document.getElementById('w03-content-' + tabName);
+
+  if (activeBtn) {
+    activeBtn.style.background = '#0d9488';
+    activeBtn.style.color = '#fff';
+    activeBtn.classList.add('active');
+  }
+  if (activePane) {
+    activePane.style.display = 'block';
+  }
+};
+
+// 10 W03 PPT Slides Deck Data
+window.w03SlidesData = [
+  {
+    slideNum: 1,
+    title: "Slide 01: 課程主題與學習目標 (2小時大綱)",
+    subtitle: "W03 大氣擴散與氣象背景數據理論（含語音導讀）",
+    bullets: [
+      "📌 <strong>單元一 (Hour 1)</strong>：氣象觀測站數據特徵擷取 & 風玫瑰圖 (Wind Rose) 繪製與主導風向解析",
+      "📌 <strong>單元二 (Hour 2)</strong>：Pasquill-Gifford 大氣穩定度 (A~F級) 劃分矩陣 & 高斯煙羽擴散理論基礎",
+      "⚡ <strong>核心目標</strong>：學會在環評空品章節中，如何利用觀測站資料判讀下風向受體風險。"
+    ],
+    notes: "歡迎同學！本週課程為空品模擬之理論核心。請注意氣象資料如何直接決定空氣污染物之傳輸與擴散。"
+  },
+  {
+    slideNum: 2,
+    title: "Slide 02: 氣象觀測站數據指標特徵解析",
+    subtitle: "中央氣象署 / 環保署觀測站之 5 大核心氣象因子",
+    bullets: [
+      "🚩 <strong>風速 ($u$, m/s)</strong>：風速愈高，單位時間稀釋體積愈大，大氣污染物濃度成反比下降。",
+      "🚩 <strong>風向 ($\theta$)</strong>：16 方位角，決定污染煙羽漂移之傳輸路徑。",
+      "🚩 <strong>氣溫與氣壓 ($T, P$)</strong>：決定空氣密度與熱力對流上升效應。",
+      "🚩 <strong>混合層高度 ($h_m$, m)</strong>：邊界層逆溫層頂，限制污染物垂直垂直擴散上限。"
+    ],
+    notes: "氣象觀測站數據為 AERMOD 等擴散模式之必要輸入檔案 (Surface & Profile File)。"
+  },
+  {
+    slideNum: 3,
+    title: "Slide 03: 風玫瑰圖 (Wind Rose) 構造與統計要領",
+    subtitle: "風向頻率扇形圖與風速級距分色疊加",
+    bullets: [
+      "📊 <strong>16 方位風向扇區</strong>：以圓心為基準，長度代表該風向出現之累積頻率百分比 (%)。",
+      "🎨 <strong>風速級距分色</strong>：疊加不同風速級距 (Calm, 0.5-2.1, 2.1-3.6, 3.6-5.7, >5.7 m/s)。",
+      "⚠️ <strong>靜風 (Calm Wind) 處理</strong>：風速 < 0.5 m/s 時，無明確風向，標示於圓心百分比。"
+    ],
+    notes: "風玫瑰圖為環評報告書中空品章節之必備圖表，能一眼看出當地全年或季節風場特性。"
+  },
+  {
+    slideNum: 4,
+    title: "Slide 04: 主導風向與季節性風玫瑰圖對比",
+    subtitle: "台灣典型季風氣候（冬季東北季風 vs 夏季西南季風）",
+    bullets: [
+      "❄️ <strong>冬季風玫瑰圖</strong>：東北季風盛行 (NE/NNE)，下風向為台灣中南部西海岸，易產生背風側尾流積聚。",
+      "☀️ <strong>夏季風玫瑰圖</strong>：西南季風盛行 (SW/SSW)，下風向為北部與東北部。",
+      "🔍 <strong>主導風向 (Prevailing Wind)</strong>：累積頻率最高之風向，為監測點位設點指標。"
+    ],
+    notes: "環評評估時，必須分別檢視「全年」、「冬季」與「夏季」風玫瑰圖，確保各季節敏感受體安全。"
+  },
+  {
+    slideNum: 5,
+    title: "Slide 05: 風玫瑰圖在環評監測佈點之應用實務",
+    subtitle: "上風點、下風最大濃度點與敏感受體布設原則",
+    bullets: [
+      "📍 <strong>上風向對照點 (Control Point)</strong>：設於盛行風之上風處，代表未受本開發案影響之基線品質。",
+      "📍 <strong>最大落地濃度點 (Impact Point)</strong>：盛行風下風向 500m ~ 3000m（視煙囪高度而定）。",
+      "📍 <strong>敏感受體點 (Receptors)</strong>：下風向之學校、社區、醫院。"
+    ],
+    notes: "若審查委員詢問為何監測點設在某處，答案就是依據風玫瑰圖與最大落地濃度距離！"
+  },
+  {
+    slideNum: 6,
+    title: "Slide 06: Pasquill 大氣穩定度 (A~F級) 物理意義",
+    subtitle: "大氣湍流熱力與動力狀態分類",
+    bullets: [
+      "🔥 <strong>A ~ C 級 (不穩定 Unstable)</strong>：白天強熱力對流，垂直混合劇烈，煙羽呈浪滾狀 (Looping)。",
+      "⚖️ <strong>D 級 (中性 Neutral)</strong>：陰天或強風，動力湍流主導，煙羽呈錐狀 (Coning)。",
+      "❄️ <strong>E ~ F 級 (穩定 Stable)</strong>：夜間輻射冷卻逆溫，湍流壓制，煙羽呈扇狀 (Fanning) 傳播極遠。"
+    ],
+    notes: "大氣穩定度直接控制污染物擴散標準差 sigma_y 與 sigma_z 的大小！"
+  },
+  {
+    slideNum: 7,
+    title: "Slide 07: Pasquill 穩定度查表判定矩陣",
+    subtitle: "地面風速、白天太陽輻射量與夜間雲量判定",
+    bullets: [
+      "☀️ <strong>白天情況</strong>：微風 (<2 m/s) + 強日照 ➜ <strong>A 級</strong>；高風速 (>6 m/s) ➜ <strong>D 級</strong>。",
+      "🌙 <strong>夜間情況</strong>：微風 (<2 m/s) + 晴朗少雲 ($\le 3/8$) ➜ <strong>F 級</strong>（極度穩定最不利擴散）。",
+      "📋 <strong>對照矩陣應用</strong>：為 AERMOD 與 ISC3 模式計算每小時穩定度之依據。"
+    ],
+    notes: "請同學務必熟記 A~F 級之物理代表意義，F 級往往對遠距離地表濃度最不利。"
+  },
+  {
+    slideNum: 8,
+    title: "Slide 08: 擴散參數 $\\sigma_y, \\sigma_z$ 經驗曲線",
+    subtitle: "Pasquill-Gifford 擴散標準差隨下風距離 $x$ 之變化",
+    bullets: [
+      "📈 <strong>橫向標準差 $\\sigma_y(x)$</strong>：煙羽水平寬度隨距離 $x$ 增加而擴大。",
+      "📈 <strong>垂直標準差 $\\sigma_z(x)$</strong>：煙羽垂直高度隨距離 $x$ 擴張，A級遠大於 F級。",
+      "📐 <strong>經驗公式</strong>：$\\sigma_y = a \\cdot x^b$, $\\sigma_z = c \\cdot x^d$ (a,b,c,d 為穩定度等級參數)。"
+    ],
+    notes: "Sigma_y 與 Sigma_z 是高斯公式中分母的重要變數，直接決定煙羽稀釋程度。"
+  },
+  {
+    slideNum: 9,
+    title: "Slide 09: 高斯煙羽擴散基本方程式簡介",
+    subtitle: "Gaussian Plume Equation & Effective Stack Height $H$",
+    bullets: [
+      "🧮 <strong>高斯公式</strong>：$C(x,y,z) = \\frac{Q}{2\\pi u \\sigma_y \\sigma_z} \\exp(-\\frac{y^2}{2\\sigma_y^2}) [...]$",
+      "🏭 <strong>有效煙囪高度 $H$</strong>：實體高度 $h_s$ + 熱力上升與排出速度抬升 $\\Delta h$。",
+      "💡 <strong>地面最大濃度距離</strong>：$x_{max}$ 出現於 $\\sigma_z(x) \\approx H / \\sqrt{2}$ 之位置。"
+    ],
+    notes: "高斯模式為現代大氣品質評估之基石，下一週 W04 將實作 25m 與 50m 煙囪加高模擬！"
+  },
+  {
+    slideNum: 10,
+    title: "Slide 10: 2 小時單元總結與 W04 實作預告",
+    subtitle: "氣象數據與大氣擴散理論重點回顧",
+    bullets: [
+      "✅ <strong>學習重點 1</strong>：風玫瑰圖提供風向頻率與風速分級，為環評點位佈局之首要指引。",
+      "✅ <strong>學習重點 2</strong>：Pasquill A~F 級穩定度反映大氣對流與逆溫，決定 $\\sigma_y, \\sigma_z$ 擴散率。",
+      "🚀 <strong>W04 預告</strong>：煙囪高斯擴散模擬實作（25m vs 50m 煙囪加高實測比對）。"
+    ],
+    notes: "感謝各位同學！請完成觀念測驗，並準備好下一週的電腦實驗課。"
+  }
+];
+
+window.w03CurrentSlideIdx = 0;
+
+window.renderW03Slide = function(idx) {
+  if (!window.w03SlidesData || window.w03SlidesData.length === 0) return;
+  if (idx < 0) idx = 0;
+  if (idx >= window.w03SlidesData.length) idx = window.w03SlidesData.length - 1;
+  window.w03CurrentSlideIdx = idx;
+
+  const slide = window.w03SlidesData[idx];
+  const badge = document.getElementById('w03-slide-idx-badge');
+  const container = document.getElementById('w03-slide-container');
+  const notes = document.getElementById('w03-speaker-notes');
+
+  if (badge) badge.innerText = `Slide ${slide.slideNum} / ${window.w03SlidesData.length}`;
+
+  if (container) {
+    let bulletsHtml = slide.bullets.map(b => `<li style="margin-bottom:12px; font-size:1.02rem; color:#1e293b; line-height:1.6;">${b}</li>`).join('');
+    container.innerHTML = `
+      <div style="border-bottom:2px solid #0d9488; padding-bottom:12px; margin-bottom:16px;">
+        <h2 style="margin:0 0 6px 0; color:#0f766e; font-weight:800; font-size:1.4rem;">
+          <i class="fa-solid fa-play-circle" style="color:#0d9488;"></i> ${slide.title}
+        </h2>
+        <p style="margin:0; font-size:0.98rem; color:#64748b; font-weight:700;">${slide.subtitle}</p>
+      </div>
+      <ul style="padding-left:22px; margin:0;">
+        ${bulletsHtml}
+      </ul>
+    `;
+  }
+
+  if (notes) {
+    notes.innerText = slide.notes;
+  }
+};
+
+window.w03PrevSlide = function() {
+  window.renderW03Slide(window.w03CurrentSlideIdx - 1);
+};
+
+window.w03NextSlide = function() {
+  window.renderW03Slide(window.w03CurrentSlideIdx + 1);
+};
+
+window.checkW03Quiz = function() {
+  const q1 = document.querySelector('input[name="w03_q1"]:checked');
+  const q2 = document.querySelector('input[name="w03_q2"]:checked');
+  const res = document.getElementById('w03-quiz-result');
+  if (!res) return;
+
+  if (!q1 || !q2) {
+    res.style.display = 'block';
+    res.style.background = '#fef2f2';
+    res.style.color = '#991b1b';
+    res.innerText = '請完成所有題目後再點擊提交！';
+    return;
+  }
+
+  let score = 0;
+  if (q1.value === 'A') score += 50;
+  if (q2.value === 'B') score += 50;
+
+  res.style.display = 'block';
+  if (score === 100) {
+    res.style.background = '#f0fdf4';
+    res.style.color = '#166534';
+    res.innerHTML = '<strong>🎉 恭喜全對 (100分)！</strong><br>Q1解析：白天強烈日照且風速 < 2m/s 為極強對流狀態， Pasquill 劃分為 A 級 (極不穩定)。<br>Q2解析：出現頻率最高之風向即為「主導風向 (Prevailing Wind)」。';
+  } else {
+    res.style.background = '#fff7ed';
+    res.style.color = '#c2410c';
+    res.innerHTML = `<strong>得分：${score} 分</strong>。請重新核對講義內容：<br>Q1正確答案為 (A) A 級；Q2正確答案為 (B) 主導風向。`;
+  }
+};
+
+// Initialize slide rendering when modal rendered
+setTimeout(function() {
+  window.renderW03Slide(0);
+}, 500);

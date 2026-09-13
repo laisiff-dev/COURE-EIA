@@ -812,9 +812,9 @@ window.EIA_COURSE_DATA = {
           title: "W03 大氣擴散與氣象背景數據理論（含語音導讀）",
           tag: "理論講義",
           tagColor: "teal",
-          desc: "風玫瑰圖 (Wind Rose)、大氣穩定度 (Pasquill) 與氣象觀測站數據特徵擷取。",
+          desc: "氣象觀測站數據特徵擷取、風玫瑰圖 (Wind Rose) 繪製解析與 Pasquill 大氣穩定度 (A~F級) 劃分理論（2小時完整PPT講義與語音導讀）。",
           actionText: "閱讀講義",
-          modalType: "w02_guide"
+          modalType: "w03_guide"
         },
         {
           id: "w03-c2",
