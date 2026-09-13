@@ -472,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       contentHtml = renderInteractiveSlideViewer();
-    } } else if (modalType === 'instructor_profile' || cardId === 'w01-c0') {
+    } else if (modalType === 'instructor_profile' || cardId === 'w01-c0') {
       const prof = window.EIA_COURSE_DATA.instructorProfile;
       contentHtml = `
         <div class="instructor-profile-card">
