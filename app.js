@@ -495,11 +495,20 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       contentHtml = renderInteractiveSlideViewer();
-            } else if (modalType === 'kab_survey' || cardId === 'kab-survey' || modalType === 'survey') {
+                } else if (modalType === 'kab_survey' || cardId === 'kab-survey' || modalType === 'survey') {
       function renderKabSurveyView() {
-        let surveyState = localStorage.getItem('eia_kab_survey_state') || 'unfilled_pre';
-        let preData = JSON.parse(localStorage.getItem('eia_kab_pre_data') || 'null');
-        let postData = JSON.parse(localStorage.getItem('eia_kab_post_data') || 'null');
+        const roster = (window.EIA_COURSE_DATA && window.EIA_COURSE_DATA.studentRoster) ? window.EIA_COURSE_DATA.studentRoster : [
+          { id: '11301001', name: '陳冠宇', dept: '職業安全衛生系 3A' },
+          { id: '11301002', name: '林雅婷', dept: '環境工程技術系 3B' },
+          { id: '11301003', name: '黃家豪', dept: '公共衛生學系 4A' }
+        ];
+
+        let activeStudentId = localStorage.getItem('eia_kab_active_student_id') || roster[0].id;
+        let studentObj = roster.find(s => s.id === activeStudentId) || roster[0];
+
+        // Retrieve survey data for active student
+        let studentRecordKey = 'eia_kab_record_' + studentObj.id;
+        let studentRecord = JSON.parse(localStorage.getItem(studentRecordKey) || '{"pre":null, "post":null, "state":"unfilled_pre"}');
 
         const questions = [
           { id: 'q1', dim: 'K', dimName: '知識 (K)', title: '1. 對我國《環境影響評估法》體系與主管機關職掌之瞭解程度' },
@@ -510,26 +519,54 @@ document.addEventListener('DOMContentLoaded', () => {
           { id: 'q6', dim: 'A', dimName: '態度 (A)', title: '6. 對於 AI 創新工具（如 AI 導讀/AERMOD）導入環評抱持積極學習態度' },
           { id: 'q7', dim: 'B', dimName: '行為 (B)', title: '7. 能主動查閱公開之環評說明書與環境監測公開數據' },
           { id: 'q8', dim: 'B', dimName: '行為 (B)', title: '8. 能運用生成式 AI 或分析工具輔助環評資料整理與報告編製' },
-          { id: 'q9', dim: 'B', dimName: '行為 (B)', title: '9. 具備參與團隊討論、範疇界定演練與專案報告發表之實踐能力' }
+          { id: 'q9', dim: 'B', dimName: '行為 (B)', title: '9. 具備參與團隊討論、範疇界定演練與專案報告發表之實務能力' }
         ];
 
         let htmlContent = '';
 
-        if (surveyState === 'unfilled_pre') {
+        // Top Roster Selection & Excel Export Control Bar
+        const topControlHeader = `
+          <div style="background:#0b3c5d; color:#fff; padding:16px 20px; border-radius:10px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; box-shadow:0 4px 12px rgba(11,60,93,0.2);">
+            <div>
+              <h3 style="margin:0 0 4px 0; font-size:1.15rem;"><i class="fa-solid fa-clipboard-user"></i> KAB 課程學習成效評估問卷系統</h3>
+              <p style="margin:0; font-size:0.85rem; color:#e0f2fe;">依學生名單填寫期初/期末自評問卷 ‧ 即時分析指標圖表與前後測成長對比 ‧ 支援 Excel 數據匯出</p>
+            </div>
+            
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <!-- Student Roster Selector -->
+              <div style="display:flex; align-items:center; gap:6px;">
+                <label style="font-size:0.85rem; font-weight:700; color:#cbd5e1;">👤 選擇學生：</label>
+                <select onchange="window.switchKabStudent(this.value)" style="background:#fff; color:#0f172a; border:2px solid #0284c7; padding:6px 12px; border-radius:8px; font-weight:700; font-size:0.88rem; cursor:pointer;">
+                  ${roster.map(s => `
+                    <option value="${s.id}" ${s.id === studentObj.id ? 'selected' : ''}>
+                      ${s.name} (${s.id} - ${s.dept})
+                    </option>
+                  `).join('')}
+                </select>
+              </div>
+
+              <!-- Excel Export Button -->
+              <button onclick="window.exportKabToExcel()" style="background:#10b981; color:#fff; border:none; padding:7px 14px; border-radius:8px; font-weight:800; font-size:0.85rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 2px 8px rgba(16,185,129,0.3);">
+                <i class="fa-solid fa-file-excel"></i> 匯出 EXCEL (CSV)
+              </button>
+            </div>
+          </div>
+        `;
+
+        if (studentRecord.state === 'unfilled_pre') {
           htmlContent = `
-            <div style="background:#0b3c5d; color:#fff; padding:18px 20px; border-radius:10px; margin-bottom:20px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                <div>
-                  <h3 style="margin:0 0 6px 0; font-size:1.2rem;"><i class="fa-solid fa-clipboard-question"></i> KAB 課程學習成效自評問卷 【期初 Pre-test】</h3>
-                  <p style="margin:0; font-size:0.88rem; color:#e0f2fe;">本問卷採匿名統計，旨在瞭解您在修課前對環境影響評估 (EIA) 之知識 (K)、態度 (A)、行為 (B) 基礎。完成填寫後系統將即時運算各題分析圖表！</p>
-                </div>
-                <span style="background:#f59e0b; color:#fff; padding:4px 12px; border-radius:12px; font-weight:800; font-size:0.82rem;">階段 1/2：期初評估</span>
+            ${topControlHeader}
+
+            <div style="background:#fffbeb; border:1px solid #fde68a; color:#b45309; padding:12px 16px; border-radius:8px; margin-bottom:16px; font-size:0.88rem; display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>📌 當前選取學生：</strong> ${studentObj.name} (${studentObj.id} - ${studentObj.dept})
+                <span style="background:#f59e0b; color:#fff; padding:2px 8px; border-radius:10px; font-weight:700; font-size:0.78rem; margin-left:8px;">階段 1/2：請填寫期初問卷</span>
               </div>
             </div>
 
             <form id="preTestForm" onsubmit="window.submitPreTestForm(event)" style="background:#f8fafc; border:1px solid #cbd5e1; padding:20px; border-radius:10px;">
               <div style="margin-bottom:16px; font-weight:700; color:#0b3c5d; border-bottom:2px solid #0284c7; padding-bottom:6px;">
-                📝 期初學習量表 (請依個人實際認知評分 1 ~ 5 分，1: 非常不瞭解/不同意, 5: 非常瞭解/同意)
+                📝 1. 【期初 Pre-test 自評問卷】 (請依個人修課前認知評分 1 ~ 5 分)
               </div>
               ${questions.map(q => `
                 <div style="background:#fff; border:1px solid #e2e8f0; padding:12px 16px; border-radius:8px; margin-bottom:12px;">
@@ -554,19 +591,22 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             </form>
           `;
-        } else if (surveyState === 'completed_pre') {
+        } else if (studentRecord.state === 'completed_pre') {
+          const preData = studentRecord.pre;
           const kAvg = computeDimAvg(preData, ['q1','q2','q3']);
           const aAvg = computeDimAvg(preData, ['q4','q5','q6']);
           const bAvg = computeDimAvg(preData, ['q7','q8','q9']);
 
           htmlContent = `
-            <div style="background:#ecfdf5; border:1px solid #10b981; color:#065f46; padding:16px 20px; border-radius:10px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            ${topControlHeader}
+
+            <div style="background:#ecfdf5; border:1px solid #10b981; color:#065f46; padding:14px 18px; border-radius:10px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
               <div>
-                <strong style="font-size:1.05rem;"><i class="fa-solid fa-circle-check"></i> 期初 KAB 問卷已完成填寫！</strong>
-                <p style="margin:4px 0 0 0; font-size:0.88rem;">系統已即時計算您與全班的期初學習基線與各提問指標分析結果。期末問卷填寫完後將即時呈顯前後測成長比較。</p>
+                <strong style="font-size:1rem;"><i class="fa-solid fa-circle-check"></i> ${studentObj.name} 同學已完成【期初 Pre-test】問卷！</strong>
+                <p style="margin:4px 0 0 0; font-size:0.85rem;">系統已即時運算該學生之期初學習基線與各提問指標分析圖表。期末時可開放填寫【期末 Post-test】並進行前後測成長對比。</p>
               </div>
               <button onclick="window.startPostTestForm()" style="background:#047857; color:#fff; border:none; padding:8px 18px; border-radius:8px; font-weight:800; font-size:0.88rem; cursor:pointer; box-shadow:0 2px 8px rgba(4,120,87,0.3);">
-                📝 進入【期末 Post-test】問卷填寫 ➔
+                📝 開放並填寫【期末 Post-test】問卷 ➔
               </button>
             </div>
 
@@ -590,7 +630,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div style="background:#fff; border:1px solid #cbd5e1; padding:20px; border-radius:10px; margin-bottom:20px;">
               <h4 style="font-size:1.05rem; color:#0b3c5d; font-weight:800; margin:0 0 16px 0; border-bottom:2px solid #e2e8f0; padding-bottom:8px;">
-                📊 期初 Pre-test 各提問分項分析圖表
+                📊 ${studentObj.name} 期初 Pre-test 各提問分項分析圖表
               </h4>
               ${questions.map(q => {
                 const score = preData ? (preData[q.id] || 3) : 3;
@@ -610,29 +650,31 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <button onclick="window.resetKabSurveyState()" style="background:#f1f5f9; color:#64748b; border:1px solid #cbd5e1; padding:6px 14px; border-radius:6px; font-size:0.82rem; cursor:pointer;">
-                🔄 重置評估狀態 (重新模擬填寫)
+              <button onclick="window.resetStudentKabRecord()" style="background:#f1f5f9; color:#64748b; border:1px solid #cbd5e1; padding:6px 14px; border-radius:6px; font-size:0.82rem; cursor:pointer;">
+                🔄 重置 ${studentObj.name} 的評估資料
               </button>
               <button onclick="window.startPostTestForm()" style="background:#0284c7; color:#fff; border:none; padding:8px 20px; border-radius:8px; font-weight:800; font-size:0.9rem; cursor:pointer;">
                 進入【期末 Post-test】填寫 ➔
               </button>
             </div>
           `;
-        } else if (surveyState === 'filling_post') {
+        } else if (studentRecord.state === 'filling_post') {
           htmlContent = `
-            <div style="background:#0b3c5d; color:#fff; padding:18px 20px; border-radius:10px; margin-bottom:20px;">
+            ${topControlHeader}
+
+            <div style="background:#0b3c5d; color:#fff; padding:16px 20px; border-radius:10px; margin-bottom:18px;">
               <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                 <div>
-                  <h3 style="margin:0 0 6px 0; font-size:1.2rem;"><i class="fa-solid fa-graduation-cap"></i> KAB 課程學習成效自評問卷 【期末 Post-test】</h3>
-                  <p style="margin:0; font-size:0.88rem; color:#e0f2fe;">請評估您在經歷 18 週環境影響評估課程與 AI 專案實作後的最新學習成效。提交後系統將即時展現後測結果及前後測學習成長差異！</p>
+                  <h3 style="margin:0 0 4px 0; font-size:1.15rem;"><i class="fa-solid fa-graduation-cap"></i> 2. 【期末 Post-test 自評問卷】 (${studentObj.name})</h3>
+                  <p style="margin:0; font-size:0.85rem; color:#e0f2fe;">請評估經歷 18 週學習後的最新成效。提交後系統將即時展現期末結果與前後測比較差別！</p>
                 </div>
-                <span style="background:#10b981; color:#fff; padding:4px 12px; border-radius:12px; font-weight:800; font-size:0.82rem;">階段 2/2：期末總結評估</span>
+                <span style="background:#10b981; color:#fff; padding:4px 12px; border-radius:12px; font-weight:800; font-size:0.82rem;">階段 2/2：期末總結</span>
               </div>
             </div>
 
             <form id="postTestForm" onsubmit="window.submitPostTestForm(event)" style="background:#f8fafc; border:1px solid #cbd5e1; padding:20px; border-radius:10px;">
               <div style="margin-bottom:16px; font-weight:700; color:#0b3c5d; border-bottom:2px solid #10b981; padding-bottom:6px;">
-                📝 期末學習量表 (請依學期結束後之實際能力評分 1 ~ 5 分)
+                📝 期末學習量表 (請依學期結束後實際能力評分 1 ~ 5 分)
               </div>
               ${questions.map(q => `
                 <div style="background:#fff; border:1px solid #e2e8f0; padding:12px 16px; border-radius:8px; margin-bottom:12px;">
@@ -652,12 +694,15 @@ document.addEventListener('DOMContentLoaded', () => {
               
               <div style="text-align:right; margin-top:20px;">
                 <button type="submit" style="background:#10b981; color:#fff; border:none; padding:10px 24px; border-radius:8px; font-weight:800; font-size:0.95rem; cursor:pointer; box-shadow:0 4px 12px rgba(16,185,129,0.3);">
-                  🚀 提交【期末 Post-test】問卷並檢視前後測差異與成長分析 ➔
+                  🚀 提交【期末 Post-test】問卷並檢視前後測差別與成長對比 ➔
                 </button>
               </div>
             </form>
           `;
-        } else if (surveyState === 'completed_post') {
+        } else if (studentRecord.state === 'completed_post') {
+          const preData = studentRecord.pre;
+          const postData = studentRecord.post;
+
           const kPre = computeDimAvg(preData, ['q1','q2','q3']);
           const aPre = computeDimAvg(preData, ['q4','q5','q6']);
           const bPre = computeDimAvg(preData, ['q7','q8','q9']);
@@ -671,13 +716,15 @@ document.addEventListener('DOMContentLoaded', () => {
           const bDiff = bPost - bPre;
 
           htmlContent = `
-            <div style="background:linear-gradient(135deg, #0b3c5d, #0284c7); color:#fff; padding:20px; border-radius:10px; margin-bottom:20px; box-shadow:0 6px 16px rgba(11,60,93,0.3);">
+            ${topControlHeader}
+
+            <div style="background:linear-gradient(135deg, #0b3c5d, #0284c7); color:#fff; padding:18px 20px; border-radius:10px; margin-bottom:18px; box-shadow:0 6px 16px rgba(11,60,93,0.3);">
               <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                 <div>
-                  <h3 style="margin:0 0 6px 0; font-size:1.25rem;"><i class="fa-solid fa-chart-line"></i> 期初 vs 期末 KAB 學習成長差異與成效分析對比</h3>
-                  <p style="margin:0; font-size:0.88rem; color:#e0f2fe;">恭喜完成學期完整 KAB 評估！以下為您於「期初 Pre-test」與「期末 Post-test」的提問分析結果與顯著成效增長比較。</p>
+                  <h3 style="margin:0 0 4px 0; font-size:1.2rem;"><i class="fa-solid fa-chart-line"></i> ${studentObj.name} - 期初 vs 期末 KAB 學習成長差別與成效分析</h3>
+                  <p style="margin:0; font-size:0.85rem; color:#e0f2fe;">已完成全學期前後測！以下呈現該生於期初與期末之各指標得分與顯著成長比對。</p>
                 </div>
-                <span style="background:#10b981; color:#fff; padding:4px 14px; border-radius:14px; font-weight:800; font-size:0.85rem;">已完成全學期評估</span>
+                <span style="background:#10b981; color:#fff; padding:4px 14px; border-radius:14px; font-weight:800; font-size:0.82rem;">前後測對比已完成</span>
               </div>
             </div>
 
@@ -715,7 +762,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div style="background:#fff; border:1px solid #cbd5e1; padding:20px; border-radius:10px; margin-bottom:20px;">
               <h4 style="font-size:1.05rem; color:#0b3c5d; font-weight:800; margin:0 0 16px 0; border-bottom:2px solid #0284c7; padding-bottom:8px;">
-                📊 各提問 (Q1~Q9) 期初 vs 期末差別指標分析與成長對比
+                📊 ${studentObj.name} 各提問 (Q1~Q9) 期初 vs 期末差別指標分析與成長對比
               </h4>
               ${questions.map(q => {
                 const preVal = preData ? (preData[q.id] || 3) : 3;
@@ -759,8 +806,8 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div style="text-align:center;">
-              <button onclick="window.resetKabSurveyState()" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; padding:8px 20px; border-radius:8px; font-size:0.88rem; cursor:pointer; font-weight:700;">
-                🔄 重置全學期問卷資料 (重新模擬完整期初/期末流程)
+              <button onclick="window.resetStudentKabRecord()" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; padding:8px 20px; border-radius:8px; font-size:0.88rem; cursor:pointer; font-weight:700;">
+                🔄 重置 ${studentObj.name} 的全學期問卷資料
               </button>
             </div>
           `;
@@ -773,42 +820,128 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
       }
 
+      // Switch Active Student Helper
+      window.switchKabStudent = function(studentId) {
+        localStorage.setItem('eia_kab_active_student_id', studentId);
+        modalBody.innerHTML = renderKabSurveyView();
+      };
+
+      // Submit Pre-Test for Active Student
       window.submitPreTestForm = function(e) {
         e.preventDefault();
+        const roster = (window.EIA_COURSE_DATA && window.EIA_COURSE_DATA.studentRoster) ? window.EIA_COURSE_DATA.studentRoster : [];
+        let activeStudentId = localStorage.getItem('eia_kab_active_student_id') || (roster[0] ? roster[0].id : '11301001');
+
         const form = document.getElementById('preTestForm');
         const formData = new FormData(form);
         const data = {};
         for (let [k, v] of formData.entries()) {
           data[k] = parseInt(v, 10);
         }
-        localStorage.setItem('eia_kab_pre_data', JSON.stringify(data));
-        localStorage.setItem('eia_kab_survey_state', 'completed_pre');
+
+        let studentRecordKey = 'eia_kab_record_' + activeStudentId;
+        let studentRecord = JSON.parse(localStorage.getItem(studentRecordKey) || '{"pre":null, "post":null, "state":"unfilled_pre"}');
+        studentRecord.pre = data;
+        studentRecord.state = 'completed_pre';
+
+        localStorage.setItem(studentRecordKey, JSON.stringify(studentRecord));
         modalBody.innerHTML = renderKabSurveyView();
       };
 
+      // Unlock & Start Post-Test Form
       window.startPostTestForm = function() {
-        localStorage.setItem('eia_kab_survey_state', 'filling_post');
+        const roster = (window.EIA_COURSE_DATA && window.EIA_COURSE_DATA.studentRoster) ? window.EIA_COURSE_DATA.studentRoster : [];
+        let activeStudentId = localStorage.getItem('eia_kab_active_student_id') || (roster[0] ? roster[0].id : '11301001');
+        let studentRecordKey = 'eia_kab_record_' + activeStudentId;
+        let studentRecord = JSON.parse(localStorage.getItem(studentRecordKey) || '{}');
+        studentRecord.state = 'filling_post';
+        localStorage.setItem(studentRecordKey, JSON.stringify(studentRecord));
         modalBody.innerHTML = renderKabSurveyView();
       };
 
+      // Submit Post-Test for Active Student
       window.submitPostTestForm = function(e) {
         e.preventDefault();
+        const roster = (window.EIA_COURSE_DATA && window.EIA_COURSE_DATA.studentRoster) ? window.EIA_COURSE_DATA.studentRoster : [];
+        let activeStudentId = localStorage.getItem('eia_kab_active_student_id') || (roster[0] ? roster[0].id : '11301001');
+
         const form = document.getElementById('postTestForm');
         const formData = new FormData(form);
         const data = {};
         for (let [k, v] of formData.entries()) {
           data[k] = parseInt(v, 10);
         }
-        localStorage.setItem('eia_kab_post_data', JSON.stringify(data));
-        localStorage.setItem('eia_kab_survey_state', 'completed_post');
+
+        let studentRecordKey = 'eia_kab_record_' + activeStudentId;
+        let studentRecord = JSON.parse(localStorage.getItem(studentRecordKey) || '{}');
+        studentRecord.post = data;
+        studentRecord.state = 'completed_post';
+
+        localStorage.setItem(studentRecordKey, JSON.stringify(studentRecord));
         modalBody.innerHTML = renderKabSurveyView();
       };
 
-      window.resetKabSurveyState = function() {
-        localStorage.removeItem('eia_kab_survey_state');
-        localStorage.removeItem('eia_kab_pre_data');
-        localStorage.removeItem('eia_kab_post_data');
+      // Reset record for single student
+      window.resetStudentKabRecord = function() {
+        const roster = (window.EIA_COURSE_DATA && window.EIA_COURSE_DATA.studentRoster) ? window.EIA_COURSE_DATA.studentRoster : [];
+        let activeStudentId = localStorage.getItem('eia_kab_active_student_id') || (roster[0] ? roster[0].id : '11301001');
+        let studentRecordKey = 'eia_kab_record_' + activeStudentId;
+        localStorage.removeItem(studentRecordKey);
         modalBody.innerHTML = renderKabSurveyView();
+      };
+
+      // Export All Survey Results to Excel (CSV with UTF-8 BOM)
+      window.exportKabToExcel = function() {
+        const roster = (window.EIA_COURSE_DATA && window.EIA_COURSE_DATA.studentRoster) ? window.EIA_COURSE_DATA.studentRoster : [];
+        
+        let csvRows = [];
+        // Header
+        csvRows.push(['學號', '姓名', '科系班級', '期初狀態', '期初_K知識均分', '期初_A態度均分', '期初_B行為均分', '期初_Q1', '期初_Q2', '期初_Q3', '期初_Q4', '期初_Q5', '期初_Q6', '期初_Q7', '期初_Q8', '期初_Q9', '期末狀態', '期末_K知識均分', '期末_A態度均分', '期末_B行為均分', '期末_Q1', '期末_Q2', '期末_Q3', '期末_Q4', '期末_Q5', '期末_Q6', '期末_Q7', '期末_Q8', '期末_Q9', 'K成長差異', 'A成長差異', 'B成長差異'].join(','));
+
+        roster.forEach(student => {
+          let recKey = 'eia_kab_record_' + student.id;
+          let rec = JSON.parse(localStorage.getItem(recKey) || '{"pre":null, "post":null, "state":"未填寫"}');
+
+          let pre = rec.pre || {};
+          let post = rec.post || {};
+
+          let preK = pre.q1 ? ((pre.q1 + pre.q2 + pre.q3) / 3).toFixed(2) : '未填寫';
+          let preA = pre.q4 ? ((pre.q4 + pre.q5 + pre.q6) / 3).toFixed(2) : '未填寫';
+          let preB = pre.q7 ? ((pre.q7 + pre.q8 + pre.q9) / 3).toFixed(2) : '未填寫';
+
+          let postK = post.q1 ? ((post.q1 + post.q2 + post.q3) / 3).toFixed(2) : '未填寫';
+          let postA = post.q4 ? ((post.q4 + post.q5 + post.q6) / 3).toFixed(2) : '未填寫';
+          let postB = post.q7 ? ((post.q7 + post.q8 + post.q9) / 3).toFixed(2) : '未填寫';
+
+          let diffK = (post.q1 && pre.q1) ? (parseFloat(postK) - parseFloat(preK)).toFixed(2) : 'N/A';
+          let diffA = (post.q4 && pre.q4) ? (parseFloat(postA) - parseFloat(preA)).toFixed(2) : 'N/A';
+          let diffB = (post.q7 && pre.q7) ? (parseFloat(postB) - parseFloat(preB)).toFixed(2) : 'N/A';
+
+          let row = [
+            `"${student.id}"`,
+            `"${student.name}"`,
+            `"${student.dept}"`,
+            `"${rec.pre ? '已完成' : '未填寫'}"`,
+            preK, preA, preB,
+            pre.q1||'', pre.q2||'', pre.q3||'', pre.q4||'', pre.q5||'', pre.q6||'', pre.q7||'', pre.q8||'', pre.q9||'',
+            `"${rec.post ? '已完成' : '未填寫'}"`,
+            postK, postA, postB,
+            post.q1||'', post.q2||'', post.q3||'', post.q4||'', post.q5||'', post.q6||'', post.q7||'', post.q8||'', post.q9||'',
+            diffK, diffA, diffB
+          ];
+          csvRows.push(row.join(','));
+        });
+
+        const csvContent = '\uFEFF' + csvRows.join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `輔英EIA_KAB學習問卷結果匯出_${new Date().toISOString().slice(0,10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
       };
 
       function computeDimAvg(dataObj, qKeys) {
@@ -819,7 +952,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       contentHtml = renderKabSurveyView();
-    } else if (modalType === 'case') {
+    }
+    else if (modalType === 'case') {
       contentHtml = `
         <div style="padding:10px;">
           <div style="background:#fff7ed; border-left:4px solid #f97316; padding:16px; border-radius:8px; margin-bottom:16px;">
