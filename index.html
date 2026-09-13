@@ -80,7 +80,7 @@
             <label style="font-size:0.9rem; font-weight:700; color:#0b3c5d; white-space:nowrap;">
               <i class="fa-solid fa-calendar-week" style="color:#0284c7;"></i> 週次下接：
             </label>
-            <select id="weekSelectDropdown" style="width:100%; padding:8px 12px; border-radius:8px; border:2px solid #0b3c5d; font-size:0.9rem; background:#f0f9ff; font-weight:700; color:#0b3c5d; cursor:pointer;">
+            <select id="weekSelectDropdown" onchange="if(window.handleWeekSelect) window.handleWeekSelect(this.value, true)" style="width:100%; padding:8px 12px; border-radius:8px; border:2px solid #0b3c5d; font-size:0.9rem; background:#f0f9ff; font-weight:700; color:#0b3c5d; cursor:pointer;">
               <option value="all">-- 下拉選擇單一週次 (精簡畫面) --</option>
               <optgroup label="📘 無 AI 導入設計週次 (10 週)">
                 <option value="w1">W01 課程導覽與教師介紹 (9/16)</option>

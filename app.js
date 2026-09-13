@@ -27,13 +27,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const resetWeekFilterBtn = document.getElementById('resetWeekFilterBtn');
   const filterStatusBadge = document.getElementById('filterStatusBadge');
 
-  // Global helper for week navigation
-  window.selectWeekNav = function(weekVal) {
+  // Global helper for week navigation & scrolling focus
+  window.handleWeekSelect = function(weekVal, shouldScroll = true) {
     if (weekSelectDropdown) {
       weekSelectDropdown.value = weekVal;
-      if (categoryFilterSelect) categoryFilterSelect.value = 'all';
+      if (weekVal !== 'all' && categoryFilterSelect) {
+        categoryFilterSelect.value = 'all';
+      }
       applyFiltersAndRender();
+
+      if (shouldScroll) {
+        setTimeout(() => {
+          const targetEl = document.getElementById('columnLayoutContainer') || document.getElementById('singleSyllabusContainer');
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 60);
+      }
     }
+  };
+
+  window.selectWeekNav = function(weekVal) {
+    window.handleWeekSelect(weekVal, true);
   };
 
   // Filter Event Listeners
@@ -56,10 +71,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (weekSelectDropdown) {
     weekSelectDropdown.addEventListener('change', () => {
-      if (weekSelectDropdown.value !== 'all' && categoryFilterSelect) {
-        categoryFilterSelect.value = 'all';
+      window.handleWeekSelect(weekSelectDropdown.value, true);
+    });
+
+    weekSelectDropdown.addEventListener('click', () => {
+      if (weekSelectDropdown.value !== 'all') {
+        window.handleWeekSelect(weekSelectDropdown.value, true);
       }
-      applyFiltersAndRender();
     });
   }
 
