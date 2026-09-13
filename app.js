@@ -185,6 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderColumnItem(week, isAi, isFocused = false) {
     const prevNum = week.weekNum > 1 ? week.weekNum - 1 : 18;
     const nextNum = week.weekNum < 18 ? week.weekNum + 1 : 1;
+    const isW1 = (week.weekNum === 1);
 
     return `
       <div class="col-week-item ${isFocused ? 'focused-single-week' : ''}" style="${isFocused ? 'border:2px solid #0284c7; background:#fff; padding:18px; border-radius:12px; box-shadow:0 4px 14px rgba(2,132,199,0.12);' : ''}">
@@ -219,6 +220,24 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="outcome-item"><strong>🧠 知識 (K)：</strong> <span>${week.outcomes.knowledge}</span></div>
             <div class="outcome-item"><strong>❤️ 態度 (A)：</strong> <span>${week.outcomes.attitude}</span></div>
             <div class="outcome-item"><strong>🛠️ 行為 (B)：</strong> <span>${week.outcomes.behavior}</span></div>
+          </div>
+        ` : ''}
+
+        ${isW1 ? `
+          <!-- Prominent Direct Voice Guide Player Bar for W01 -->
+          <div style="background: linear-gradient(135deg, #0b3c5d 0%, #0284c7 100%); color:#fff; padding:14px 18px; border-radius:10px; margin:12px 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; box-shadow:0 4px 14px rgba(2,132,199,0.22); border:1px solid #38bdf8;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div style="background:#f59e0b; color:#fff; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0; box-shadow:0 2px 8px rgba(245,158,11,0.4);">
+                <i class="fa-solid fa-volume-high"></i>
+              </div>
+              <div>
+                <strong style="font-size:1rem; color:#fff; font-weight:800;">W01 修課指南 AI 語音導讀播放器 (Web Speech API)</strong>
+                <div style="font-size:0.83rem; color:#e0f2fe; margin-top:2px;">賴文亮教授親錄導讀 ‧ 課程定位、18週地圖、60/40戰略方式</div>
+              </div>
+            </div>
+            <button onclick="window.openCardModal('guide', 'w01-c1')" style="background:#f59e0b; color:#78350f; border:none; padding:8px 18px; border-radius:8px; font-weight:800; font-size:0.9rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 2px 8px rgba(0,0,0,0.2);">
+              <i class="fa-solid fa-play"></i> 開啟語音導讀播放器 ➔
+            </button>
           </div>
         ` : ''}
 
