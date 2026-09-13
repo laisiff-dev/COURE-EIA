@@ -1074,7 +1074,134 @@ document.addEventListener('DOMContentLoaded', () => {
           </ul>
         </div>
       `;
-    } else if (modalType === 'lecture' || cardId === 'w01-c2' || cardId === 'w02-c1' || cardId === 'w03-c1' || cardId === 'w05-c1' || cardId === 'w07-c1' || cardId === 'w10-c1' || cardId === 'w11-c1' || cardId === 'w15-c1') {
+        } else if (modalType === 'w02_guide' || cardId === 'w02-c1') {
+      contentHtml = `
+        <!-- W02 Voice Guide Header & Player -->
+        <div style="background: linear-gradient(135deg, #0b3c5d 0%, #0284c7 100%); color:#fff; padding:20px; border-radius:12px; margin-bottom:20px; box-shadow:0 6px 18px rgba(2,132,199,0.25);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div>
+              <span style="background:rgba(255,255,255,0.2); color:#fff; padding:3px 10px; border-radius:12px; font-size:0.8rem; font-weight:700;">
+                <i class="fa-solid fa-volume-high"></i> W02 專屬 AI 語音導讀播放器
+              </span>
+              <h2 style="font-size:1.35rem; margin:8px 0 4px 0; color:#fff; font-weight:800;">
+                <i class="fa-solid fa-scale-balanced"></i> W02 環評法與施行細則解碼（含語音導讀）
+              </h2>
+              <p style="font-size:0.88rem; color:#e0f2fe; margin:0;">
+                輔英科技大學 《環境影響評估》 (授課教師：賴文亮 教授) ‧ 第二週法規講義與認定標準專題
+              </p>
+            </div>
+            <span id="w02SpeechStatusTag" style="background:#f59e0b; color:#78350f; font-weight:800; padding:6px 14px; border-radius:20px; font-size:0.88rem;">
+              ▶️ 點擊下方播放語音導讀
+            </span>
+          </div>
+
+          <!-- Speech Control Panel -->
+          <div style="background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25); border-radius:10px; padding:14px; margin-top:16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <button onclick="window.playW02GuideSpeech()" style="background:#f59e0b; color:#fff; border:none; padding:8px 18px; border-radius:8px; font-weight:800; font-size:0.9rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 2px 8px rgba(0,0,0,0.2);">
+                <i class="fa-solid fa-play"></i> 播放導讀
+              </button>
+              <button onclick="window.pauseW02GuideSpeech()" style="background:rgba(255,255,255,0.2); color:#fff; border:1px solid rgba(255,255,255,0.4); padding:8px 14px; border-radius:8px; font-weight:700; font-size:0.85rem; cursor:pointer;">
+                <i class="fa-solid fa-pause"></i> 暫停
+              </button>
+              <button onclick="window.stopW02GuideSpeech()" style="background:rgba(255,255,255,0.2); color:#fff; border:1px solid rgba(255,255,255,0.4); padding:8px 14px; border-radius:8px; font-weight:700; font-size:0.85rem; cursor:pointer;">
+                <i class="fa-solid fa-stop"></i> 停止
+              </button>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:0.82rem; font-weight:700; color:#e0f2fe;">語音速度：</span>
+              <select onchange="window.setW02GuideSpeechRate(parseFloat(this.value))" style="background:#fff; color:#0f172a; border:none; padding:5px 10px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer;">
+                <option value="0.75">0.75x 慢速</option>
+                <option value="1.0" selected>1.0x 標準速度</option>
+                <option value="1.25">1.25x 快速</option>
+                <option value="1.5">1.5x 高速</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- W02 Script Container -->
+        <div id="w02GuideTextScript" style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:10px; padding:18px; margin-bottom:20px; font-size:0.93rem; line-height:1.75; color:#334155;">
+          <h4 style="color:#0b3c5d; margin:0 0 10px 0; font-weight:800; font-size:1.05rem; border-bottom:2px solid #0284c7; padding-bottom:6px;">
+            🎙️ 賴文亮教授親錄 W02 授課導讀逐字稿：
+          </h4>
+          <p style="margin-bottom:10px;">
+            各位同學們好，我是賴文亮教授。歡迎來到第二週《我國環境影響評估法規體系與認定標準解析》。本週我們的核心學習目標，是幫助大家建立完整且清晰的環評法章體系與實務防線認知。
+          </p>
+          <p style="margin-bottom:10px;">
+            我國《環境影響評估法》自民國83年公布施行以來，即確立了『預防重於治療』的核心法理。依據第1條規定，環評目的在於預防及減輕開發行為對環境造成之不良影響。其中最關鍵的條文為第14條的『環評否決權』——若環評審查結論未獲通過，目的事業主管機關即不得許可該開發行為，這是環保法規中最具法律強制力的防線。
+          </p>
+          <p style="margin-bottom:0;">
+            本週講義我們將深入剖析第一階段環境影響說明書 (EIR) 與第二階段評估報告書 (EIS) 的程序差異，並配合《開發行為應實施環境影響評估細目及範圍認定標準》附表一與附表二，學習如何計算工業區、高科技園區與水資源工程的量化門檻。請大家對照簡報與本講義指引切實研讀！
+          </p>
+        </div>
+
+        <!-- Structured Lecture Notes Body (規劃原則上課講義) -->
+        <div style="background:#fff; border:1px solid #cbd5e1; border-radius:10px; padding:20px; margin-bottom:20px;">
+          <h3 style="font-size:1.15rem; color:#0b3c5d; font-weight:800; margin:0 0 16px 0; border-bottom:2px solid #0284c7; padding-bottom:8px;">
+            📚 W02 依規劃原則進行之系統化上課講義內容
+          </h3>
+
+          <!-- Unit 1 -->
+          <div style="background:#f0f9ff; border-left:4px solid #0284c7; padding:14px 16px; border-radius:6px; margin-bottom:14px;">
+            <h4 style="margin:0 0 8px 0; color:#0369a1; font-size:1rem; font-weight:800;">
+              ⚖️ 單元一：環評法規金字塔與核心法條解碼 (第1條~第24條)
+            </h4>
+            <ul style="margin:0; padding-left:18px; font-size:0.9rem; color:#334155; line-height:1.7;">
+              <li><strong>第1條（立法目的）</strong>：預防及減輕開發行為對環境造成之不良影響，達成永續發展。</li>
+              <li><strong>第7條（第一階段環評）</strong>：開發單位應編製環境影響說明書 (EIR)，向主管機關申請審查。</li>
+              <li><strong>第8條~第13條（第二階段環評）</strong>：對環境有重大影響之虞者，應進行現場勘察、範疇界定、公聽會及編製評估報告書 (EIS)。</li>
+              <li><strong>第14條（否決權機制）</strong>：審查結論未通過者，不得許可開發。違法許可者無效。</li>
+              <li><strong>第15條與第18條（環現差與追蹤驗收）</strong>：通過後超過3年未動工者，應提報『環境現況差異分析及對策檢討報告』。</li>
+            </ul>
+          </div>
+
+          <!-- Unit 2 -->
+          <div style="background:#fef3c7; border-left:4px solid #f59e0b; padding:14px 16px; border-radius:6px; margin-bottom:14px;">
+            <h4 style="margin:0 0 8px 0; color:#b45309; font-size:1rem; font-weight:800;">
+              🔍 單元二：開發行為應實施環評認定標準 (附表一與附表二門檻實務拆解)
+            </h4>
+            <ul style="margin:0; padding-left:18px; font-size:0.9rem; color:#334155; line-height:1.7;">
+              <li><strong>工業區與科技園區開發</strong>：園區擴建或新建面積達 10 公頃以上，或部位於敏感地質/水質保護區者。</li>
+              <li><strong>水資源與水庫工程</strong>：堰堤蓄水容量、水道變更長度達一定規模，或涉及特定保育類動物棲地者。</li>
+              <li><strong>高架道路與交通工程</strong>：快速道路拓寬達 5 公里以上，或跨越一級環境敏感區者。</li>
+            </ul>
+          </div>
+
+          <!-- Unit 3 -->
+          <div style="background:#f0fdf4; border-left:4px solid #10b981; padding:14px 16px; border-radius:6px; margin-bottom:14px;">
+            <h4 style="margin:0 0 8px 0; color:#047857; font-size:1rem; font-weight:800;">
+              🛠️ 單元三：範疇界定指引與四大環境因子評估體系
+            </h4>
+            <ul style="margin:0; padding-left:18px; font-size:0.9rem; color:#334155; line-height:1.7;">
+              <li><strong>物理與化學因子</strong>：空氣品質 (AERMOD 模擬)、水質 (RPI 指標)、噪音振動與土壤地下水。</li>
+              <li><strong>生態與景觀因子</strong>：陸域/水域生物調查、特有種棲地評價、景觀視覺衝擊。</li>
+              <li><strong>社會經濟與健康風險</strong>：居民問卷、文化資產保護、健康風險評估 (HRA) 四步驟。</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Official Live Teaching Links -->
+        <div style="background:#f0f9ff; border:2px solid #bae6fd; border-radius:12px; padding:18px; margin-bottom:20px;">
+          <h4 style="font-size:1.05rem; color:#0b3c5d; margin:0 0 12px 0; font-weight:800;">
+            🌐 W02 課堂實機操作與官方法規檢索連結門戶：
+          </h4>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:10px;">
+            <a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090001" target="_blank" style="background:#fff; border:1px solid #bae6fd; padding:10px 14px; border-radius:8px; text-decoration:none; color:#0284c7; font-weight:700; font-size:0.88rem; display:flex; align-items:center; justify-content:space-between;">
+              <span><i class="fa-solid fa-scale-balanced"></i> 全國法規資料庫：環評法全文</span> <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+            <a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090002" target="_blank" style="background:#fff; border:1px solid #bae6fd; padding:10px 14px; border-radius:8px; text-decoration:none; color:#0284c7; font-weight:700; font-size:0.88rem; display:flex; align-items:center; justify-content:space-between;">
+              <span><i class="fa-solid fa-gavel"></i> 環評法施行的細則條文</span> <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+            <a href="https://eiadoc.moenv.gov.tw/" target="_blank" style="background:#fff; border:1px solid #bae6fd; padding:10px 14px; border-radius:8px; text-decoration:none; color:#0284c7; font-weight:700; font-size:0.88rem; display:flex; align-items:center; justify-content:space-between;">
+              <span><i class="fa-solid fa-database"></i> 環境部：環評書件查詢系統</span> <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+        </div>
+      `;
+    }
+    else if (modalType === 'lecture' || cardId === 'w01-c2' || cardId === 'w03-c1' || cardId === 'w05-c1' || cardId === 'w07-c1' || cardId === 'w10-c1' || cardId === 'w11-c1' || cardId === 'w15-c1') {
       contentHtml = `
         <h2 class="modal-title" style="color:#0b3c5d;"><i class="fa-solid fa-scale-balanced" style="color:#0284c7;"></i> 環評法規體系總覽與官方網路連結點</h2>
         <p class="modal-subtitle">輔英科技大學 《環境影響評估》課程授課講義與法規檢索門戶 (授課教師：賴文亮 教授)</p>
@@ -1468,3 +1595,73 @@ function attachCardClickDelegation() {
   });
   isCardDelegationAttached = true;
 }
+
+  // Web Speech API Synthesis Engine for W02 Course Guide
+  window.w02GuideSpeechRate = 1.0;
+  window.w02GuideUtterance = null;
+
+  window.setW02GuideSpeechRate = function(rate) {
+    window.w02GuideSpeechRate = rate;
+    if (window.speechSynthesis && window.speechSynthesis.speaking) {
+      window.playW02GuideSpeech();
+    }
+  };
+
+  window.playW02GuideSpeech = function() {
+    if (!('speechSynthesis' in window)) {
+      alert('您的瀏覽器不支援語音合成功能，建議使用 Chrome 或 Edge 瀏覽器！');
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const scriptContainer = document.getElementById('w02GuideTextScript');
+    if (!scriptContainer) return;
+
+    const fullText = scriptContainer.innerText;
+    const utterance = new SpeechSynthesisUtterance(fullText);
+
+    utterance.lang = 'zh-TW';
+    utterance.rate = window.w02GuideSpeechRate || 1.0;
+    utterance.pitch = 1.0;
+
+    utterance.onstart = function() {
+      const tag = document.getElementById('w02SpeechStatusTag');
+      if (tag) tag.innerHTML = '🔊 W02 語音導讀進行中...';
+    };
+
+    utterance.onend = function() {
+      const tag = document.getElementById('w02SpeechStatusTag');
+      if (tag) tag.innerHTML = '✓ W02 語音導讀已播放完成';
+    };
+
+    utterance.onerror = function() {
+      const tag = document.getElementById('w02SpeechStatusTag');
+      if (tag) tag.innerHTML = '▶️ 點擊播放語音導讀';
+    };
+
+    window.w02GuideUtterance = utterance;
+    window.speechSynthesis.speak(utterance);
+  };
+
+  window.pauseW02GuideSpeech = function() {
+    if (window.speechSynthesis) {
+      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+        window.speechSynthesis.pause();
+        const tag = document.getElementById('w02SpeechStatusTag');
+        if (tag) tag.innerHTML = '⏸️ W02 語音導讀已暫停';
+      } else if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+        const tag = document.getElementById('w02SpeechStatusTag');
+        if (tag) tag.innerHTML = '🔊 W02 語音導讀進行中...';
+      }
+    }
+  };
+
+  window.stopW02GuideSpeech = function() {
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+      const tag = document.getElementById('w02SpeechStatusTag');
+      if (tag) tag.innerHTML = '▶️ 點擊播放語音導讀';
+    }
+  };
