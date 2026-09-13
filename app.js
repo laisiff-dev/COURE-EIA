@@ -1,0 +1,638 @@
+/**
+ * 輔英科技大學 賴文亮教授 環境影響評估 (EIA) 雙欄課程網站與問卷控制器
+ * - 上課時段：星期三 第 3-4 節 (10:10 - 12:00)
+ * - 雙欄對照：⚡ 有 AI 導入週次 vs 📘 無 AI 導入週次
+ * - 完整功能：W01 賴文亮教授自我介紹、KAB 期初/期末即時問卷結果與題目分布條狀圖
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+  const aiColumnContent = document.getElementById('aiColumnContent');
+  const nonAiColumnContent = document.getElementById('nonAiColumnContent');
+  const courseSearchInput = document.getElementById('courseSearchInput');
+  const btnTwoCol = document.getElementById('btnTwoCol');
+  const btnTimeline = document.getElementById('btnTimeline');
+  const twoColumnLayout = document.getElementById('twoColumnLayout');
+  const singleSyllabusContainer = document.getElementById('singleSyllabusContainer');
+  const surveyTriggerBtn = document.getElementById('surveyTriggerBtn');
+  const modalBackdrop = document.getElementById('modalBackdrop');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  const modalBody = document.getElementById('modalBody');
+
+  let currentViewMode = 'twocol';
+  let activeSurveyTab = 'live_results'; // 'live_results', 'pre', 'post', 'growth'
+
+  // Dropdown Selectors Elements
+  const categoryFilterSelect = document.getElementById('categoryFilterSelect');
+  const weekSelectDropdown = document.getElementById('weekSelectDropdown');
+  const resetWeekFilterBtn = document.getElementById('resetWeekFilterBtn');
+  const filterStatusBadge = document.getElementById('filterStatusBadge');
+
+  // Global helper for week navigation
+  window.selectWeekNav = function(weekVal) {
+    if (weekSelectDropdown) {
+      weekSelectDropdown.value = weekVal;
+      if (categoryFilterSelect) categoryFilterSelect.value = 'all';
+      applyFiltersAndRender();
+    }
+  };
+
+  // Filter Event Listeners
+  if (categoryFilterSelect) {
+    categoryFilterSelect.addEventListener('change', () => {
+      const catVal = categoryFilterSelect.value;
+      const weekVal = weekSelectDropdown ? weekSelectDropdown.value : 'all';
+      
+      // If user selected a specific week, check if it matches the selected category; if not, reset week selector
+      if (weekVal !== 'all' && window.EIA_COURSE_DATA) {
+        const targetNum = parseInt(weekVal.replace('w', ''), 10);
+        const isAiWeek = window.EIA_COURSE_DATA.aiWeeks.some(w => w.weekNum === targetNum);
+        if ((catVal === 'ai' && !isAiWeek) || (catVal === 'non_ai' && isAiWeek)) {
+          if (weekSelectDropdown) weekSelectDropdown.value = 'all';
+        }
+      }
+      applyFiltersAndRender();
+    });
+  }
+
+  if (weekSelectDropdown) {
+    weekSelectDropdown.addEventListener('change', () => {
+      if (weekSelectDropdown.value !== 'all' && categoryFilterSelect) {
+        categoryFilterSelect.value = 'all';
+      }
+      applyFiltersAndRender();
+    });
+  }
+
+  if (resetWeekFilterBtn) {
+    resetWeekFilterBtn.addEventListener('click', () => {
+      if (categoryFilterSelect) categoryFilterSelect.value = 'all';
+      if (weekSelectDropdown) weekSelectDropdown.value = 'all';
+      if (courseSearchInput) courseSearchInput.value = '';
+      applyFiltersAndRender();
+    });
+  }
+
+  function applyFiltersAndRender() {
+    if (currentViewMode === 'twocol') {
+      renderTwoColumns();
+    } else {
+      renderSingleTimeline();
+    }
+  }
+
+  // Enhanced renderTwoColumns with Dropdown Filtering & Single-Week Focus
+  function renderTwoColumns() {
+    if (!window.EIA_COURSE_DATA) return;
+
+    const keyword = courseSearchInput ? courseSearchInput.value.trim().toLowerCase() : '';
+    const catVal = categoryFilterSelect ? categoryFilterSelect.value : 'all';
+    const weekVal = weekSelectDropdown ? weekSelectDropdown.value : 'all';
+
+    const aiColBox = document.querySelector('.column-box.ai-column');
+    const nonAiColBox = document.querySelector('.column-box.non-ai-column');
+
+    // Filter Weeks
+    let filteredAiWeeks = window.EIA_COURSE_DATA.aiWeeks.filter(w => matchSearch(w, keyword));
+    let filteredNonAiWeeks = window.EIA_COURSE_DATA.nonAiWeeks.filter(w => matchSearch(w, keyword));
+
+    if (weekVal !== 'all') {
+      const targetNum = parseInt(weekVal.replace('w', ''), 10);
+      filteredAiWeeks = filteredAiWeeks.filter(w => w.weekNum === targetNum);
+      filteredNonAiWeeks = filteredNonAiWeeks.filter(w => w.weekNum === targetNum);
+
+      // Single week selection mode: Hide empty column and expand active column to full-width
+      if (aiColBox && nonAiColBox) {
+        if (filteredAiWeeks.length > 0) {
+          aiColBox.style.display = 'block';
+          aiColBox.style.gridColumn = '1 / -1';
+          nonAiColBox.style.display = 'none';
+        } else if (filteredNonAiWeeks.length > 0) {
+          aiColBox.style.display = 'none';
+          nonAiColBox.style.display = 'block';
+          nonAiColBox.style.gridColumn = '1 / -1';
+        }
+      }
+    } else {
+      // Category filter mode or ALL weeks mode
+      if (aiColBox && nonAiColBox) {
+        if (catVal === 'ai') {
+          aiColBox.style.display = 'block';
+          aiColBox.style.gridColumn = '1 / -1';
+          nonAiColBox.style.display = 'none';
+        } else if (catVal === 'non_ai') {
+          aiColBox.style.display = 'none';
+          nonAiColBox.style.display = 'block';
+          nonAiColBox.style.gridColumn = '1 / -1';
+        } else {
+          aiColBox.style.display = 'block';
+          aiColBox.style.gridColumn = '';
+          nonAiColBox.style.display = 'block';
+          nonAiColBox.style.gridColumn = '';
+        }
+      }
+    }
+
+    aiColumnContent.innerHTML = filteredAiWeeks.map(w => renderColumnItem(w, true, weekVal !== 'all')).join('');
+    nonAiColumnContent.innerHTML = filteredNonAiWeeks.map(w => renderColumnItem(w, false, weekVal !== 'all')).join('');
+
+    // Update Filter Status Badge
+    updateFilterBadge(catVal, weekVal, keyword);
+
+    // Card Click Listeners (Delegated)
+    attachCardClickDelegation();
+  }
+
+  function updateFilterBadge(catVal, weekVal, keyword) {
+    if (!filterStatusBadge) return;
+    const isFiltered = (catVal !== 'all' || weekVal !== 'all' || keyword !== '');
+
+    if (resetWeekFilterBtn) {
+      resetWeekFilterBtn.style.display = isFiltered ? 'inline-flex' : 'none';
+    }
+
+    if (weekVal !== 'all') {
+      const targetNum = parseInt(weekVal.replace('w', ''), 10);
+      const allW = [...(window.EIA_COURSE_DATA.aiWeeks || []), ...(window.EIA_COURSE_DATA.nonAiWeeks || [])];
+      const found = allW.find(w => w.weekNum === targetNum);
+      const wTitle = found ? found.title : `第 ${targetNum} 週`;
+      filterStatusBadge.innerHTML = `<i class="fa-solid fa-location-dot"></i> 精準呈現：${found ? found.weekCode : ''} ${wTitle}`;
+      filterStatusBadge.style.background = '#d1fae5';
+      filterStatusBadge.style.color = '#047857';
+    } else if (catVal === 'ai') {
+      filterStatusBadge.innerHTML = `<i class="fa-solid fa-bolt"></i> 分類：僅顯示 8 週 AI 創新週次`;
+      filterStatusBadge.style.background = '#fef3c7';
+      filterStatusBadge.style.color = '#b45309';
+    } else if (catVal === 'non_ai') {
+      filterStatusBadge.innerHTML = `<i class="fa-solid fa-book"></i> 分類：僅顯示 10 週 無 AI 基礎週次`;
+      filterStatusBadge.style.background = '#e0f2fe';
+      filterStatusBadge.style.color = '#0369a1';
+    } else {
+      filterStatusBadge.innerHTML = `<i class="fa-solid fa-list-ul"></i> 模式：顯示全部 18 週雙欄對照`;
+      filterStatusBadge.style.background = '#e0f2fe';
+      filterStatusBadge.style.color = '#0369a1';
+    }
+  }
+
+  function matchSearch(week, keyword) {
+    if (!keyword) return true;
+    const tMatch = week.title.toLowerCase().includes(keyword);
+    const cMatch = week.weekCode.toLowerCase().includes(keyword);
+    const oMatch = week.outcomes && (week.outcomes.knowledge.toLowerCase().includes(keyword) || week.outcomes.attitude.toLowerCase().includes(keyword) || week.outcomes.behavior.toLowerCase().includes(keyword));
+    const cardMatch = week.cards.some(c => c.title.toLowerCase().includes(keyword) || c.desc.toLowerCase().includes(keyword));
+    return tMatch || cMatch || oMatch || cardMatch;
+  }
+
+  function renderColumnItem(week, isAi, isFocused = false) {
+    const prevNum = week.weekNum > 1 ? week.weekNum - 1 : 18;
+    const nextNum = week.weekNum < 18 ? week.weekNum + 1 : 1;
+
+    return `
+      <div class="col-week-item ${isFocused ? 'focused-single-week' : ''}" style="${isFocused ? 'border:2px solid #0284c7; background:#fff; padding:18px; border-radius:12px; box-shadow:0 4px 14px rgba(2,132,199,0.12);' : ''}">
+        ${isFocused ? `
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#f0f9ff; border:1px solid #bae6fd; padding:10px 14px; border-radius:8px; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+            <button onclick="window.selectWeekNav('w${prevNum}')" style="background:#0284c7; color:#fff; border:none; padding:5px 12px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+              <i class="fa-solid fa-chevron-left"></i> 上一週 (W${prevNum < 10 ? '0'+prevNum : prevNum})
+            </button>
+            <span style="font-weight:700; color:#0b3c5d; font-size:0.95rem;">
+              <i class="fa-solid fa-graduation-cap" style="color:#0284c7;"></i> 精準呈現上課規劃內容：${week.weekCode}
+            </span>
+            <button onclick="window.selectWeekNav('w${nextNum}')" style="background:#0284c7; color:#fff; border:none; padding:5px 12px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+              下一週 (W${nextNum < 10 ? '0'+nextNum : nextNum}) <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+        ` : ''}
+
+        <div class="col-week-head">
+          <span class="col-week-code">${week.weekCode}</span>
+          <span class="col-week-date">${week.dateStr}</span>
+        </div>
+        <div class="col-week-title" style="font-size:1.1rem; font-weight:700; color:#0b3c5d; margin:6px 0 10px 0;">${week.title}</div>
+        
+        ${week.noticeAlert ? `
+          <div style="font-size: 0.85rem; background: #fffbeb; color: #92400e; padding: 8px 12px; border-radius: 6px; border: 1px solid #fef3c7; margin-bottom:10px;">
+            ${week.noticeAlert}
+          </div>
+        ` : ''}
+
+        ${week.outcomes ? `
+          <div class="outcome-breakdown-box" style="margin-bottom:12px;">
+            <div class="outcome-item"><strong>🧠 知識 (K)：</strong> <span>${week.outcomes.knowledge}</span></div>
+            <div class="outcome-item"><strong>❤️ 態度 (A)：</strong> <span>${week.outcomes.attitude}</span></div>
+            <div class="outcome-item"><strong>🛠️ 行為 (B)：</strong> <span>${week.outcomes.behavior}</span></div>
+          </div>
+        ` : ''}
+
+        <div class="cards-list" style="margin-top: 8px;">
+          ${week.cards.map(card => `
+            <div class="course-card" data-modal="${card.modalType}" data-card-id="${card.id}" onclick="window.openCardModal('${card.modalType}', '${card.id}')">
+              <div class="card-left">
+                <div class="card-icon-box"><i class="${card.icon}"></i></div>
+                <div class="card-content">
+                  <div class="card-title-row">
+                    <span class="card-title">${card.title}</span>
+                    <span class="card-tag ${card.tagColor}">${card.tag}</span>
+                  </div>
+                  <div class="card-desc">${card.desc}</div>
+                </div>
+              </div>
+              <div class="card-right"><i class="fa-solid fa-chevron-right"></i></div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  // Toggle View Modes
+  if (btnTwoCol && btnTimeline && twoColumnLayout && singleSyllabusContainer) {
+    btnTwoCol.addEventListener('click', () => {
+      btnTwoCol.classList.add('active');
+      btnTimeline.classList.remove('active');
+      twoColumnLayout.style.display = 'grid';
+      singleSyllabusContainer.style.display = 'none';
+      currentViewMode = 'twocol';
+      renderTwoColumns();
+    });
+
+    btnTimeline.addEventListener('click', () => {
+      btnTimeline.classList.add('active');
+      btnTwoCol.classList.remove('active');
+      twoColumnLayout.style.display = 'none';
+      singleSyllabusContainer.style.display = 'flex';
+      currentViewMode = 'timeline';
+      renderSingleTimeline();
+    });
+  }
+
+  if (courseSearchInput) {
+    courseSearchInput.addEventListener('input', applyFiltersAndRender);
+  }
+
+  function renderSingleTimeline() {
+    if (!window.EIA_COURSE_DATA) return;
+
+    const keyword = courseSearchInput ? courseSearchInput.value.trim().toLowerCase() : '';
+    const catVal = categoryFilterSelect ? categoryFilterSelect.value : 'all';
+    const weekVal = weekSelectDropdown ? weekSelectDropdown.value : 'all';
+
+    let allWeeks = [...window.EIA_COURSE_DATA.aiWeeks, ...window.EIA_COURSE_DATA.nonAiWeeks];
+    allWeeks.sort((a, b) => a.weekNum - b.weekNum);
+
+    // Apply Search Keyword Filter
+    allWeeks = allWeeks.filter(w => matchSearch(w, keyword));
+
+    // Apply Category Filter
+    if (catVal === 'ai') {
+      allWeeks = allWeeks.filter(w => window.EIA_COURSE_DATA.aiWeeks.some(aiW => aiW.weekNum === w.weekNum));
+    } else if (catVal === 'non_ai') {
+      allWeeks = allWeeks.filter(w => window.EIA_COURSE_DATA.nonAiWeeks.some(nW => nW.weekNum === w.weekNum));
+    }
+
+    // Apply Week Dropdown Filter
+    if (weekVal !== 'all') {
+      const targetNum = parseInt(weekVal.replace('w', ''), 10);
+      allWeeks = allWeeks.filter(w => w.weekNum === targetNum);
+    }
+
+    singleSyllabusContainer.innerHTML = allWeeks.map(w => `
+      <div style="background:#fff; border:1px solid #e2e8f0; padding:20px; border-radius:10px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <strong style="color:#0b3c5d;">${w.weekCode} (${w.dateStr})</strong>
+          <span style="font-size:0.8rem; padding:2px 8px; border-radius:10px; font-weight:700; ${w.cards.some(c=>c.type==='ai_tool' || c.id==='w04-c1' || c.id==='w06-c1' || c.id==='w08-c1' || c.id==='w09-c1' || c.id==='w12-c1' || c.id==='w13-c1' || c.id==='w14-c1' || c.id==='w18-c1') ? 'background:#d1fae5; color:#047857;' : 'background:#e0f2fe; color:#0369a1;'}">
+            ${w.cards.some(c=>c.type==='ai_tool' || c.id==='w04-c1' || c.id==='w06-c1' || c.id==='w08-c1' || c.id==='w09-c1' || c.id==='w12-c1' || c.id==='w13-c1' || c.id==='w14-c1' || c.id==='w18-c1') ? '⚡ 導入 AI 設計' : '📘 未導入 AI 基礎'}
+          </span>
+        </div>
+        <h3 style="font-size:1.05rem; margin-bottom:10px;">${w.title}</h3>
+        ${w.outcomes ? `
+          <div style="font-size:0.85rem; background:#f8fafc; padding:10px; border-radius:6px; margin-bottom:10px;">
+            <p><strong>🧠 知識 (K)：</strong> ${w.outcomes.knowledge}</p>
+            <p><strong>❤️ 態度 (A)：</strong> ${w.outcomes.attitude}</p>
+            <p><strong>🛠️ 行為 (B)：</strong> ${w.outcomes.behavior}</p>
+          </div>
+        ` : ''}
+        ${w.cards.map(c => `
+          <div class="course-card" data-modal="${c.modalType}" data-card-id="${c.id}" onclick="window.openCardModal('${c.modalType}', '${c.id}')" style="margin-top:8px;">
+            <div class="card-left">
+              <div class="card-icon-box"><i class="${c.icon}"></i></div>
+              <div><strong>${c.title}</strong> - <span style="font-size:0.85rem; color:#64748b;">${c.desc}</span></div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `).join('');
+
+    updateFilterBadge(catVal, weekVal, keyword);
+    attachCardClickDelegation();
+  }
+
+  // Open Card Modal Function
+  function openCardModal(modalType, cardId) {
+    let contentHtml = '';
+
+    if (modalType === 'w01_slides' || cardId === 'w01-slides' || modalType === 'w02_slides' || cardId === 'w02-slides') {
+      const isW2 = (modalType === 'w02_slides' || cardId === 'w02-slides');
+      const slides = isW2 ? (window.EIA_W02_SLIDES || []) : (window.EIA_W01_SLIDES || []);
+      const totalCount = slides.length || (isW2 ? 42 : 35);
+      const weekTitleStr = isW2 ? 'W02 我國環評法規體系與認定標準解析' : 'W01 環評法規體系總覽與學習地圖';
+
+      window.currentSlideIdx = 0;
+
+      function renderInteractiveSlideViewer() {
+        const slide = slides[window.currentSlideIdx] || {
+          slideNum: window.currentSlideIdx + 1,
+          title: `簡報頁次 ${window.currentSlideIdx + 1}`,
+          category: isW2 ? 'W02 法規解碼' : 'W01 基礎講義',
+          content: ['講義內容載入中...']
+        };
+
+        return `
+          <div id="slideModalContainer" style="background:#0f172a; color:#f8fafc; border-radius:12px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+            <!-- Slide Header Bar -->
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:12px; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+              <div>
+                <span style="background:#0284c7; color:#fff; padding:3px 10px; border-radius:12px; font-size:0.8rem; font-weight:700;">${slide.category || '簡報講義'}</span>
+                <strong style="font-size:1.05rem; color:#38bdf8; margin-left:8px;">${weekTitleStr}</strong>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-size:0.9rem; font-weight:700; color:#94a3b8;">
+                  頁次：<span id="slideCounter" style="color:#f59e0b; font-size:1.1rem;">${window.currentSlideIdx + 1}</span> / ${totalCount}
+                </span>
+                <button onclick="window.toggleSlideFullscreen()" style="background:#334155; color:#f8fafc; border:1px solid #475569; padding:5px 12px; border-radius:6px; font-size:0.82rem; cursor:pointer; font-weight:600;">
+                  <i class="fa-solid fa-expand"></i> 全螢幕呈現
+                </button>
+              </div>
+            </div>
+
+            <!-- Slide Content Card Area -->
+            <div id="slideMainCard" style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:24px; min-height:340px; display:flex; flex-direction:column; justify-content:space-between; transition:all 0.2s;">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                  <h3 id="slideTitle" style="font-size:1.25rem; color:#f1f5f9; font-weight:700; margin:0;">
+                    ${slide.title}
+                  </h3>
+                  <span style="font-size:0.8rem; background:#334155; color:#94a3b8; padding:2px 8px; border-radius:4px;">
+                    SLIDE #${slide.slideNum || (window.currentSlideIdx + 1)}
+                  </span>
+                </div>
+
+                <div id="slideContentBody" style="font-size:0.98rem; line-height:1.75; color:#cbd5e1;">
+                  ${Array.isArray(slide.content) ? `
+                    <ul style="padding-left:20px; margin:0;">
+                      ${slide.content.map(pt => `<li style="margin-bottom:8px;">${pt}</li>`).join('')}
+                    </ul>
+                  ` : `<div>${slide.content}</div>`}
+                </div>
+              </div>
+
+              ${slide.note ? `
+                <div style="margin-top:16px; background:rgba(2,132,199,0.15); border-left:4px solid #0284c7; padding:10px 14px; border-radius:4px; font-size:0.88rem; color:#e0f2fe;">
+                  <i class="fa-solid fa-lightbulb" style="color:#f59e0b; margin-right:6px;"></i> <strong>授課重點說明：</strong> ${slide.note}
+                </div>
+              ` : ''}
+            </div>
+
+            <!-- Slide Control Bar -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:18px; pt:12px; border-top:1px dashed #334155;">
+              <button id="prevSlideBtn" onclick="window.navSlide(-1)" ${window.currentSlideIdx === 0 ? 'disabled style="opacity:0.4; cursor:not-allowed; background:#334155; color:#94a3b8; border:none; padding:8px 18px; border-radius:6px;"' : 'style="background:#0284c7; color:#fff; border:none; padding:8px 18px; border-radius:6px; font-weight:700; cursor:pointer;"'}>
+                <i class="fa-solid fa-chevron-left"></i> 上一頁 (Left)
+              </button>
+
+              <div style="font-size:0.85rem; color:#94a3b8;">
+                <i class="fa-solid fa-keyboard"></i> 提示：可用鍵盤 ← / → 切換簡報
+              </div>
+
+              <button id="nextSlideBtn" onclick="window.navSlide(1)" ${window.currentSlideIdx === totalCount - 1 ? 'disabled style="opacity:0.4; cursor:not-allowed; background:#334155; color:#94a3b8; border:none; padding:8px 18px; border-radius:6px;"' : 'style="background:#0284c7; color:#fff; border:none; padding:8px 18px; border-radius:6px; font-weight:700; cursor:pointer;"'}>
+                下一頁 (Right) <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      window.navSlide = function(dir) {
+        window.currentSlideIdx += dir;
+        if (window.currentSlideIdx < 0) window.currentSlideIdx = 0;
+        if (window.currentSlideIdx >= totalCount) window.currentSlideIdx = totalCount - 1;
+        modalBody.innerHTML = renderInteractiveSlideViewer();
+      };
+
+      window.toggleSlideFullscreen = function() {
+        const container = document.getElementById('slideModalContainer');
+        if (container) {
+          if (!document.fullscreenElement) {
+            container.requestFullscreen().catch(err => alert('無法開啟全螢幕模式: ' + err.message));
+          } else {
+            document.exitFullscreen();
+          }
+        }
+      };
+
+      contentHtml = renderInteractiveSlideViewer();
+    } else if (modalType === 'instructor_profile' || cardId === 'w01-c0') {
+      const prof = window.EIA_COURSE_DATA.instructorProfile;
+      contentHtml = `
+        <div class="instructor-profile-card">
+          <div class="instructor-header-row">
+            <div class="instructor-avatar"><i class="fa-solid fa-user-graduate"></i></div>
+            <div class="instructor-name-box">
+              <h3>${prof.name} <span style="font-size:0.95rem; font-weight:500;">(${prof.nameEn})</span></h3>
+              <p>${prof.title}</p>
+              <p><i class="fa-solid fa-envelope"></i> E-mail: ${prof.email}</p>
+            </div>
+          </div>
+          <div style="font-size:0.85rem; background:rgba(255,255,255,0.15); padding:8px 12px; border-radius:6px; color:#e0f2fe; line-height:1.4;">
+            <i class="fa-solid fa-quote-left" style="margin-right:6px;"></i> ${prof.motto}
+          </div>
+        </div>
+
+        <div style="font-size: 0.925rem; line-height: 1.7; color: #334155;">
+          <h4 style="font-size:1.05rem; font-weight:800; color:#0b3c5d; margin:16px 0 8px 0; border-bottom:2px solid #e2e8f0; padding-bottom:4px;">
+            <i class="fa-solid fa-graduation-cap" style="color:#0284c7;"></i> 🎓 學歷 (Education)
+          </h4>
+          <ul style="list-style:none; padding-left:0;">
+            ${prof.education.map(e => `<li style="margin-bottom:6px; padding-left:18px; position:relative;"><span style="position:absolute; left:0; color:#0284c7;">•</span> ${e}</li>`).join('')}
+          </ul>
+
+          <h4 style="font-size:1.05rem; font-weight:800; color:#0b3c5d; margin:16px 0 8px 0; border-bottom:2px solid #e2e8f0; padding-bottom:4px;">
+            <i class="fa-solid fa-briefcase" style="color:#0284c7;"></i> 💼 經歷 (Experience 1991-2026)
+          </h4>
+          <ul style="list-style:none; padding-left:0;">
+            ${prof.experience.map(exp => `<li style="margin-bottom:6px; padding-left:18px; position:relative;"><span style="position:absolute; left:0; color:#0284c7;">•</span> ${exp}</li>`).join('')}
+          </ul>
+
+          <h4 style="font-size:1.05rem; font-weight:800; color:#0b3c5d; margin:16px 0 8px 0; border-bottom:2px solid #e2e8f0; padding-bottom:4px;">
+            <i class="fa-solid fa-trophy" style="color:#f59e0b;"></i> 🏆 榮譽與獎項 (Honors & Awards)
+          </h4>
+          <ul style="list-style:none; padding-left:0;">
+            ${prof.honors.map(h => `<li style="margin-bottom:6px; padding-left:18px; position:relative;"><span style="position:absolute; left:0; color:#f59e0b;">•</span> ${h}</li>`).join('')}
+          </ul>
+
+          <h4 style="font-size:1.05rem; font-weight:800; color:#0b3c5d; margin:16px 0 8px 0; border-bottom:2px solid #e2e8f0; padding-bottom:4px;">
+            <i class="fa-solid fa-award" style="color:#059669;"></i> 📜 專業證照 (Professional Certifications)
+          </h4>
+          <ul style="list-style:none; padding-left:0;">
+            ${prof.certifications.map(c => `<li style="margin-bottom:6px; padding-left:18px; position:relative;"><span style="position:absolute; left:0; color:#059669;">•</span> ${c}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+    } else if (modalType === 'lecture' || cardId === 'w01-c2' || cardId === 'w02-c1' || cardId === 'w03-c1' || cardId === 'w05-c1' || cardId === 'w07-c1' || cardId === 'w10-c1' || cardId === 'w11-c1' || cardId === 'w15-c1') {
+      contentHtml = `
+        <h2 class="modal-title" style="color:#0b3c5d;"><i class="fa-solid fa-scale-balanced" style="color:#0284c7;"></i> 環評法規體系總覽與官方網路連結點</h2>
+        <p class="modal-subtitle">輔英科技大學 《環境影響評估》課程授課講義與法規檢索門戶 (授課教師：賴文亮 教授)</p>
+
+        <!-- Lecture Key Concepts -->
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:18px; margin-bottom:20px;">
+          <h4 style="font-size:1.05rem; color:#0b3c5d; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+            <i class="fa-solid fa-book-bookmark" style="color:#0284c7;"></i> 法規架構與授課重點概要：
+          </h4>
+          <ul style="margin:0; padding-left:20px; font-size:0.92rem; color:#334155; line-height:1.7;">
+            <li><strong>立法目的 (第1條)</strong>：預防及減輕開發行為對環境造成之不良影響，以達成永續發展目標。</li>
+            <li><strong>環評否決權 (第14條)</strong>：環評審查結論未通過者，目的事業主管機關不得許可該開發行為。</li>
+            <li><strong>四大環境範疇</strong>：物理及化學、生態環境、景觀及遊憩、社會經濟環境。</li>
+            <li><strong>兩階段審查</strong>：第一階段環境影響說明書 (EIR) 初審 ➜ 第二階段評估報告書 (EIS) 範疇界定與公聽會。</li>
+          </ul>
+        </div>
+
+        <!-- Official Web Hyperlinks Portal for Live Teaching -->
+        <div style="background:#f0f9ff; border:2px solid #bae6fd; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 4px 12px rgba(2,132,199,0.06);">
+          <h4 style="font-size:1.1rem; color:#0369a1; margin-bottom:12px; font-weight:800; display:flex; align-items:center; gap:8px;">
+            <i class="fa-solid fa-globe" style="color:#0284c7;"></i> 授課專用：國家級官方法規與資料庫網路連結點 (點擊開啟)
+          </h4>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:14px;">
+            <!-- Link 1: EIA Act (Moj LawAll O0090001) -->
+            <a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090001" target="_blank" rel="noopener noreferrer" onclick="window.open('https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090001', '_blank'); return false;" style="text-decoration:none; background:#fff; border:1px solid #93c5fd; border-radius:8px; padding:14px; display:flex; align-items:flex-start; gap:12px; cursor:pointer; transition:all 0.2s; box-shadow:0 2px 4px rgba(0,0,0,0.03);">
+              <div style="background:#0284c7; color:#fff; width:38px; height:38px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;"><i class="fa-solid fa-gavel"></i></div>
+              <div>
+                <div style="font-weight:700; color:#0b3c5d; font-size:0.95rem; margin-bottom:2px;">1. 《環境影響評估法》母法</div>
+                <div style="font-size:0.82rem; color:#64748b;">法務部全國法規資料庫 (最新全文條文)</div>
+                <span style="font-size:0.8rem; color:#0284c7; font-weight:700; display:inline-block; margin-top:4px;">前往法規資料庫 ↗</span>
+              </div>
+            </a>
+
+            <!-- Link 2: EIA Enforcement Rules (Moj LawAll O0090002) -->
+            <a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090002" target="_blank" rel="noopener noreferrer" onclick="window.open('https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090002', '_blank'); return false;" style="text-decoration:none; background:#fff; border:1px solid #93c5fd; border-radius:8px; padding:14px; display:flex; align-items:flex-start; gap:12px; cursor:pointer; transition:all 0.2s; box-shadow:0 2px 4px rgba(0,0,0,0.03);">
+              <div style="background:#0369a1; color:#fff; width:38px; height:38px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;"><i class="fa-solid fa-file-contract"></i></div>
+              <div>
+                <div style="font-weight:700; color:#0b3c5d; font-size:0.95rem; margin-bottom:2px;">2. 《環境影響評估法施行細則》</div>
+                <div style="font-size:0.82rem; color:#64748b;">法務部全國法規資料庫 (環境因子與細節)</div>
+                <span style="font-size:0.8rem; color:#0284c7; font-weight:700; display:inline-block; margin-top:4px;">前往法規資料庫 ↗</span>
+              </div>
+            </a>
+
+            <!-- Link 3: Development Activities Standards (Moj LawAll O0090003) -->
+            <a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090003" target="_blank" rel="noopener noreferrer" onclick="window.open('https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090003', '_blank'); return false;" style="text-decoration:none; background:#fff; border:1px solid #93c5fd; border-radius:8px; padding:14px; display:flex; align-items:flex-start; gap:12px; cursor:pointer; transition:all 0.2s; box-shadow:0 2px 4px rgba(0,0,0,0.03);">
+              <div style="background:#0891b2; color:#fff; width:38px; height:38px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;"><i class="fa-solid fa-list-check"></i></div>
+              <div>
+                <div style="font-weight:700; color:#0b3c5d; font-size:0.95rem; margin-bottom:2px;">3. 《開發行為應實施環評認定標準》</div>
+                <div style="font-size:0.82rem; color:#64748b;">法務部全國法規資料庫 (工廠/交通/能源門檻)</div>
+                <span style="font-size:0.8rem; color:#0284c7; font-weight:700; display:inline-block; margin-top:4px;">前往法規資料庫 ↗</span>
+              </div>
+            </a>
+
+            <!-- Link 4: EIA Query System (MOENV EIA Online) -->
+            <a href="https://eiadoc.moenv.gov.tw/" target="_blank" rel="noopener noreferrer" onclick="window.open('https://eiadoc.moenv.gov.tw/', '_blank'); return false;" style="text-decoration:none; background:#fff; border:1px solid #93c5fd; border-radius:8px; padding:14px; display:flex; align-items:flex-start; gap:12px; cursor:pointer; transition:all 0.2s; box-shadow:0 2px 4px rgba(0,0,0,0.03);">
+              <div style="background:#059669; color:#fff; width:38px; height:38px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;"><i class="fa-solid fa-database"></i></div>
+              <div>
+                <div style="font-weight:700; color:#0b3c5d; font-size:0.95rem; margin-bottom:2px;">4. 環評書件查詢系統 (EIA Online)</div>
+                <div style="font-size:0.82rem; color:#64748b;">全台歷年 EIR 與 EIS 開發說明書完整資料庫</div>
+                <span style="font-size:0.8rem; color:#059669; font-weight:700; display:inline-block; margin-top:4px;">開啟實務資料庫 ↗</span>
+              </div>
+            </a>
+
+            <!-- Link 5: Net-Zero Climate Act (Moj LawAll O0020098) -->
+            <a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0020098" target="_blank" rel="noopener noreferrer" onclick="window.open('https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0020098', '_blank'); return false;" style="text-decoration:none; background:#fff; border:1px solid #93c5fd; border-radius:8px; padding:14px; display:flex; align-items:flex-start; gap:12px; cursor:pointer; transition:all 0.2s; box-shadow:0 2px 4px rgba(0,0,0,0.03);">
+              <div style="background:#16a34a; color:#fff; width:38px; height:38px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;"><i class="fa-solid fa-leaf"></i></div>
+              <div>
+                <div style="font-weight:700; color:#0b3c5d; font-size:0.95rem; margin-bottom:2px;">5. 《氣候變遷因應法》與淨零專區</div>
+                <div style="font-size:0.82rem; color:#64748b;">法務部全國法規資料庫 (溫室氣體盤查與碳評估)</div>
+                <span style="font-size:0.8rem; color:#16a34a; font-weight:700; display:inline-block; margin-top:4px;">前往法規資料庫 ↗</span>
+              </div>
+            </a>
+
+          </div>
+        </div>
+      `;
+    } else if (modalType === 'guide') {
+      contentHtml = `
+        <h2 class="modal-title"><i class="fa-solid fa-compass"></i> W01 課程修課指南與學期地圖</h2>
+        <p class="modal-subtitle">輔英科技大學 環境工程與科學系 賴文亮教授 (星期三 3-4 節)</p>
+        <div style="font-size: 0.95rem; line-height: 1.7; color: #334155;">
+          <p><strong>一、課程定位與核心目標：</strong></p>
+          <p>本課程旨在引導學生掌握環境影響評估（EIA）核心法理、空氣與水品質衝擊模式，並引入生成式 AI（NotebookLM, ChatGPT）輔助非結構化大檔拆解與決策分析。</p>
+          <br>
+          <p><strong>二、60/40 戰略評量機制：</strong></p>
+          <ul style="padding-left: 20px;">
+            <li><strong>60% 平時開放區：</strong>開放大膽使用 AI 工具，但需完整保留 Prompt 提問日誌與人為校正紀錄。</li>
+            <li><strong>40% 核心禁區：</strong>期末實體閉卷筆試，嚴格檢驗專業法理與工程原則是否真正內化。</li>
+          </ul>
+        </div>
+      `;
+    } else if (modalType.startsWith('ai_module_')) {
+      const num = modalType.replace('ai_module_', '');
+      contentHtml = `
+        <h2 class="modal-title"><i class="fa-solid fa-robot" style="color:#0284c7;"></i> 【AI 模組 ${num}】生成式 AI 輔助環評專案沙盒</h2>
+        <p class="modal-subtitle">輔英科技大學 EIA 課程 AI 創新教學實驗單元</p>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 18px; border-radius: 8px; margin-bottom: 16px;">
+          <p style="font-weight:700; color:#0b3c5d;">🤖 模組功能與演練指示：</p>
+          <p style="font-size:0.9rem; color:#475569; line-height:1.6;">本單元引導同學運用 ChatGPT / NotebookLM 進行大檔數據萃取、AERMOD/AQUATOX 模擬輔助與減輕對策草案生成。請同學於 eclass 上傳 AI Prompt 歷程日誌。</p>
+        </div>
+      `;
+    } else {
+      contentHtml = `
+        <h2 class="modal-title"><i class="fa-solid fa-book-open"></i> 課程單元詳細大綱與講義資訊</h2>
+        <p class="modal-subtitle">輔英科技大學 環境影響評估 (EIA) 課程</p>
+        <p>本單元課程教材與簡報已於 eclass 平台上架，請同學登入下載或進行課後線上檢核。</p>
+      `;
+    }
+
+    if (modalBody && modalBackdrop) {
+      modalBody.innerHTML = contentHtml;
+      modalBackdrop.classList.add('active');
+    }
+  }
+
+  // EXPOSE GLOBALLY ON WINDOW
+  window.openCardModal = openCardModal;
+
+  // Modal Close Listeners
+  if (modalCloseBtn && modalBackdrop) {
+    modalCloseBtn.addEventListener('click', () => modalBackdrop.classList.remove('active'));
+    modalBackdrop.addEventListener('click', (e) => {
+      if (e.target === modalBackdrop) modalBackdrop.classList.remove('active');
+    });
+  }
+
+  // Keyboard navigation for slide deck (Left / Right arrows & Escape key)
+  document.addEventListener('keydown', (e) => {
+    if (modalBackdrop && modalBackdrop.classList.contains('active')) {
+      if (e.key === 'ArrowLeft' && typeof window.navSlide === 'function') {
+        window.navSlide(-1);
+      } else if (e.key === 'ArrowRight' && typeof window.navSlide === 'function') {
+        window.navSlide(1);
+      } else if (e.key === 'Escape') {
+        modalBackdrop.classList.remove('active');
+      }
+    }
+  });
+
+  // Initial Render
+  renderTwoColumns();
+});
+
+// Global Event Delegation for Course Cards
+let isCardDelegationAttached = false;
+function attachCardClickDelegation() {
+  if (isCardDelegationAttached) return;
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('.course-card');
+    if (card) {
+      const modalType = card.getAttribute('data-modal');
+      const cardId = card.getAttribute('data-card-id');
+      if (typeof window.openCardModal === 'function') {
+        window.openCardModal(modalType, cardId);
+      }
+    }
+  });
+  isCardDelegationAttached = true;
+}

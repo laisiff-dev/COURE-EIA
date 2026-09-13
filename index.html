@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>環境影響評估 (EIA) 課程網站 - 輔英科技大學 賴文亮教授</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="輔英科技大學環境工程與科學系賴文亮教授『環境影響評估 (EIA)』18 週雙欄課程大綱、AI 導入對照與 KAB 期初期末學習問卷系統。">
+  <meta name="keywords" content="輔英科技大學, 賴文亮, 環境影響評估, EIA, 18週課綱, 雙欄呈現, KAB問卷, NotebookLM, AERMOD">
+
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Navy Banner (Matching 1789274543302.jpg) -->
+  <header class="top-navy-banner">
+    <div class="banner-container">
+      <div class="brand-title">
+        <i class="fa-solid fa-cloud-sun-rain brand-icon"></i>
+        <span>環境影響評估 (EIA) 課程網站</span>
+        <span class="ai-badge"><i class="fa-solid fa-columns"></i> 雙欄位對照呈現</span>
+      </div>
+      <div class="info-pills">
+        <span class="pill"><i class="fa-solid fa-user-tie"></i> 賴文亮 教授</span>
+        <span class="pill"><i class="fa-solid fa-clock"></i> 星期三 第 3-4 節 (10:10-12:00)</span>
+        <span class="pill"><i class="fa-solid fa-location-dot"></i> 教室：C527</span>
+        <button class="survey-trigger-btn" id="surveyTriggerBtn">
+          <i class="fa-solid fa-clipboard-check"></i> KAB 期初/期末學習問卷
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Layout Area -->
+  <main class="main-container">
+
+    <!-- Notice Box Card (Yellow Accent Strip - Matching 1789274543302.jpg) -->
+    <div class="notice-card">
+      <div class="notice-accent"></div>
+      <div class="notice-content">
+        <i class="fa-solid fa-circle-info notice-icon"></i>
+        <span><strong>這裡是本課的教材網站</strong>——每週教材會陸續上架，收藏這一頁就夠。公告與作業繳交仍在 <a href="https://ea7.fy.edu.tw/fy/portalidx.jsp?token=62EFBAB4F5DE03E09DB5429B28EDE059&fnc=BK232" target="_blank" class="eclass-link">eclass 課程頁 <i class="fa-solid fa-arrow-up-right-from-square"></i></a>。</span>
+      </div>
+    </div>
+
+    <!-- Filter & Toolbar Area -->
+    
+      <!-- Filter & Toolbar Area -->
+      <div class="toolbar-section" style="background:#fff; border:1px solid #cbd5e1; border-radius:12px; padding:18px; box-shadow:0 4px 12px rgba(0,0,0,0.04); margin-bottom:24px;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:16px; align-items:center;">
+          
+          <!-- Search Box -->
+          <div class="search-box" style="margin:0;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="courseSearchInput" placeholder="搜尋 18 週大綱、指標或 AI 模組關鍵字...">
+          </div>
+
+          <!-- Dropdown 1: Category Filter (AI vs Non-AI) -->
+          <div style="display:flex; align-items:center; gap:8px;">
+            <label style="font-size:0.9rem; font-weight:700; color:#0b3c5d; white-space:nowrap;">
+              <i class="fa-solid fa-filter" style="color:#0284c7;"></i> 分類篩選：
+            </label>
+            <select id="categoryFilterSelect" style="width:100%; padding:8px 12px; border-radius:8px; border:1.5 solid #0284c7; font-size:0.9rem; background:#fff; font-weight:700; color:#0f172a; cursor:pointer;">
+              <option value="all">📌 顯示全部 18 週內容 (雙欄對照)</option>
+              <option value="ai">⚡ 僅顯示 AI 導入設計週次 (共 8 週)</option>
+              <option value="non_ai">📘 僅顯示 無 AI 導入週次 (共 10 週)</option>
+            </select>
+          </div>
+
+          <!-- Dropdown 2: Single Week Selector (避免畫面冗長) -->
+          <div style="display:flex; align-items:center; gap:8px;">
+            <label style="font-size:0.9rem; font-weight:700; color:#0b3c5d; white-space:nowrap;">
+              <i class="fa-solid fa-calendar-week" style="color:#0284c7;"></i> 週次下接：
+            </label>
+            <select id="weekSelectDropdown" style="width:100%; padding:8px 12px; border-radius:8px; border:2px solid #0b3c5d; font-size:0.9rem; background:#f0f9ff; font-weight:700; color:#0b3c5d; cursor:pointer;">
+              <option value="all">-- 下拉選擇單一週次 (精簡畫面) --</option>
+              <optgroup label="📘 無 AI 導入設計週次 (10 週)">
+                <option value="w1">W01 課程導覽與教師介紹 (9/16)</option>
+                <option value="w2">W02 我國環評法規與認定標準 (9/23)</option>
+                <option value="w3">W03 四大環境因子與基線調查 (9/30)</option>
+                <option value="w5">W05 物理與化學環境影響評估 (10/14)</option>
+                <option value="w7">W07 水質與廢棄物影響評估 (10/28)</option>
+                <option value="w10">W10 社會經濟與健康風險評估 (11/18)</option>
+                <option value="w11">W11 二階段環評範疇界定與公聽會 (11/25)</option>
+                <option value="w15">W15 環評審查委員會運作實務 (12/23)</option>
+                <option value="w16">W16 環評追蹤與違規案例分析 (12/30)</option>
+                <option value="w17">W17 氣候變遷調適與淨零趨勢 (01/06)</option>
+              </optgroup>
+              <optgroup label="⚡ 有 AI 導入設計週次 (8 週)">
+                <option value="w4">⚡ W04 [AI] 生成式 AI 於數據分析 (10/07)</option>
+                <option value="w6">⚡ W06 [AI] 空氣品質 AERMOD 模擬 (10/21)</option>
+                <option value="w8">⚡ W08 [AI] 生態與景觀 AI 圖解 (11/04)</option>
+                <option value="w9">⚡ W09 [AI] 期中專案報告與評析 (11/11)</option>
+                <option value="w12">⚡ W12 [AI] 範疇界定 AI 模擬演練 (12/02)</option>
+                <option value="w13">⚡ W13 [AI] 減輕對策 EMP AI 生成 (12/09)</option>
+                <option value="w14">⚡ W14 [AI] 碳足跡與 ISO14064 整合 (12/16)</option>
+                <option value="w18">⚡ W18 [AI] 期末專案成果發表 (01/13)</option>
+              </optgroup>
+            </select>
+          </div>
+
+        </div>
+
+        <!-- Toolbar Sub-row: View Mode & Reset Button -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:12px; border-top:1px dashed #cbd5e1; flex-wrap:wrap; gap:10px;">
+          <div style="font-size:0.88rem; color:#475569; display:flex; align-items:center; gap:8px;">
+            <span id="filterStatusBadge" style="background:#e0f2fe; color:#0369a1; padding:3px 10px; border-radius:12px; font-weight:700; font-size:0.82rem;">
+              <i class="fa-solid fa-list-ul"></i> 模式：顯示全部 18 週課程
+            </span>
+            <button id="resetWeekFilterBtn" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; padding:3px 10px; border-radius:6px; font-size:0.8rem; cursor:pointer; font-weight:600; display:none;">
+              <i class="fa-solid fa-rotate-left"></i> 重置顯示全部
+            </button>
+          </div>
+
+          <div class="layout-toggle-btns" style="margin:0;">
+            <span class="view-label">檢視模式：</span>
+            <button class="toggle-btn active" id="btnTwoCol"><i class="fa-solid fa-table-columns"></i> 雙欄對照</button>
+            <button class="toggle-btn" id="btnTimeline"><i class="fa-solid fa-list-check"></i> 單欄時間軸</button>
+          </div>
+        </div>
+      </div>
+
+
+    <!-- Two-Column Layout Section (二個 COLUMN 呈現) -->
+    <div class="two-column-layout" id="twoColumnLayout">
+      
+      <!-- Left Column: 有 AI 導入設計週次 (8 週) -->
+      <div class="column-box ai-column">
+        <div class="column-header">
+          <div class="column-title">
+            <i class="fa-solid fa-bolt icon-ai"></i>
+            <span>⚡ 有 AI 導入設計週次 (共 8 週)</span>
+          </div>
+          <span class="column-badge badge-ai">AI 創新教學</span>
+        </div>
+        <div class="column-content" id="aiColumnContent">
+          <!-- Dynamic Content Rendered by app.js -->
+        </div>
+      </div>
+
+      <!-- Right Column: 無 AI 導入設計週次 (10 週) -->
+      <div class="column-box non-ai-column">
+        <div class="column-header">
+          <div class="column-title">
+            <i class="fa-solid fa-book-bookmark icon-non-ai"></i>
+            <span>📘 無 AI 導入設計週次 (共 10 週)</span>
+          </div>
+          <span class="column-badge badge-non-ai">傳統工程基礎</span>
+        </div>
+        <div class="column-content" id="nonAiColumnContent">
+          <!-- Dynamic Content Rendered by app.js -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Single Timeline Layout (Alternative View) -->
+    <section class="syllabus-section" id="singleSyllabusContainer" style="display: none;">
+      <!-- Single column timeline view -->
+    </section>
+
+  </main>
+
+  <!-- Footer (Matching 1789274543302.jpg) -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p>115-1 環境影響評估 | 輔英科技大學 環境工程與科學系 | 賴文亮 教授</p>
+      <p class="footer-sub">上課時間：星期三 第 3-4 節 (10:10-12:00) | 教室：C527 智慧環境人才培訓基地 | Office Hour：星期一、四 第 7-8 節 (C543)</p>
+    </div>
+  </footer>
+
+  <!-- Modal Backdrop Container -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal-box" id="modalBox">
+      <button class="modal-close-btn" id="modalCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-body" id="modalBody">
+        <!-- Content dynamically injected by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
