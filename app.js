@@ -973,240 +973,253 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
       `;
-    } else if (modalType === 'lab') {
+    } else if (modalType === 'lab' || modalType === 'tutorial') {
       contentHtml = `
-        <div style="background:#0f172a; color:#f8fafc; border-radius:14px; padding:24px; box-shadow:0 12px 32px rgba(0,0,0,0.4); border:1px solid #334155;">
-          
-          <!-- Control Panel Header & Room Status Bar -->
-          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #334155; padding-bottom:14px; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
-            <div>
-              <div style="display:flex; align-items:center; gap:10px;">
-                <i class="fa-solid fa-desktop" style="color:#10b981; font-size:1.6rem;"></i>
-                <h3 style="margin:0; font-size:1.25rem; color:#f8fafc; font-weight:800;">
-                  💻 C527 智慧環境人才培訓基地 — 數值模式與實機操作控制台
-                </h3>
-              </div>
-              <p style="margin:4px 0 0 0; font-size:0.85rem; color:#94a3b8;">
-                <i class="fa-solid fa-location-dot" style="color:#38bdf8;"></i> C527 電腦教室預載環境模擬系統 | 授課教師：賴文亮 教授
-              </p>
+        <div style="display:flex; flex-direction:column; gap:20px;">
+
+          <!-- Top Notice Card matching exact user specifications -->
+          <div style="background:#f0fdf4; border-left:5px solid #10b981; border:1px solid #bbf7d0; border-left-width:5px; padding:20px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.04);">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+              <span style="background:#10b981; color:#fff; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.1rem;">⚗️</span>
+              <h3 style="margin:0; color:#065f46; font-size:1.25rem; font-weight:800;">環境模擬實驗與軟體電腦實作全紀錄</h3>
             </div>
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span id="labSwBadge" style="background:rgba(16,185,129,0.2); border:1px solid #10b981; color:#34d399; padding:6px 14px; border-radius:20px; font-size:0.82rem; font-weight:700;">
-                🛠️ 模式：AERMOD (C527 網格連線版)
-              </span>
+            <p style="margin:0 0 14px 0; font-size:0.93rem; color:#166534; line-height:1.6; font-weight:600;">
+              本單元包含大氣高斯擴散模式、水質 RPI 模式與污染傳播模擬之實驗數據處理與實機操作。
+            </p>
+
+            <div style="background:#ffffff; border:1px solid #dcfce7; padding:16px; border-radius:8px; margin-bottom:14px;">
+              <h4 style="margin:0 0 10px 0; font-size:0.98rem; color:#0f766e; font-weight:800; display:flex; align-items:center; gap:6px;">
+                <i class="fa-solid fa-gear" style="color:#059669;"></i> ⚙️ 實驗與軟體操作要點：
+              </h4>
+              <ul style="margin:0; padding-left:22px; font-size:0.91rem; color:#334155; line-height:1.75;">
+                <li style="margin-bottom:4px;"><strong>輸入參數校正：</strong> 氣象背景資料 (Wind Rose)、排放源高與煙氣上升量 (Plume Rise)。</li>
+                <li style="margin-bottom:4px;"><strong>網格計算與等濃線劃設：</strong> 模擬最大地面濃度著地距離與敏感點濃度影響。</li>
+                <li style="margin-bottom:4px;"><strong>數據品質保證 (QA/QC)：</strong> 實測值與模式模擬值之比對校正與誤差分析。</li>
+              </ul>
+            </div>
+
+            <div style="background:#ecfdf5; border:1px solid #a7f3d0; color:#047857; padding:10px 16px; border-radius:8px; font-size:0.9rem; font-weight:700; display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-wrench" style="color:#059669;"></i> 🛠️ 軟體環境：AERMOD / ISCST3 / River Water Quality Model 模擬軟體已配置於 C527 電腦教室。
             </div>
           </div>
 
-          <!-- Software Environment Selector Tabs -->
-          <div style="margin-bottom:20px; background:#1e293b; padding:10px; border-radius:10px; border:1px solid #334155; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-            <span style="font-weight:700; font-size:0.88rem; color:#cbd5e1; margin-right:6px;"><i class="fa-solid fa-cubes"></i> 選擇模擬軟體環境：</span>
-            <button id="swAERMOD" onclick="window.switchLabSoftware('AERMOD')" style="background:#059669; color:#fff; border:none; padding:6px 16px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer; transition:all 0.2s;">
-              <i class="fa-solid fa-wind"></i> AERMOD 高階大氣品質模式
-            </button>
-            <button id="swISCST3" onclick="window.switchLabSoftware('ISCST3')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:6px 16px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer; transition:all 0.2s;">
-              <i class="fa-solid fa-industry"></i> ISCST3 傳統高斯煙羽模式
-            </button>
-            <button id="swRIVER" onclick="window.switchLabSoftware('River Water')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:6px 16px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer; transition:all 0.2s;">
-              <i class="fa-solid fa-water"></i> River Water Quality 水質模式
-            </button>
-          </div>
-
-          <!-- Section 1: 輸入參數校正 -->
-          <div style="background:#1e293b; border:1px solid #334155; padding:18px; border-radius:12px; margin-bottom:20px;">
-            <h4 style="margin:0 0 14px 0; color:#38bdf8; font-size:1.05rem; display:flex; align-items:center; gap:8px; border-bottom:1px solid #334155; padding-bottom:8px;">
-              <i class="fa-solid fa-sliders"></i> ⚙️ 1. 輸入參數校正 (Input Parameter Calibration)
-            </h4>
+          <!-- C527 Interactive Control Panel -->
+          <div style="background:#0f172a; color:#f8fafc; border-radius:14px; padding:24px; box-shadow:0 12px 32px rgba(0,0,0,0.4); border:1px solid #334155;">
             
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+            <!-- Control Panel Header & Room Status Bar -->
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #334155; padding-bottom:14px; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+              <div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <i class="fa-solid fa-desktop" style="color:#10b981; font-size:1.6rem;"></i>
+                  <h3 style="margin:0; font-size:1.25rem; color:#f8fafc; font-weight:800;">
+                    💻 C527 智慧環境人才培訓基地 — 數值模式與實機操作控制台
+                  </h3>
+                </div>
+                <p style="margin:4px 0 0 0; font-size:0.85rem; color:#94a3b8;">
+                  <i class="fa-solid fa-location-dot" style="color:#38bdf8;"></i> C527 電腦教室預載環境模擬系統 | 授課教師：賴文亮 教授
+                </p>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span id="labSwBadge" style="background:rgba(16,185,129,0.2); border:1px solid #10b981; color:#34d399; padding:6px 14px; border-radius:20px; font-size:0.82rem; font-weight:700;">
+                  🛠️ 模式：AERMOD (C527 網格連線版)
+                </span>
+              </div>
+            </div>
+
+            <!-- Software Environment Selector Tabs -->
+            <div style="margin-bottom:20px; background:#1e293b; padding:10px; border-radius:10px; border:1px solid #334155; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+              <span style="font-weight:700; font-size:0.88rem; color:#cbd5e1; margin-right:6px;"><i class="fa-solid fa-cubes"></i> 選擇模擬軟體環境：</span>
+              <button id="swAERMOD" onclick="window.switchLabSoftware('AERMOD')" style="background:#059669; color:#fff; border:none; padding:6px 16px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer; transition:all 0.2s;">
+                <i class="fa-solid fa-wind"></i> AERMOD 高階大氣品質模式
+              </button>
+              <button id="swISCST3" onclick="window.switchLabSoftware('ISCST3')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:6px 16px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer; transition:all 0.2s;">
+                <i class="fa-solid fa-industry"></i> ISCST3 傳統高斯煙羽模式
+              </button>
+              <button id="swRIVER" onclick="window.switchLabSoftware('River Water')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:6px 16px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer; transition:all 0.2s;">
+                <i class="fa-solid fa-water"></i> River Water Quality 水質模式
+              </button>
+            </div>
+
+            <!-- Section 1: 輸入參數校正 -->
+            <div style="background:#1e293b; border:1px solid #334155; padding:18px; border-radius:12px; margin-bottom:20px;">
+              <h4 style="margin:0 0 14px 0; color:#38bdf8; font-size:1.05rem; display:flex; align-items:center; gap:8px; border-bottom:1px solid #334155; padding-bottom:8px;">
+                <i class="fa-solid fa-sliders"></i> ⚙️ 1. 輸入參數校正 (Input Parameter Calibration)
+              </h4>
               
-              <!-- Column A: 氣象背景資料 (Wind Rose & Met) -->
-              <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(56,189,248,0.2); padding:14px; border-radius:8px;">
-                <h5 style="margin:0 0 10px 0; color:#7dd3fc; font-size:0.92rem;"><i class="fa-solid fa-compass"></i> 氣象背景資料 (Meteorological & Wind Rose)</h5>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
                 
-                <div style="margin-bottom:12px;">
-                  <label style="display:flex; justify-content:space-between; font-size:0.84rem; color:#cbd5e1; margin-bottom:4px;">
-                    <span>平均風速 $u$ (Ground Wind Speed):</span>
-                    <strong id="valWindSpeed" style="color:#38bdf8;">2.5 m/s</strong>
-                  </label>
-                  <input type="range" id="labWindSpeed" min="1.0" max="12.0" step="0.1" value="2.5" oninput="window.updateLabSimulation()" style="width:100%; cursor:pointer;">
+                <!-- Column A: 氣象背景資料 (Wind Rose & Met) -->
+                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(56,189,248,0.2); padding:14px; border-radius:8px;">
+                  <h5 style="margin:0 0 10px 0; color:#7dd3fc; font-size:0.92rem;"><i class="fa-solid fa-compass"></i> 氣象背景資料 (Meteorological & Wind Rose)</h5>
+                  
+                  <div style="margin-bottom:12px;">
+                    <label style="display:flex; justify-content:space-between; font-size:0.84rem; color:#cbd5e1; margin-bottom:4px;">
+                      <span>平均風速 $u$ (Ground Wind Speed):</span>
+                      <strong id="valWindSpeed" style="color:#38bdf8;">2.5 m/s</strong>
+                    </label>
+                    <input type="range" id="labWindSpeed" min="1.0" max="12.0" step="0.1" value="2.5" oninput="window.updateLabSimulation()" style="width:100%; cursor:pointer;">
+                  </div>
+
+                  <div style="margin-bottom:12px;">
+                    <label style="display:block; font-size:0.84rem; color:#cbd5e1; margin-bottom:4px;">主導風向 (Wind Rose Prevailing Sector):</label>
+                    <select id="labWindDir" onchange="window.updateLabSimulation()" style="width:100%; background:#0f172a; color:#f8fafc; border:1px solid #475569; padding:6px 10px; border-radius:6px; font-size:0.85rem;">
+                      <option value="NE" selected>NE (東北風 - 台灣冬季主導風)</option>
+                      <option value="N">N (北風)</option>
+                      <option value="E">E (東風)</option>
+                      <option value="SE">SE (東南風)</option>
+                      <option value="SW">SW (西南風 - 台灣夏季主導風)</option>
+                      <option value="NW">NW (西北風)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label style="display:block; font-size:0.84rem; color:#cbd5e1; margin-bottom:6px;">Pasquill 大氣穩定度 (Atmospheric Stability):</label>
+                    <div style="display:grid; grid-template-columns: repeat(6, 1fr); gap:6px;">
+                      <button id="stA" onclick="window.setLabStability('A')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:5px 0; border-radius:4px; font-size:0.8rem; cursor:pointer;">A</button>
+                      <button id="stB" onclick="window.setLabStability('B')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:5px 0; border-radius:4px; font-size:0.8rem; cursor:pointer;">B</button>
+                      <button id="stC" onclick="window.setLabStability('C')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:5px 0; border-radius:4px; font-size:0.8rem; cursor:pointer;">C</button>
+                      <button id="stD" onclick="window.setLabStability('D')" style="background:#38bdf8; color:#0f172a; font-weight:800; border:1px solid #38bdf8; padding:5px 0; border-radius:4px; font-size:0.8rem; cursor:pointer;">D</button>
+                      <button id="stE" onclick="window.setLabStability('E')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:5px 0; border-radius:4px; font-size:0.8rem; cursor:pointer;">E</button>
+                      <button id="stF" onclick="window.setLabStability('F')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:5px 0; border-radius:4px; font-size:0.8rem; cursor:pointer;">F</button>
+                    </div>
+                  </div>
                 </div>
 
-                <div style="margin-bottom:12px;">
-                  <label style="display:block; font-size:0.84rem; color:#cbd5e1; margin-bottom:4px;">主導風向 (Wind Rose Prevailing Sector):</label>
-                  <select id="labWindDir" onchange="window.updateLabSimulation()" style="width:100%; background:#0f172a; color:#f8fafc; border:1px solid #475569; padding:6px 10px; border-radius:6px; font-size:0.85rem;">
-                    <option value="NE" selected>NE (東北風 - 台灣冬季主導風)</option>
-                    <option value="N">N (北風)</option>
-                    <option value="E">E (東風)</option>
-                    <option value="SE">SE (東南風)</option>
-                    <option value="SW">SW (西南風 - 台灣夏季主導風)</option>
-                    <option value="NW">NW (西北風)</option>
-                  </select>
-                </div>
+                <!-- Column B: 排放源高與煙氣上升量 (Plume Rise) -->
+                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(52,211,153,0.2); padding:14px; border-radius:8px;">
+                  <h5 style="margin:0 0 10px 0; color:#6ee7b7; font-size:0.92rem;"><i class="fa-solid fa-smog"></i> 排放源與煙氣上升量 (Source & Plume Rise)</h5>
 
-                <div>
-                  <label style="display:block; font-size:0.84rem; color:#cbd5e1; margin-bottom:6px;">Pasquill 大氣穩定度 (Atmospheric Stability):</label>
-                  <div style="display:grid; grid-template-columns: repeat(6, 1fr); gap:6px;">
-                    <button id="stA" onclick="window.setLabStability('A')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:5px 0; border-radius:4px; font-size:0.8rem; cursor:pointer;">A</button>
-                    <button id="stB" onclick="window.setLabStability('B')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:5px 0; border-radius:4px; font-size:0.8rem; cursor:pointer;">B</button>
-                    <button id="stC" onclick="window.setLabStability('C')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:5px 0; border-radius:4px; font-size:0.8rem; cursor:pointer;">C</button>
-                    <button id="stD" onclick="window.setLabStability('D')" style="background:#38bdf8; color:#0f172a; font-weight:800; border:1px solid #38bdf8; padding:5px 0; border-radius:4px; font-size:0.8rem; cursor:pointer;">D</button>
-                    <button id="stE" onclick="window.setLabStability('E')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:5px 0; border-radius:4px; font-size:0.8rem; cursor:pointer;">E</button>
-                    <button id="stF" onclick="window.setLabStability('F')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:5px 0; border-radius:4px; font-size:0.8rem; cursor:pointer;">F</button>
+                  <div style="margin-bottom:12px;">
+                    <label style="display:flex; justify-content:space-between; font-size:0.84rem; color:#cbd5e1; margin-bottom:4px;">
+                      <span>煙囪實體高度 $h_s$ (Stack Physical Height):</span>
+                      <strong id="valStackHeight" style="color:#34d399;">60 m</strong>
+                    </label>
+                    <input type="range" id="labStackHeight" min="20" max="150" step="5" value="60" oninput="window.updateLabSimulation()" style="width:100%; cursor:pointer;">
+                  </div>
+
+                  <div style="margin-bottom:12px;">
+                    <label style="display:flex; justify-content:space-between; font-size:0.84rem; color:#cbd5e1; margin-bottom:4px;">
+                      <span>污染物排放速率 $Q$ (Emission Rate):</span>
+                      <strong id="valEmissionRate" style="color:#34d399;">120 g/s</strong>
+                    </label>
+                    <input type="range" id="labEmissionRate" min="10" max="300" step="5" value="120" oninput="window.updateLabSimulation()" style="width:100%; cursor:pointer;">
+                  </div>
+
+                  <div style="margin-bottom:10px;">
+                    <label style="display:flex; justify-content:space-between; font-size:0.84rem; color:#cbd5e1; margin-bottom:4px;">
+                      <span>排氣溫度 $T_s$ (Stack Temp):</span>
+                      <strong id="valStackTemp" style="color:#34d399;">140 °C</strong>
+                    </label>
+                    <input type="range" id="labStackTemp" min="50" max="250" step="5" value="140" oninput="window.updateLabSimulation()" style="width:100%; cursor:pointer;">
+                  </div>
+
+                  <!-- Live Calculated Height Result -->
+                  <div style="background:#0f172a; border:1px solid #059669; padding:8px 12px; border-radius:6px; display:flex; justify-content:space-between; font-size:0.82rem; color:#a7f3d0;">
+                    <span>煙氣熱抬升 $\Delta h$: <strong id="resDeltaH" style="color:#f59e0b;">25 m</strong></span>
+                    <span>煙囪有效高度 $H=h_s+\Delta h$: <strong id="resEffH" style="color:#38bdf8;">85 m</strong></span>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <!-- Column B: 排放源高與煙氣上升量 (Plume Rise) -->
-              <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(52,211,153,0.2); padding:14px; border-radius:8px;">
-                <h5 style="margin:0 0 10px 0; color:#6ee7b7; font-size:0.92rem;"><i class="fa-solid fa-smog"></i> 排放源與煙氣上升量 (Source & Plume Rise)</h5>
+            <!-- Section 2: 網格計算與等濃線劃設 Canvas Graphic Section -->
+            <div style="background:#1e293b; border:1px solid #334155; padding:18px; border-radius:12px; margin-bottom:20px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:8px; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+                <h4 style="margin:0; color:#fbbf24; font-size:1.05rem; display:flex; align-items:center; gap:8px;">
+                  <i class="fa-solid fa-chart-line"></i> 📐 2. 網格計算與等濃線劃設 (Grid Computation & Isopleths)
+                </h4>
+                <span id="resComplianceTag" style="background:#10b981; color:#fff; padding:3px 10px; border-radius:12px; font-size:0.8rem; font-weight:700;">
+                  ✅ 符合環評標準 (<100 µg/m³)
+                </span>
+              </div>
 
-                <div style="margin-bottom:12px;">
-                  <label style="display:flex; justify-content:space-between; font-size:0.84rem; color:#cbd5e1; margin-bottom:4px;">
-                    <span>煙囪實體高度 $h_s$ (Stack Physical Height):</span>
-                    <strong id="valStackHeight" style="color:#34d399;">60 m</strong>
-                  </label>
-                  <input type="range" id="labStackHeight" min="20" max="150" step="5" value="60" oninput="window.updateLabSimulation()" style="width:100%; cursor:pointer;">
+              <!-- Key Calculated Metrics Cards -->
+              <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-bottom:16px;">
+                <div style="background:#0f172a; border:1px solid #3b82f6; padding:12px; border-radius:8px; text-align:center;">
+                  <span style="font-size:0.8rem; color:#94a3b8; display:block;">最大地面濃度 $C_{\max}$</span>
+                  <strong id="resCmax" style="font-size:1.35rem; color:#38bdf8;">82 µg/m³</strong>
                 </div>
-
-                <div style="margin-bottom:12px;">
-                  <label style="display:flex; justify-content:space-between; font-size:0.84rem; color:#cbd5e1; margin-bottom:4px;">
-                    <span>污染物排放速率 $Q$ (Emission Rate):</span>
-                    <strong id="valEmissionRate" style="color:#34d399;">120 g/s</strong>
-                  </label>
-                  <input type="range" id="labEmissionRate" min="10" max="300" step="5" value="120" oninput="window.updateLabSimulation()" style="width:100%; cursor:pointer;">
+                <div style="background:#0f172a; border:1px solid #f59e0b; padding:12px; border-radius:8px; text-align:center;">
+                  <span style="font-size:0.8rem; color:#94a3b8; display:block;">最大著地距離 $x_{\max}$</span>
+                  <strong id="resXmax" style="font-size:1.35rem; color:#fbbf24;">1,148 m</strong>
                 </div>
-
-                <div style="margin-bottom:10px;">
-                  <label style="display:flex; justify-content:space-between; font-size:0.84rem; color:#cbd5e1; margin-bottom:4px;">
-                    <span>排氣溫度 $T_s$ (Stack Temp):</span>
-                    <strong id="valStackTemp" style="color:#34d399;">140 °C</strong>
-                  </label>
-                  <input type="range" id="labStackTemp" min="50" max="250" step="5" value="140" oninput="window.updateLabSimulation()" style="width:100%; cursor:pointer;">
+                <div style="background:#0f172a; border:1px solid #10b981; padding:12px; border-radius:8px; text-align:center;">
+                  <span style="font-size:0.8rem; color:#94a3b8; display:block;">C527 敏感受體點 (1200m) 濃度</span>
+                  <strong id="resCreceptor" style="font-size:1.35rem; color:#34d399;">78 µg/m³</strong>
                 </div>
+              </div>
 
-                <!-- Live Calculated Height Result -->
-                <div style="background:#0f172a; border:1px solid #059669; padding:8px 12px; border-radius:6px; display:flex; justify-content:space-between; font-size:0.82rem; color:#a7f3d0;">
-                  <span>煙氣熱抬升 $\Delta h$: <strong id="resDeltaH" style="color:#f59e0b;">25 m</strong></span>
-                  <span>煙囪有效高度 $H=h_s+\Delta h$: <strong id="resEffH" style="color:#38bdf8;">85 m</strong></span>
+              <!-- Visual 2D Plume & Concentration Profile Canvas -->
+              <div style="background:#0f172a; border:1px solid #475569; border-radius:8px; padding:10px; text-align:center; overflow:hidden;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-size:0.8rem; color:#cbd5e1;">
+                  <span><i class="fa-solid fa-eye"></i> AERMOD 下風向高斯煙羽擴散與地面濃度剖面動態模擬圖</span>
+                  <span style="color:#94a3b8;">藍虛線: 有效煙囪高度 $H$ | 紅線: 地面濃度 $C(x,0,0)$</span>
+                </div>
+                <div style="width:100%; position:relative;">
+                  <canvas id="labPlumeCanvas" style="width:100%; height:240px; border-radius:6px; display:block;"></canvas>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Section 2: 網格計算與等濃線劃設 Canvas Graphic Section -->
-          <div style="background:#1e293b; border:1px solid #334155; padding:18px; border-radius:12px; margin-bottom:20px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:8px; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
-              <h4 style="margin:0; color:#fbbf24; font-size:1.05rem; display:flex; align-items:center; gap:8px;">
-                <i class="fa-solid fa-chart-line"></i> 📐 2. 網格計算與等濃線劃設 (Grid Computation & Isopleths)
+            <!-- Section 3: 數據品質保證 (QA/QC) 與誤差分析 -->
+            <div style="background:#1e293b; border:1px solid #334155; padding:18px; border-radius:12px; margin-bottom:20px;">
+              <h4 style="margin:0 0 12px 0; color:#a7f3d0; font-size:1.05rem; display:flex; align-items:center; gap:8px; border-bottom:1px solid #334155; padding-bottom:8px;">
+                <i class="fa-solid fa-clipboard-check"></i> 🔍 3. 數據品質保證 (QA/QC) 實測與模擬比對校正
               </h4>
-              <span id="resComplianceTag" style="background:#10b981; color:#fff; padding:3px 10px; border-radius:12px; font-size:0.8rem; font-weight:700;">
-                ✅ 符合環評標準 (<100 µg/m³)
-              </span>
+              
+              <div style="overflow-x:auto;">
+                <table style="width:100%; border-collapse:collapse; font-size:0.84rem; text-align:center; color:#cbd5e1;">
+                  <thead>
+                    <tr style="background:#0f172a; color:#34d399; border-bottom:2px solid #334155;">
+                      <th style="padding:8px; border:1px solid #334155;">監測測站種類</th>
+                      <th style="padding:8px; border:1px solid #334155;">實測值 (Obs, µg/m³)</th>
+                      <th style="padding:8px; border:1px solid #334155;">AERMOD 模式值 (Sim, µg/m³)</th>
+                      <th style="padding:8px; border:1px solid #334155;">相對誤差 (Relative Error)</th>
+                      <th style="padding:8px; border:1px solid #334155;">QA/QC 判定結論</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="background:rgba(255,255,255,0.02);">
+                      <td style="padding:8px; border:1px solid #334155; font-weight:700; color:#7dd3fc;">Station 1: 上風向背景點 (Control)</td>
+                      <td style="padding:8px; border:1px solid #334155;">12.0</td>
+                      <td style="padding:8px; border:1px solid #334155;">12.4</td>
+                      <td style="padding:8px; border:1px solid #334155; color:#34d399; font-weight:700;">3.3%</td>
+                      <td style="padding:8px; border:1px solid #334155;"><span style="background:#065f46; color:#a7f3d0; padding:2px 8px; border-radius:4px; font-size:0.78rem;">PASS (誤差 ≤15%)</span></td>
+                    </tr>
+                    <tr style="background:rgba(255,255,255,0.04);">
+                      <td style="padding:8px; border:1px solid #334155; font-weight:700; color:#fbbf24;">Station 2: 下風向最大落地點 (Peak)</td>
+                      <td id="qaObs2" style="padding:8px; border:1px solid #334155;">77</td>
+                      <td id="qaSim2" style="padding:8px; border:1px solid #334155; font-weight:700; color:#fbbf24;">82</td>
+                      <td id="qaErr2" style="padding:8px; border:1px solid #334155; color:#34d399; font-weight:700;">6.5%</td>
+                      <td style="padding:8px; border:1px solid #334155;"><span style="background:#065f46; color:#a7f3d0; padding:2px 8px; border-radius:4px; font-size:0.78rem;">PASS (誤差 ≤15%)</span></td>
+                    </tr>
+                    <tr style="background:rgba(255,255,255,0.02);">
+                      <td style="padding:8px; border:1px solid #334155; font-weight:700; color:#34d399;">Station 3: C527 敏感受體點 (Receptor)</td>
+                      <td id="qaObs3" style="padding:8px; border:1px solid #334155;">82</td>
+                      <td id="qaSim3" style="padding:8px; border:1px solid #334155; font-weight:700; color:#34d399;">78</td>
+                      <td id="qaErr3" style="padding:8px; border:1px solid #334155; color:#34d399; font-weight:700;">4.9%</td>
+                      <td style="padding:8px; border:1px solid #334155;"><span style="background:#065f46; color:#a7f3d0; padding:2px 8px; border-radius:4px; font-size:0.78rem;">PASS (誤差 ≤15%)</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
 
-            <!-- Key Calculated Metrics Cards -->
-            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-bottom:16px;">
-              <div style="background:#0f172a; border:1px solid #3b82f6; padding:12px; border-radius:8px; text-align:center;">
-                <span style="font-size:0.8rem; color:#94a3b8; display:block;">最大地面濃度 $C_{\max}$</span>
-                <strong id="resCmax" style="font-size:1.35rem; color:#38bdf8;">82 µg/m³</strong>
+            <!-- Bottom Action Buttons & Room Note -->
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-top:10px;">
+              <div style="font-size:0.84rem; color:#94a3b8; display:flex; align-items:center; gap:6px;">
+                <i class="fa-solid fa-circle-info" style="color:#38bdf8;"></i> 提示：滑動上方參數桿，模擬數據與動態波形圖將即時即算更新。
               </div>
-              <div style="background:#0f172a; border:1px solid #f59e0b; padding:12px; border-radius:8px; text-align:center;">
-                <span style="font-size:0.8rem; color:#94a3b8; display:block;">最大著地距離 $x_{\max}$</span>
-                <strong id="resXmax" style="font-size:1.35rem; color:#fbbf24;">1,148 m</strong>
-              </div>
-              <div style="background:#0f172a; border:1px solid #10b981; padding:12px; border-radius:8px; text-align:center;">
-                <span style="font-size:0.8rem; color:#94a3b8; display:block;">C527 敏感受體點 (1200m) 濃度</span>
-                <strong id="resCreceptor" style="font-size:1.35rem; color:#34d399;">78 µg/m³</strong>
+              <div style="display:flex; gap:10px;">
+                <button onclick="window.initLabSimulation()" style="background:#334155; color:#f8fafc; border:1px solid #475569; padding:8px 16px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer;">
+                  <i class="fa-solid fa-rotate-left"></i> 重置 C527 預設參數
+                </button>
+                <button onclick="alert('🎉 數據品質保證 (QA/QC) 校正數據報告已匯出至 C527 電腦教室系統！')" style="background:#0284c7; color:#fff; border:none; padding:8px 18px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer;">
+                  <i class="fa-solid fa-file-export"></i> 匯出 QA/QC 校正報告 (CSV)
+                </button>
               </div>
             </div>
 
-            <!-- Visual 2D Plume & Concentration Profile Canvas -->
-            <div style="background:#0f172a; border:1px solid #475569; border-radius:8px; padding:10px; text-align:center; overflow:hidden;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-size:0.8rem; color:#cbd5e1;">
-                <span><i class="fa-solid fa-eye"></i> AERMOD 下風向高斯煙羽擴散與地面濃度剖面動態模擬圖</span>
-                <span style="color:#94a3b8;">藍虛線: 有效煙囪高度 $H$ | 紅線: 地面濃度 $C(x,0,0)$</span>
-              </div>
-              <div style="width:100%; position:relative;">
-                <canvas id="labPlumeCanvas" style="width:100%; height:240px; border-radius:6px; display:block;"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <!-- Section 3: 數據品質保證 (QA/QC) 與誤差分析 -->
-          <div style="background:#1e293b; border:1px solid #334155; padding:18px; border-radius:12px; margin-bottom:20px;">
-            <h4 style="margin:0 0 12px 0; color:#a7f3d0; font-size:1.05rem; display:flex; align-items:center; gap:8px; border-bottom:1px solid #334155; padding-bottom:8px;">
-              <i class="fa-solid fa-clipboard-check"></i> 🔍 3. 數據品質保證 (QA/QC) 實測與模擬比對校正
-            </h4>
-            
-            <div style="overflow-x:auto;">
-              <table style="width:100%; border-collapse:collapse; font-size:0.84rem; text-align:center; color:#cbd5e1;">
-                <thead>
-                  <tr style="background:#0f172a; color:#34d399; border-bottom:2px solid #334155;">
-                    <th style="padding:8px; border:1px solid #334155;">監測測站種類</th>
-                    <th style="padding:8px; border:1px solid #334155;">實測值 (Obs, µg/m³)</th>
-                    <th style="padding:8px; border:1px solid #334155;">AERMOD 模式值 (Sim, µg/m³)</th>
-                    <th style="padding:8px; border:1px solid #334155;">相對誤差 (Relative Error)</th>
-                    <th style="padding:8px; border:1px solid #334155;">QA/QC 判定結論</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr style="background:rgba(255,255,255,0.02);">
-                    <td style="padding:8px; border:1px solid #334155; font-weight:700; color:#7dd3fc;">Station 1: 上風向背景點 (Control)</td>
-                    <td style="padding:8px; border:1px solid #334155;">12.0</td>
-                    <td style="padding:8px; border:1px solid #334155;">12.4</td>
-                    <td style="padding:8px; border:1px solid #334155; color:#34d399; font-weight:700;">3.3%</td>
-                    <td style="padding:8px; border:1px solid #334155;"><span style="background:#065f46; color:#a7f3d0; padding:2px 8px; border-radius:4px; font-size:0.78rem;">PASS (誤差 ≤15%)</span></td>
-                  </tr>
-                  <tr style="background:rgba(255,255,255,0.04);">
-                    <td style="padding:8px; border:1px solid #334155; font-weight:700; color:#fbbf24;">Station 2: 下風向最大落地點 (Peak)</td>
-                    <td id="qaObs2" style="padding:8px; border:1px solid #334155;">77</td>
-                    <td id="qaSim2" style="padding:8px; border:1px solid #334155; font-weight:700; color:#fbbf24;">82</td>
-                    <td id="qaErr2" style="padding:8px; border:1px solid #334155; color:#34d399; font-weight:700;">6.5%</td>
-                    <td style="padding:8px; border:1px solid #334155;"><span style="background:#065f46; color:#a7f3d0; padding:2px 8px; border-radius:4px; font-size:0.78rem;">PASS (誤差 ≤15%)</span></td>
-                  </tr>
-                  <tr style="background:rgba(255,255,255,0.02);">
-                    <td style="padding:8px; border:1px solid #334155; font-weight:700; color:#34d399;">Station 3: C527 敏感受體點 (Receptor)</td>
-                    <td id="qaObs3" style="padding:8px; border:1px solid #334155;">82</td>
-                    <td id="qaSim3" style="padding:8px; border:1px solid #334155; font-weight:700; color:#34d399;">78</td>
-                    <td id="qaErr3" style="padding:8px; border:1px solid #334155; color:#34d399; font-weight:700;">4.9%</td>
-                    <td style="padding:8px; border:1px solid #334155;"><span style="background:#065f46; color:#a7f3d0; padding:2px 8px; border-radius:4px; font-size:0.78rem;">PASS (誤差 ≤15%)</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Bottom Action Buttons & Room Note -->
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-top:10px;">
-            <div style="font-size:0.84rem; color:#94a3b8; display:flex; align-items:center; gap:6px;">
-              <i class="fa-solid fa-circle-info" style="color:#38bdf8;"></i> 提示：滑動上方參數桿，模擬數據與動態波形圖將即時即算更新。
-            </div>
-            <div style="display:flex; gap:10px;">
-              <button onclick="window.initLabSimulation()" style="background:#334155; color:#f8fafc; border:1px solid #475569; padding:8px 16px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer;">
-                <i class="fa-solid fa-rotate-left"></i> 重置 C527 預設參數
-              </button>
-              <button onclick="alert('🎉 數據品質保證 (QA/QC) 校正數據報告已匯出至 C527 電腦教室系統！')" style="background:#0284c7; color:#fff; border:none; padding:8px 18px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer;">
-                <i class="fa-solid fa-file-export"></i> 匯出 QA/QC 校正報告 (CSV)
-              </button>
-            </div>
-          </div>
-
-        </div>
-      `;
-    } else if (modalType === 'tutorial') {
-      contentHtml = `
-        <div style="padding:10px;">
-          <div style="background:#eff6ff; border-left:4px solid #3b82f6; padding:16px; border-radius:8px; margin-bottom:16px;">
-            <h3 style="margin:0 0 6px 0; color:#1d4ed8; font-size:1.15rem;"><i class="fa-solid fa-laptop-code"></i> 環評技術演練與實務手把手教學</h3>
-            <p style="margin:0; font-size:0.9rem; color:#1e40af;">提供高科技園區、開發案空氣品質與水質影響評估之完整實作步驟指南與數據庫說明。</p>
-          </div>
-          <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:16px; border-radius:8px; font-size:0.92rem; line-height:1.7; color:#334155;">
-            <h4 style="font-size:1rem; color:#0b3c5d; margin:0 0 8px 0; font-weight:800;">📋 實作練習指引：</h4>
-            <ol style="padding-left:20px; margin:0 0 12px 0;">
-              <li style="margin-bottom:6px;">登入 eclass 課程專區下載範例數據套件與座標格式檔案。</li>
-              <li style="margin-bottom:6px;">依據《開發行為環境影響評估作業準則》規定進行範疇篩選與推估。</li>
-              <li style="margin-bottom:6px;">撰寫 2 頁精簡專案報告並上傳至課程系統進行同儕互評。</li>
-            </ol>
           </div>
         </div>
       `;
@@ -2002,7 +2015,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }, 50);
       }
-      if (modalType === 'lab') {
+      if (modalType === 'lab' || modalType === 'tutorial') {
         setTimeout(function() {
           if (typeof window.initLabSimulation === 'function') {
             window.initLabSimulation();
