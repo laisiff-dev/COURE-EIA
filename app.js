@@ -989,7 +989,7 @@ document.addEventListener('DOMContentLoaded', () => {
               </button>
             </div>
             <p style="margin:0 0 14px 0; font-size:0.93rem; color:#166534; line-height:1.6; font-weight:600;">
-              本單元包含大氣高斯擴散模式、水質 RPI 模式與污染傳播模擬之實驗數據處理與實機操作。
+              本單元包含大氣高斯擴散模式 (AERMOD / ISCST3) 之實驗數據處理與實機操作。
             </p>
 
             <div style="background:#ffffff; border:1px solid #dcfce7; padding:16px; border-radius:8px; margin-bottom:14px;">
@@ -1004,7 +1004,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div style="background:#ecfdf5; border:1px solid #a7f3d0; color:#047857; padding:10px 16px; border-radius:8px; font-size:0.9rem; font-weight:700; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-              <span><i class="fa-solid fa-wrench" style="color:#059669;"></i> 🛠️ 軟體環境：AERMOD / ISCST3 / River Water Quality Model 模擬軟體已配置於 C527 電腦教室。</span>
+              <span><i class="fa-solid fa-wrench" style="color:#059669;"></i> 🛠️ 軟體環境：AERMOD / ISCST3 大氣高斯擴散模擬軟體已配置於 C527 電腦教室。</span>
               <span style="color:#0284c7; font-weight:800;">[ 點擊全卡片立即載入 C527 控制台 <i class="fa-solid fa-arrow-down"></i> ]</span>
             </div>
           </div>
@@ -1034,15 +1034,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <!-- Software Environment Selector Tabs -->
             <div style="margin-bottom:20px; background:#1e293b; padding:10px; border-radius:10px; border:1px solid #334155; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-              <span style="font-weight:700; font-size:0.88rem; color:#cbd5e1; margin-right:6px;"><i class="fa-solid fa-cubes"></i> 選擇模擬軟體環境：</span>
+              <span style="font-weight:700; font-size:0.88rem; color:#cbd5e1; margin-right:6px;"><i class="fa-solid fa-cubes"></i> 選擇大氣模擬軟體環境：</span>
               <button id="swAERMOD" onclick="window.switchLabSoftware('AERMOD')" style="background:#059669; color:#fff; border:none; padding:6px 16px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer; transition:all 0.2s;">
                 <i class="fa-solid fa-wind"></i> AERMOD 高階大氣品質模式
               </button>
               <button id="swISCST3" onclick="window.switchLabSoftware('ISCST3')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:6px 16px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer; transition:all 0.2s;">
                 <i class="fa-solid fa-industry"></i> ISCST3 傳統高斯煙羽模式
-              </button>
-              <button id="swRIVER" onclick="window.switchLabSoftware('River Water')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:6px 16px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer; transition:all 0.2s;">
-                <i class="fa-solid fa-water"></i> River Water Quality 水質模式
               </button>
             </div>
 
@@ -1620,15 +1617,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <!-- Software Environment Selector Tabs -->
             <div style="margin-bottom:20px; background:#1e293b; padding:10px; border-radius:10px; border:1px solid #334155; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-              <span style="font-weight:700; font-size:0.88rem; color:#cbd5e1; margin-right:6px;"><i class="fa-solid fa-cubes"></i> 選擇模擬軟體環境：</span>
+              <span style="font-weight:700; font-size:0.88rem; color:#cbd5e1; margin-right:6px;"><i class="fa-solid fa-cubes"></i> 選擇大氣模擬軟體環境：</span>
               <button onclick="window.switchLabSoftware('AERMOD')" style="background:#059669; color:#fff; border:none; padding:6px 16px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer;">
                 <i class="fa-solid fa-wind"></i> AERMOD 高階大氣品質模式
               </button>
               <button onclick="window.switchLabSoftware('ISCST3')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:6px 16px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer;">
                 <i class="fa-solid fa-industry"></i> ISCST3 傳統高斯煙羽模式
-              </button>
-              <button onclick="window.switchLabSoftware('River Water')" style="background:#1e293b; color:#94a3b8; border:1px solid #475569; padding:6px 16px; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer;">
-                <i class="fa-solid fa-water"></i> River Water Quality 水質模式
               </button>
             </div>
 
