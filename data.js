@@ -739,7 +739,7 @@ window.EIA_COURSE_DATA = {
           tagColor: "blue",
           desc: "環境影響評估法、施行細則與主管機關權責架構初步認知建立。",
           actionText: "閱讀講義",
-          modalType: "w02_guide"
+          modalType: "lecture"
         }
       ]
     },
@@ -851,7 +851,7 @@ window.EIA_COURSE_DATA = {
           tagColor: "teal",
           desc: "地形逆溫層影響、輻射逆溫 (Radiation Inversion) 與地面最大濃度落點估算。",
           actionText: "閱讀講義",
-          modalType: "w02_guide"
+          modalType: "lecture"
         },
         {
           id: "w05-c2",
@@ -888,7 +888,7 @@ window.EIA_COURSE_DATA = {
           tagColor: "teal",
           desc: "放流水重金屬（銅 0.03mg/L、鎘）排放、枯水期零基流量條文與地下水補給防禦。",
           actionText: "閱讀講義",
-          modalType: "w02_guide"
+          modalType: "lecture"
         },
         {
           id: "w07-c2",
@@ -925,7 +925,7 @@ window.EIA_COURSE_DATA = {
           tagColor: "teal",
           desc: "一級保育類（石虎、山麻雀）棲地破碎化評估，生態檢核避開、縮小、減輕、補償四原則。",
           actionText: "閱讀講義",
-          modalType: "w02_guide"
+          modalType: "lecture"
         },
         {
           id: "w10-c2",
@@ -962,7 +962,7 @@ window.EIA_COURSE_DATA = {
           tagColor: "teal",
           desc: "農用灌溉水權爭奪、民意抗爭焦點分析與利害關係人 (Stakeholders) 溝通對策。",
           actionText: "閱讀講義",
-          modalType: "w02_guide"
+          modalType: "lecture"
         }
       ]
     },
@@ -988,7 +988,7 @@ window.EIA_COURSE_DATA = {
           tagColor: "teal",
           desc: "危害鑑別、劑量反應、暴露評估與致癌/非致癌風險特徵描述實務。",
           actionText: "閱讀講義",
-          modalType: "w02_guide"
+          modalType: "lecture"
         }
       ]
     },
