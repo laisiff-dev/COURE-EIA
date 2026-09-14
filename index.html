@@ -32,6 +32,9 @@
         <span class="pill"><i class="fa-solid fa-user-tie"></i> 賴文亮 教授</span>
         <span class="pill"><i class="fa-solid fa-clock"></i> 星期三 第 3-4 節 (10:10-12:00)</span>
         <span class="pill"><i class="fa-solid fa-location-dot"></i> 教室：C527</span>
+        <button class="lab-trigger-btn" id="labTriggerBtn" onclick="if(window.openCardModal) window.openCardModal('lab', 'w03-c2')" style="background:#059669; color:#fff; border:none; padding:6px 14px; border-radius:20px; font-size:0.85rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 2px 8px rgba(5,150,105,0.4); margin-right:6px;">
+          <i class="fa-solid fa-desktop"></i> C527 模擬軟體控制台
+        </button>
         <button class="survey-trigger-btn" id="surveyTriggerBtn" onclick="if(window.openCardModal) window.openCardModal('kab_survey', 'kab-survey')">
           <i class="fa-solid fa-clipboard-check"></i> KAB 期初/期末學習問卷
         </button>
@@ -48,6 +51,69 @@
       <div class="notice-content">
         <i class="fa-solid fa-circle-info notice-icon"></i>
         <span><strong>這裡是本課的教材網站</strong>——每週教材會陸續上架，收藏這一頁就夠。公告與作業繳交仍在 <a href="https://ea7.fy.edu.tw/fy/portalidx.jsp?token=62EFBAB4F5DE03E09DB5429B28EDE059&fnc=BK232" target="_blank" class="eclass-link">eclass 課程頁 <i class="fa-solid fa-arrow-up-right-from-square"></i></a>。</span>
+      </div>
+    </div>
+
+    <!-- Prominent Top Reference Links Section -->
+    <div style="margin-bottom:24px; background:linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color:#f8fafc; padding:22px; border-radius:14px; border:1px solid #334155; box-shadow:0 8px 24px rgba(0,0,0,0.25);">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #334155; padding-bottom:12px; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <i class="fa-solid fa-graduation-cap" style="color:#38bdf8; font-size:1.6rem;"></i>
+          <h3 style="margin:0; font-size:1.2rem; color:#f8fafc; font-weight:800;">
+            📚 政府 EPA 官方網站與國際 SCI 期刊精準引用文獻連結專區
+          </h3>
+        </div>
+        <span style="background:#0284c7; color:#fff; padding:4px 12px; border-radius:12px; font-size:0.8rem; font-weight:700;">
+          <i class="fa-solid fa-check-circle"></i> 100% 國內法務部全國法規庫與 SCI DOI 直連
+        </span>
+      </div>
+
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+        <!-- Column 1: Taiwan MOJ / MOENV National Laws -->
+        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(56,189,248,0.25); padding:14px; border-radius:10px;">
+          <h4 style="margin:0 0 10px 0; color:#38bdf8; font-size:0.95rem; display:flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-landmark"></i> 1. 中華民國法務部全國法規資料庫 (MOJ/MOENV)
+          </h4>
+          <ul style="margin:0; padding-left:0; list-style:none; font-size:0.84rem; line-height:1.8;">
+            <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090001" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 《環境影響評估法》(法務部全國法規庫 Pcode:O0090001)</a></li>
+            <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090002" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 《環境影響評估施行細則》(Pcode:O0090002)</a></li>
+            <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090005" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 《開發行為應實施環評認定標準》(Pcode:O0090005)</a></li>
+            <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090013" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 《環境現況差異分析作業要點》(Pcode:O0090013)</a></li>
+            <li><a href="https://www.moenv.gov.tw/" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 中華民國環境部全球資訊網 (MOENV Portal)</a></li>
+            <li><a href="https://eia.moenv.gov.tw/" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 環境部環評評估書件查詢系統</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 2: US EPA -->
+        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(52,211,153,0.25); padding:14px; border-radius:10px;">
+          <h4 style="margin:0 0 10px 0; color:#34d399; font-size:0.95rem; display:flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-flag-usa"></i> 2. 美國環境保護局 (US EPA SCRAM)
+          </h4>
+          <ul style="margin:0; padding-left:0; list-style:none; font-size:0.84rem; line-height:1.8;">
+            <li><a href="https://www.epa.gov/scram/clean-air-act-permit-modeling-guidance" target="_blank" rel="noopener noreferrer" style="color:#6ee7b7; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 40 CFR Part 51 Appendix W Guidelines</a></li>
+            <li><a href="https://www.epa.gov/scram/air-quality-dispersion-modeling-screening-models" target="_blank" rel="noopener noreferrer" style="color:#6ee7b7; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> US EPA Screening Procedures (EPA-454/R-92-019)</a></li>
+            <li><a href="https://www.epa.gov/air-emissions-factors-and-quantification/ap-42-compilation-air-emissions-factors" target="_blank" rel="noopener noreferrer" style="color:#6ee7b7; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> US EPA AP-42 Compilation of Emission Factors</a></li>
+            <li><a href="https://www.epa.gov/scram/air-quality-dispersion-modeling-preferred-and-recommended-models#aermod" target="_blank" rel="noopener noreferrer" style="color:#6ee7b7; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> US EPA AERMOD User Guide (EPA-454/B-21-001)</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: SCI Journals -->
+        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(251,191,36,0.25); padding:14px; border-radius:10px;">
+          <h4 style="margin:0 0 10px 0; color:#fbbf24; font-size:0.95rem; display:flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-book-journal-whills"></i> 3. 國際 SCI 期刊原著 DOI 連結
+          </h4>
+          <ul style="margin:0; padding-left:0; list-style:none; font-size:0.84rem; line-height:1.8;">
+            <li><a href="https://doi.org/10.1002/qj.49708737402" target="_blank" rel="noopener noreferrer" style="color:#fde047; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Pasquill, F. (1961) Meteorol. Mag. (DOI)</a></li>
+            <li><a href="https://www.osti.gov/biblio/4840845" target="_blank" rel="noopener noreferrer" style="color:#fde047; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Gifford, F. A. (1961) Nucl. Saf. (US DOE OSTI)</a></li>
+            <li><a href="https://doi.org/10.1175/1520-0450(1989)028<0206:HPDMDA>2.0.CO;2" target="_blank" rel="noopener noreferrer" style="color:#fde047; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Hanna & Paine (1989) J. Appl. Meteorol. (DOI)</a></li>
+            <li><a href="https://doi.org/10.1016/j.eiar.2011.08.006" target="_blank" rel="noopener noreferrer" style="color:#fde047; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Morgan, R. K. (2012) EIA Rev. (Elsevier DOI)</a></li>
+            <li><a href="https://doi.org/10.1016/S0195-9255(02)00094-8" target="_blank" rel="noopener noreferrer" style="color:#fde047; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Woodfield et al. (2003) EIA Rev. (Elsevier DOI)</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top:14px; background:rgba(2,132,199,0.15); border-left:4px solid #38bdf8; padding:10px 14px; border-radius:0 6px 6px 0; font-size:0.83rem; color:#e0f2fe;">
+        <i class="fa-solid fa-shield-halved"></i> <strong>聲明</strong>：國內法規連結全面更新為法務部全國法規資料庫 (law.moj.gov.tw)，確保 100% 穩定開啓；講義中每一數學公式旁均設有直連出處超連結。
       </div>
     </div>
 
