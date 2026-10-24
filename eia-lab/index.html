@@ -1,33 +1,1887 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fooyin EIA Learning Lab｜實作教學系統</title><style>
-:root{--n:#0f254a;--g:#c59b27;--bg:#f4f7f9}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--n);font-family:system-ui,"Noto Sans TC",sans-serif}header{padding:24px 6%;background:var(--n);color:white}header h1{margin:6px 0;font-size:27px}main{max-width:1100px;margin:auto;padding:24px}nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}button,.btn{background:var(--n);color:white;border:0;border-radius:8px;padding:11px 16px;cursor:pointer;text-decoration:none;display:inline-block}button.secondary{background:#e9edf4;color:var(--n)}button:disabled{opacity:.4}.panel{background:white;border-radius:12px;padding:22px;margin:15px 0;box-shadow:0 2px 12px #142b4510}h2{margin-top:0}label{display:block;margin-top:12px;font-weight:600}input,textarea,select{width:100%;padding:10px;border:1px solid #bac4d0;border-radius:6px;margin-top:5px;font:inherit}textarea{min-height:85px}table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:8px;border:1px solid #dae1eb}th{background:#e9eef5}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.hint{color:#58718b;font-size:14px}.warn{background:#fff4dc;padding:14px;border-left:4px solid var(--g)}.hidden{display:none}.score{font-size:23px;font-weight:bold}.pill{display:inline-block;background:#e9eef5;padding:6px 10px;border-radius:20px}a{color:#174b88}footer{padding:20px;text-align:center;color:#58718b}@media print{header,nav,.controls,.warn{display:none!important}body{background:white}.panel{box-shadow:none;border:1px solid #bbb}}
-</style></head><body><header><small>輔英科技大學｜四技環工｜120分鐘互動實作</small><h1>Fooyin EIA Learning Lab</h1><div>NotebookLM × 環境敏感區位 × 範疇矩陣 × 學習診斷</div></header><main>
-<div id="expired" class="panel hidden"><h2>本次課程已結束</h2><p>課程學生操作期限為 <b>2026 年 11 月 5 日 23:59（臺灣時間）</b>。學生端停止開放填答與報告編輯。</p><p class="hint">注意：此 GitHub Pages 靜態版的期限屬前端限制，不具防篡改安全性。正式封鎖必須由後端驗證時間及身分並撤銷 API 存取權。</p></div>
-<div id="active"><div class="warn">本版為「可試用的前端實作版」，資料只保存在目前瀏覽器，<b>尚未</b>取得 Google Drive 的私人檔案讀寫授權；教師不會自動看見各組資料。切勿輸入真實完整學號或敏感個資。</div>
-<nav class="controls" id="tabs"></nav>
-<section id="home" class="panel"><h2>① 學習入口與資料來源</h2><label>小組代碼（請使用匿名代碼，例如 G01）<input id="group" placeholder="G01"></label><label>本組案件與任務備註<textarea id="case" placeholder="從環評公開書件擷取，不得虛構"></textarea></label><p>課程結束時間：2026/11/05 23:59（Asia/Taipei）</p><h3>教師指定公開資料</h3><div class="grid"><div><a target="_blank" rel="noopener" href="https://eiadoc.moenv.gov.tw/public/publicMeetingOrBriefDetail/030F5189-BAD3-456B-B0A4-200AA0E6B17E">環評公開案例與附件</a><p class="hint">由官方頁面下載環評 PDF 與公開會議紀錄</p></div><div><a target="_blank" rel="noopener" href="https://notebooklm.google.com/">NotebookLM</a><p class="hint">由學生自行匯入指定 PDF</p></div><div><a target="_blank" rel="noopener" href="https://eland.nlma.gov.tw/">環境敏感區位查詢</a></div><div><a target="_blank" rel="noopener" href="https://fault.gsmma.gov.tw/">活動斷層圖資</a></div><div><a target="_blank" rel="noopener" href="https://data.moenv.gov.tw/dataset/detail/GISEPA_P_13">水源保護區圖資</a></div></div><label>來源文件與出處記錄<textarea id="sources" placeholder="每行：文件名稱｜章節／頁碼｜查詢日期｜網址"></textarea></label></section>
-<section id="ai" class="panel hidden"><h2>② NotebookLM 資料擷取與引用</h2><p>依序複製提示詞至 NotebookLM；把查證後的摘要貼到下方。</p><div id="prompts"></div><label>開發概要（必須有引用來源）<textarea id="summary"></textarea></label><label>審查／公開會議問題與回應（注意會議性質）<textarea id="minutes"></textarea></label><label>AI 曾提出哪些尚未證實的結論？<textarea id="gaps"></textarea></label></section>
-<section id="quiz" class="panel hidden"><h2>③ 個人概念檢核（五題）</h2><p>請先獨立作答，系統記錄理解程度；本機測驗不是正式成績。</p><div id="questions"></div><button onclick="grade()">提交檢核</button><p id="quizresult" class="score"></p></section>
-<section id="geo" class="panel hidden"><h2>④ 環境敏感區位查核</h2><p>請先取得精確基地位置，並核對官方公告及圖資。不能用 AI 推論取代查核結果。</p><table><thead><tr><th>查核項目</th><th>結果</th><th>來源與證據／日期</th></tr></thead><tbody id="geoRows"></tbody></table></section>
-<section id="matrix" class="panel hidden"><h2>⑤ 評估範疇矩陣</h2><p>此為課堂初步評估：● 優先評估；△ 待查證；— 尚無明確直接影響證據。三種符號都不是法定風險等級。</p><label>案件工程活動（四項，以「、」分隔）<input id="activities" value="土方開挖、施工運輸、工程興建、營運活動"></label><button class="secondary" onclick="renderMatrix()">更新欄名</button><div style="overflow-x:auto;margin-top:16px"><table id="mtable"></table></div><label>三項優先環境議題、理由與待調查資料<textarea id="priorities"></textarea></label></section>
-<section id="report" class="panel hidden"><h2>⑥ 報告輸出與教師評分</h2><p>先按「匯出 JSON」備份小組紀錄；再按「列印／另存 PDF」提交成果。教師評分僅為此頁本機示範，尚未連動班級成績庫。</p><div class="controls"><button onclick="save()">儲存此瀏覽器</button> <button onclick="exportJson()">匯出小組 JSON</button> <button onclick="window.print()">列印／另存 PDF</button></div><pre id="reportPreview" style="white-space:pre-wrap;overflow-wrap:anywhere;background:#f4f7f9;padding:16px"></pre><h3>教師百分制評分（本機示範）</h3><div id="rubric"></div><label>教師評語<textarea id="feedback"></textarea></label><p>合計：<span class="score" id="total">0</span>／100</p></section></div>
-<footer>Fooyin EIA Learning Lab｜課程示範版｜到期限制需搭配正式後端驗證</footer></main><script>
-const DEADLINE=Date.parse('2026-11-05T23:59:59+08:00');const expired=Date.now()>DEADLINE;
-if(expired){document.getElementById('active').remove();document.getElementById('expired').classList.remove('hidden')}else{
-const sections=['home','ai','quiz','geo','matrix','report'];const labels=['資料匯入','NotebookLM','理解測驗','圖資查核','範疇矩陣','成果／評分'];const $=id=>document.getElementById(id);const key='fooyin-eia-lab-2026';
-$('tabs').innerHTML=sections.map((s,i)=>'<button class="secondary" data-tab="'+s+'">'+(i+1)+' '+labels[i]+'</button>').join('');document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{sections.forEach(s=>$(s).classList.toggle('hidden',s!==b.dataset.tab));if(b.dataset.tab==='report')refresh()});
-const promptList=[['A｜書件摘要','請僅根據上傳的環評書件，整理開發案、基地、工程活動、可能環境影響及缺漏資料，逐項附文件來源；沒有資料請說「文件未提供」。'],['B｜意見追蹤','請依公開會議紀錄，表列提出者意見、開發單位回覆、待查事項和文件引用，區分審查會議與公開說明會。'],['C｜敏感區位','列出水源保護區、活動斷層地質敏感區、保育區與鄰近敏感受體的官方查核清單；不得自行推斷空間套疊結果。'],['D｜矩陣分析','依據文件實有工程活動與空氣、水質、噪音、生態、交通、生活環境建立初步範疇矩陣；逐項附證據、影響途徑及待補資料，分辨事實與推論。']];
-$('prompts').innerHTML=promptList.map(([a,b])=>'<div class="panel"><b>'+a+'</b><p>'+b+'</p><button class="secondary" data-copy="'+promptList.findIndex(p=>p[0]===a)+'">複製提示詞</button></div>').join('');document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>navigator.clipboard?.writeText(promptList[Number(b.dataset.copy)][1]));
-const qs=[['如果 PDF 沒提到水源保護區，應如何判斷？',['可以判定未涉及','應查官方圖資','NotebookLM 可直接判定'],1],['環評範疇矩陣「●」表示什麼？',['法定重大衝擊','已確定超標','優先需要評估'],2],['AI 引用來源後，仍應如何處理？',['與原文比對','無須再確認','直接成為法定結論'],0],['斷層線與地質敏感區是否相同？',['完全相同','應分開查核','只要距離大於1公里就安全'],1],['報告應如何處理缺少資料？',['自行補上合理數字','寫成沒有影響','標註待查證'],2]];
-$('questions').innerHTML=qs.map((q,i)=>'<div class="panel"><b>'+(i+1)+'. '+q[0]+'</b>'+q[1].map((v,j)=>'<label style="font-weight:400"><input style="width:auto" type="radio" name="q'+i+'" value="'+j+'"> '+v+'</label>').join('')+'</div>').join('');
-window.grade=()=>{let n=0;qs.forEach((q,i)=>{const v=document.querySelector('input[name=q'+i+']:checked');if(v&&+v.value===q[2])n++});$('quizresult').textContent='答對 '+n+'/5 題（'+(n*20)+' 分），請針對答錯的觀念回到資料及官方來源複習。';sessionStorage.setItem('quiz',String(n*20));save()};
-const geos=['飲用水水源水質保護區','活動斷層地質敏感區','自然生態保育區位','居民／學校等敏感受體'];$('geoRows').innerHTML=geos.map((v,i)=>'<tr><td>'+v+'</td><td><select id="status'+i+'"><option>待查證</option><option>涉及（已查核）</option><option>未涉及（已查核）</option></select></td><td><textarea id="evidence'+i+'" placeholder="官方網址、公告或查詢日期"></textarea></td></tr>').join('');
-const factors=['空氣品質','河川與水質','噪音振動','生態','交通','居民生活'];
-window.renderMatrix=()=>{let acts=$('activities').value.split('、').map(s=>s.trim()).filter(Boolean).slice(0,4);while(acts.length<4)acts.push('活動'+(acts.length+1));$('mtable').innerHTML='<thead><tr><th>因子／工程活動</th>'+acts.map(a=>'<th>'+a.replaceAll('<','&lt;')+'</th>').join('')+'</tr></thead><tbody>'+factors.map((f,i)=>'<tr><th>'+f+'</th>'+acts.map((a,j)=>'<td><select id="m'+i+'_'+j+'"><option value="△">△ 待查證</option><option value="●">● 優先</option><option value="—">— 暫無證據</option></select></td>').join('')+'</tr>').join('')+'</tbody>'};renderMatrix();
-const rub=[['書件摘要與引用',25],['敏感區位查核',25],['範疇矩陣',30],['優先議題',10],['AI查核與報告',10]];$('rubric').innerHTML=rub.map((r,i)=>'<label>'+r[0]+'（0–'+r[1]+'）<input type="number" min="0" max="'+r[1]+'" id="score'+i+'" value="0"></label>').join('');$('rubric').querySelectorAll('input').forEach(el=>el.oninput=refresh);
-function collect(){const ids=['group','case','sources','summary','minutes','gaps','activities','priorities','feedback'];const o={schema:'fooyin-eia-lab-v1',exportedAt:new Date().toISOString(),quiz:sessionStorage.getItem('quiz'),fields:Object.fromEntries(ids.map(k=>[k,$(k).value])),geo:geos.map((name,i)=>({name,status:$('status'+i).value,evidence:$('evidence'+i).value})),matrix:factors.map((name,i)=>({name,ratings:[0,1,2,3].map(j=>$('m'+i+'_'+j).value)})),rubric:rub.map((r,i)=>({name:r[0],max:r[1],score:Math.min(r[1],Math.max(0,Number($('score'+i).value)||0))}))};return o}
-window.refresh=()=>{const o=collect();const total=o.rubric.reduce((s,r)=>s+r.score,0);$('total').textContent=total;$('reportPreview').textContent='組別：'+o.fields.group+'\n案件：'+o.fields.case+'\n\n來源：\n'+o.fields.sources+'\n\n環評摘要：\n'+o.fields.summary+'\n\n會議意見：\n'+o.fields.minutes+'\n\nAI查核：\n'+o.fields.gaps+'\n\n環境敏感區位：\n'+o.geo.map(v=>v.name+'｜'+v.status+'｜'+v.evidence).join('\n')+'\n\n範疇矩陣：\n'+o.matrix.map(x=>x.name+'｜'+x.ratings.join('｜')).join('\n')+'\n\n優先議題：\n'+o.fields.priorities+'\n\n教師評分：'+total+'/100\n'+o.fields.feedback};
-window.save=()=>{localStorage.setItem(key,JSON.stringify(collect()))};
-window.exportJson=()=>{const obj=collect();const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='EIA_'+(obj.fields.group||'group')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
-try{const s=JSON.parse(localStorage.getItem(key)||'null');if(s){Object.entries(s.fields||{}).forEach(([k,v])=>{if($(k))$(k).value=v});renderMatrix();(s.geo||[]).forEach((v,i)=>{if($('status'+i))$('status'+i).value=v.status;if($('evidence'+i))$('evidence'+i).value=v.evidence});(s.matrix||[]).forEach((v,i)=>v.ratings.forEach((v,j)=>{if($('m'+i+'_'+j))$('m'+i+'_'+j).value=v}));(s.rubric||[]).forEach((v,i)=>{if($('score'+i))$('score'+i).value=v.score})}}catch(e){}
-document.querySelectorAll('input,textarea,select').forEach(el=>el.addEventListener('change',save));}
-</script></body></html>
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fooyin EIA Learning Lab｜環境影響評估實作教學系統</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --n: #0f254a;
+      --n-light: #1e3a6a;
+      --g: #c59b27;
+      --g-light: #fef8eb;
+      --bg: #f4f7f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --success: #059669;
+      --info: #0284c7;
+      --danger: #dc2626;
+      --warning: #d97706;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      line-height: 1.6;
+    }
+    header {
+      padding: 24px 6%;
+      background: linear-gradient(135deg, var(--n) 0%, #17325c 100%);
+      color: white;
+      box-shadow: 0 4px 20px rgba(15, 37, 74, 0.15);
+    }
+    header small {
+      display: inline-block;
+      letter-spacing: 1px;
+      font-size: 13px;
+      color: #99b6df;
+      margin-bottom: 4px;
+    }
+    header h1 {
+      margin: 4px 0 8px;
+      font-size: 28px;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(197, 155, 39, 0.25);
+      color: #ffd874;
+      border: 1px solid rgba(197, 155, 39, 0.4);
+    }
+    .subhead {
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+    main {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 24px 20px;
+    }
+    nav.controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0;
+      padding: 6px;
+      background: #e9edf4;
+      border-radius: 12px;
+    }
+    button, .btn {
+      background: var(--n);
+      color: white;
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 16px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    button:hover, .btn:hover {
+      background: var(--n-light);
+      transform: translateY(-1px);
+    }
+    button.secondary {
+      background: transparent;
+      color: var(--n);
+      border: 1px solid transparent;
+    }
+    button.secondary:hover {
+      background: #ffffff;
+      border-color: #cbd5e1;
+      color: var(--n);
+    }
+    button.tab-btn.active {
+      background: var(--n);
+      color: white;
+      box-shadow: 0 2px 8px rgba(15, 37, 74, 0.2);
+    }
+    button.tab-btn.curriculum-tab.active {
+      background: #7c2d12;
+      color: #fff;
+    }
+    button.tab-btn.curriculum-tab {
+      color: #9a3412;
+      font-weight: 600;
+    }
+    button.tab-btn.admin-tab {
+      background: #f1f5f9;
+      color: #0f254a;
+      border: 1px solid #cbd5e1;
+      font-weight: 600;
+    }
+    button.tab-btn.admin-tab.active {
+      background: #0f254a;
+      color: #fff;
+    }
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .panel {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 26px;
+      margin: 18px 0;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 16px rgba(15, 37, 74, 0.05);
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 22px;
+      color: var(--n);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid #eef2f6;
+      padding-bottom: 12px;
+    }
+    h3 {
+      font-size: 17px;
+      color: var(--n);
+      margin: 22px 0 10px;
+    }
+    h4 {
+      font-size: 15px;
+      margin: 10px 0 6px;
+      color: #334155;
+    }
+    label {
+      display: block;
+      margin-top: 14px;
+      font-weight: 600;
+      font-size: 14px;
+      color: #334155;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      margin-top: 6px;
+      font: inherit;
+      font-size: 14px;
+      background: #fafbfc;
+      transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--info);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+    }
+    textarea { min-height: 85px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin: 12px 0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    td, th {
+      padding: 10px 12px;
+      border: 1px solid #e2e8f0;
+      text-align: left;
+    }
+    th {
+      background: #f1f5f9;
+      color: #1e293b;
+      font-weight: 600;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 4px 0;
+    }
+    .warn {
+      background: #fffbeb;
+      padding: 14px 18px;
+      border-left: 4px solid var(--g);
+      border-radius: 8px;
+      color: #92400e;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+    .hidden { display: none !important; }
+    .score {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--n);
+    }
+    .pill {
+      display: inline-block;
+      background: #e2e8f0;
+      color: #334155;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    a {
+      color: #0369a1;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    a:hover { text-decoration: underline; }
+    footer {
+      padding: 30px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 40px;
+    }
+
+    /* 課程設計與架構專屬樣式 */
+    .blueprint-hero {
+      background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .principle-card {
+      background: white;
+      border-radius: 10px;
+      padding: 16px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .principle-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(15,37,74,0.06);
+    }
+    .timeline {
+      position: relative;
+      margin: 24px 0;
+      padding-left: 28px;
+      border-left: 3px solid #cbd5e1;
+    }
+    .timeline-node {
+      position: relative;
+      margin-bottom: 28px;
+    }
+    .timeline-node:last-child { margin-bottom: 0; }
+    .timeline-node::before {
+      content: "";
+      position: absolute;
+      left: -35px;
+      top: 4px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--n);
+      border: 3px solid #fff;
+      box-shadow: 0 0 0 2px var(--n);
+    }
+    .timeline-node.highlight::before {
+      background: var(--g);
+      box-shadow: 0 0 0 2px var(--g);
+    }
+    .timeline-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .timeline-time {
+      font-size: 12px;
+      font-weight: 700;
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .tag-bloom {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .tag-ieet {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    /* 自動儲存狀態標籤 */
+    .save-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #059669;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    /* 字數計數器與 800 字上限樣式 */
+    .char-counter {
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      display: inline-block;
+    }
+    .char-counter.near-limit {
+      color: #b45309;
+      background: #fef3c7;
+      border-color: #fde047;
+    }
+    .char-counter.at-limit {
+      color: #b91c1c;
+      background: #fee2e2;
+      border-color: #f87171;
+      font-weight: 700;
+    }
+
+    /* 系統管理者審閱儀表板專屬樣式 */
+    .admin-bar {
+      background: linear-gradient(135deg, #0f254a 0%, #1e3a6a 100%);
+      color: white;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin: 16px 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      box-shadow: 0 4px 14px rgba(15, 37, 74, 0.15);
+    }
+    .admin-bar select {
+      background: #ffffff;
+      color: #0f254a;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      max-width: 240px;
+      margin: 0;
+    }
+    .audit-section {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .audit-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--n);
+      margin: 0 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .audit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+    .audit-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+    .badge-status-danger {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #f87171;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .badge-status-safe {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #86efac;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .badge-status-warn {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde047;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* 矩陣熱點視覺樣式 */
+    .heatmap-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      margin: 10px 0;
+      font-size: 13px;
+    }
+    .heatmap-table th, .heatmap-table td {
+      padding: 8px 10px;
+      border: 1px solid #e2e8f0;
+    }
+    .cell-priority {
+      background: #fee2e2;
+      color: #b91c1c;
+      font-weight: 700;
+      border-radius: 4px;
+    }
+    .cell-verify {
+      background: #fef3c7;
+      color: #b45309;
+      font-weight: 700;
+      border-radius: 4px;
+    }
+    .cell-none {
+      background: #f1f5f9;
+      color: #64748b;
+    }
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+    }
+    .callout-box {
+      background: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #78350f;
+      margin-top: 10px;
+    }
+
+    .no-screen { display: none; }
+
+    @media print {
+      header, nav, .controls, .warn, .no-print, .admin-bar, button, input[type=file] { display: none !important; }
+      body { background: white !important; color: #1e293b !important; font-size: 11pt; line-height: 1.5; }
+      main { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+      .panel { box-shadow: none !important; border: none !important; padding: 0 !important; }
+      .audit-section { border: 1px solid #cbd5e1 !important; page-break-inside: avoid; margin-bottom: 16px !important; }
+      .audit-card div { max-height: none !important; overflow: visible !important; }
+      pre, #reportPreview { 
+        white-space: pre-wrap !important; 
+        word-break: break-all !important; 
+        max-height: none !important; 
+        overflow: visible !important;
+        border: 1px solid #cbd5e1 !important;
+        page-break-inside: auto;
+      }
+      .print-header { display: block !important; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #0f254a; padding-bottom: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
+    <div>
+      <small>輔英科技大學｜環境工程與科學系｜120 分鐘實務互動實作</small>
+      <h1>
+        Fooyin EIA Learning Lab
+        <span class="badge">教學架構與實作系統</span>
+      </h1>
+      <div class="subhead">NotebookLM 智能檢索 × 官方圖資求真 × 範疇界定矩陣 × 歷程圖示化與多元評量</div>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <a href="../index.html" target="_top" style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.18); color:#ffffff; border:1px solid rgba(255,255,255,0.4); padding:8px 16px; border-radius:8px; font-size:13px; font-weight:700; text-decoration:none; transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.28)'" onmouseout="this.style.background='rgba(255,255,255,0.18)'">
+        <i class="fa-solid fa-arrow-left"></i> <span>返回 18 週雙欄課程主站</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div id="expired" class="panel hidden">
+    <h2>本次課程已結束</h2>
+    <p>課程學生操作期限為 <b>2026 年 11 月 5 日 23:59（臺灣時間）</b>。學生端停止開放填答與報告編輯。</p>
+    <p class="hint">注意：此 GitHub Pages 靜態版的期限屬前端限制，不具防篡改安全性。正式封鎖必須由後端驗證時間及身分並撤銷 API 存取權。</p>
+  </div>
+
+  <div id="active">
+    <div class="warn">
+      📢 <b>系統使用說明：</b>本系統全面支援<b>「多組別自動保存」</b>與<b>「教師歷程審閱儀表板」</b>。學生在步驟 ①~⑤ 填寫的內容均會即時儲存於本機資料庫；系統管理者與授課教師在步驟 ⑥ 可切換各組、<b>先檢視圖示化歷程看板，最後才進行評核打分</b>。
+    </div>
+
+    <!-- 頂部頁籤導航列 -->
+    <nav class="controls" id="tabs"></nav>
+
+    <!-- 0. 系統化課程設計與教學架構 -->
+    <section id="curriculum" class="panel">
+      <h2>🎯 課程設計與教學系統架構（Curriculum Blueprint）</h2>
+      
+      <div class="blueprint-hero">
+        <h3 style="margin-top:0;">📚 課程基本定位與開課背景</h3>
+        <p style="margin:6px 0; color:#334155;">
+          <b>課程名稱：</b>環境影響評估實作（EIA Practice）｜<b>教學對象：</b>四技環境工程與科學系（大三／大四）｜<b>教學時數：</b>120 分鐘（連續 2 節課）
+        </p>
+        <p style="margin:6px 0; color:#475569; font-size:14px;">
+          <b>教學痛點與核心設計理念：</b>傳統環評教學面臨「書件動輒上千頁、學生難以提煉關鍵工程與環境議題」之痛點；然而引入生成式 AI 又容易引發「無中生有之幻覺推論」。本課程採用<b>「人機協作檢索（NotebookLM）＋ 官方圖資求真比對（GIS/法規）＋ 範疇矩陣結構化分析 ＋ 即時歷程審閱與多元診斷」</b>四位一體之系統化教學模式。
+        </p>
+      </div>
+
+      <h3>🌟 四大核心教學理念（Core Pillars）</h3>
+      <div class="grid">
+        <div class="principle-card">
+          <h4 style="color:#0369a1;">🤖 人機協作 (Human-AI)</h4>
+          <p class="hint">以 NotebookLM 作為專業學術閱讀助手，導入結構化 Prompt 提煉開發行為與各界審查意見，克服長篇專業文本閱讀障礙。</p>
+        </div>
+        <div class="principle-card">
+          <h4 style="color:#b45309;">🔎 官方求真 (Grounding)</h4>
+          <p class="hint">明確劃分「AI 輔助摘要」與「法定事實認定」。水質保護區、斷層敏感區等法定要件必須以政府空間圖資系統為準，嚴防 AI 幻覺。</p>
+        </div>
+        <div class="principle-card">
+          <h4 style="color:#047857;">📊 矩陣決策 (Scoping Matrix)</h4>
+          <p class="hint">引導學生將質性書件轉化為 6 大環境因子 × 4 項工程活動矩陣，量化工程影響，辨識優先評估議題與關鍵資料缺口。</p>
+        </div>
+        <div class="principle-card">
+          <h4 style="color:#6d28d9;">📈 歷程審閱 (Visual Audit & Rubric)</h4>
+          <p class="hint">管理者與教師在成果評分前，可先透過直觀的圖示化儀表板（測驗診斷、敏感區看板、矩陣熱點）檢視學生歷程，最後落實客觀評量。</p>
+        </div>
+      </div>
+
+      <h3>⏱️ 120 分鐘實作教學歷程時間軸（4 個階段 × 6 個實作步驟）</h3>
+      <div class="timeline">
+        <div class="timeline-node highlight">
+          <div class="timeline-header">
+            <span class="timeline-time">第 00 – 20 分鐘</span>
+            <b>階段一：情境導入與資料定錨（對應步驟 ① 資料匯入）</b>
+            <span class="tag-bloom">Bloom: 記憶與理解</span>
+            <span class="tag-ieet">IEET: 專業基礎知識</span>
+          </div>
+          <p class="hint" style="margin-top:6px;">
+            <b>【教學活動】：</b>教師解說真實環評案件背景、界定實作範圍與分組（G01~G10）。學生開啟環境部環評書件專區與 NotebookLM，建立小組知識來源清單。<br>
+            <b>【核心產出】：</b>小組代碼登錄、案件摘要筆記、官方資料出處清冊（系統即時自動儲存）。
+          </p>
+          <button class="secondary" style="font-size:12px; padding:4px 10px;" onclick="switchTab('home')">👉 進入步驟 ① 操作介面</button>
+        </div>
+
+        <div class="timeline-node">
+          <div class="timeline-header">
+            <span class="timeline-time">第 20 – 50 分鐘</span>
+            <b>階段二：AI 協作檢索與概念檢核（對應步驟 ② NotebookLM ＋ 步驟 ③ 理解測驗）</b>
+            <span class="tag-bloom">Bloom: 應用與分析</span>
+            <span class="tag-ieet">IEET: 現代科技工具應用</span>
+          </div>
+          <p class="hint" style="margin-top:6px;">
+            <b>【教學活動】：</b>學生執行結構化提示詞（書件摘要、意見追蹤、敏感區位、矩陣分析），提煉關鍵資訊並明確記錄「AI 提出但未獲證實之疑點」；隨後獨立作答 5 題觀念檢核測驗，建立對 AI 法律邊界的批判意識。<br>
+            <b>【核心產出】：</b>工程活動摘要、會議意見表、AI 盲點清單、形成性測驗即時得分。
+          </p>
+          <div style="display:flex; gap:8px;">
+            <button class="secondary" style="font-size:12px; padding:4px 10px;" onclick="switchTab('ai')">👉 進入步驟 ② 操作介面</button>
+            <button class="secondary" style="font-size:12px; padding:4px 10px;" onclick="switchTab('quiz')">👉 進入步驟 ③ 操作介面</button>
+          </div>
+        </div>
+
+        <div class="timeline-node highlight">
+          <div class="timeline-header">
+            <span class="timeline-time">第 50 – 90 分鐘</span>
+            <b>階段三：空間圖資查核與範疇矩陣建構（對應步驟 ④ 圖資查核 ＋ 步驟 ⑤ 範疇矩陣）</b>
+            <span class="tag-bloom">Bloom: 深度分析與評鑑</span>
+            <span class="tag-ieet">IEET: 複雜工程問題分析</span>
+          </div>
+          <p class="hint" style="margin-top:6px;">
+            <b>【教學活動】：</b>脫離純文字 AI，學生連線至環境敏感區位查詢、斷層圖資與水源保護區平台核對地號座標；接著在動態矩陣中評定 4 項工程活動對 6 大環境因子的交互影響等級（● 優先／△ 待查證／— 暫無證據）。<br>
+            <b>【核心產出】：</b>4 大敏感區位查核紀錄表、6×4 範疇評估矩陣、3 項優先環境議題論述。
+          </p>
+          <div style="display:flex; gap:8px;">
+            <button class="secondary" style="font-size:12px; padding:4px 10px;" onclick="switchTab('geo')">👉 進入步驟 ④ 操作介面</button>
+            <button class="secondary" style="font-size:12px; padding:4px 10px;" onclick="switchTab('matrix')">👉 進入步驟 ⑤ 操作介面</button>
+          </div>
+        </div>
+
+        <div class="timeline-node">
+          <div class="timeline-header">
+            <span class="timeline-time">第 90 – 120 分鐘</span>
+            <b>階段四：決策輸出與多元評量回饋（對應步驟 ⑥ 成果與評分）</b>
+            <span class="tag-bloom">Bloom: 綜合創造與反思</span>
+            <span class="tag-ieet">IEET: 工程倫理與溝通表達</span>
+          </div>
+          <p class="hint" style="margin-top:6px;">
+            <b>【教學活動】：</b>系統管理者與教師切換至「成果／評分」，<b>先檢視小組填寫報表之圖示化歷程（測驗、敏感區看板、熱點矩陣、AI盲點）</b>，最後依據 5 向度 Rubric 規準評分並給予回饋；小組匯出歷程 JSON 並列印 PDF 前置報告。<br>
+            <b>【核心產出】：</b>小組數位資料檔 (.json)、EIA 成果報告 (.pdf)、教師綜合評分與評語回饋。
+          </p>
+          <button class="secondary" style="font-size:12px; padding:4px 10px;" onclick="switchTab('report')">👉 進入步驟 ⑥ 操作介面</button>
+        </div>
+      </div>
+
+      <div style="margin-top:24px; text-align:center;">
+        <button onclick="switchTab('home')" style="font-size:16px; padding:12px 28px;">
+          🚀 開始實作：前往步驟 ① 學習入口與資料來源
+        </button>
+      </div>
+    </section>
+
+    <!-- ① 學習入口與資料來源 -->
+    <section id="home" class="panel hidden">
+      <h2>
+        ① 學習入口與資料來源
+        <span id="saveStatusHome" class="save-indicator">🟢 已即時自動儲存</span>
+      </h2>
+      <div class="hint" style="margin-bottom:12px;">【教學目標】：界定實作小組邊界，掌握官方公開資訊管道，建立客觀資料引用習慣。</div>
+
+      <!-- 小組選擇與切換列 -->
+      <div style="background:#f1f5f9; padding:16px; border-radius:10px; margin-bottom:16px; border:1px solid #cbd5e1;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <label style="margin:0 0 4px; font-size:13px; color:#475569;">選擇或切換已儲存之組別：</label>
+            <select id="groupSelector" style="width:auto; min-width:180px; padding:6px 12px; margin-top:2px;">
+              <!-- 動態由 JS 產生小組清單 -->
+            </select>
+          </div>
+          <div style="font-size:13px; color:#64748b;">
+            💡 切換組別時，目前小組之填寫內容會<b>自動保留</b>，不會互相覆蓋。
+          </div>
+        </div>
+      </div>
+
+      <label>小組代碼（可直接編輯代碼，例如 G01、G02、G03）
+        <input id="group" placeholder="例如：G01">
+      </label>
+      <label>本組案件名稱與任務備註
+        <textarea id="case" placeholder="從環評公開書件擷取案件全名、開發單位、基地位置，不得虛構"></textarea>
+      </label>
+      <p style="font-size:13px; color:#475569;">課程結束時間：2026/11/05 23:59（Asia/Taipei）</p>
+
+      <h3>教師指定公開資料管道</h3>
+      <div class="grid">
+        <div class="principle-card">
+          <a target="_blank" rel="noopener" href="https://eiadoc.moenv.gov.tw/public/publicMeetingOrBriefDetail/030F5189-BAD3-456B-B0A4-200AA0E6B17E">🔗 環評公開案例與附件</a>
+          <p class="hint">由環境部官方頁面下載環評說明書 PDF 與公開會議紀錄。</p>
+        </div>
+        <div class="principle-card">
+          <a target="_blank" rel="noopener" href="https://notebooklm.google.com/">🔗 NotebookLM</a>
+          <p class="hint">由學生自行匯入指定 PDF 建立專屬檢索庫。</p>
+        </div>
+        <div class="principle-card">
+          <a target="_blank" rel="noopener" href="https://eland.nlma.gov.tw/">🔗 環境敏感區位查詢系統</a>
+          <p class="hint">國土管理署空間套疊法定依據平台。</p>
+        </div>
+        <div class="principle-card">
+          <a target="_blank" rel="noopener" href="https://fault.gsmma.gov.tw/">🔗 活動斷層圖資查詢</a>
+          <p class="hint">地質調查及礦業管理中心官方圖層。</p>
+        </div>
+        <div class="principle-card">
+          <a target="_blank" rel="noopener" href="https://data.moenv.gov.tw/dataset/detail/GISEPA_P_13">🔗 水源保護區圖資平台</a>
+          <p class="hint">飲用水水源水質保護區 GIS 公開資料。</p>
+        </div>
+      </div>
+      
+      <label>來源文件與出處記錄（保存各資料來源）
+        <textarea id="sources" placeholder="每行格式：文件名稱｜章節／頁碼｜查詢日期｜網址"></textarea>
+      </label>
+    </section>
+
+    <!-- ② NotebookLM 資料擷取與引用 -->
+    <section id="ai" class="panel hidden">
+      <h2>
+        ② NotebookLM 資料擷取與引用
+        <span id="saveStatusAi" class="save-indicator">🟢 已即時自動儲存</span>
+      </h2>
+      <div class="hint" style="margin-bottom:12px;">【教學目標】：運用 5 組結構化提示詞輔助長篇書件檢索，直接對應下方 5 大填寫欄位，訓練人機協作查證、圖資前置準備與批判性思考。</div>
+      <p>請依序點選下方按鈕複製提示詞至 NotebookLM；確認檢索查證後的內容再分別貼入對應之欄位中：</p>
+      <div id="prompts"></div>
+      
+      <label>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+          <span>A. 開發概要與具體工程活動（對應 Prompt A，需標註章節／頁碼出處）</span>
+          <span id="charCount_summary" class="char-counter">0 / 800 字</span>
+        </div>
+        <textarea id="summary" maxlength="800" placeholder="填寫工程開發項目、工程規模、基地位置、具體工程活動（施工期與營運期），並註明引用出處（限 800 字內）..."></textarea>
+      </label>
+      <label>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+          <span>B. 審查／公開會議意見追蹤與回應（對應 Prompt B，注意分辨專案小組審查會與公聽會性質）</span>
+          <span id="charCount_minutes" class="char-counter">0 / 800 字</span>
+        </div>
+        <textarea id="minutes" maxlength="800" placeholder="列出各界關切要點、開發單位承諾之減輕對策或回應，並註明會議名稱與引用頁碼（限 800 字內）..."></textarea>
+      </label>
+      <label>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+          <span>C. 書件提及之敏感區位與保護對象線索（對應 Prompt C，供步驟 ④ 官方 GIS 核實之待查清單）</span>
+          <span id="charCount_geoClues" class="char-counter">0 / 800 字</span>
+        </div>
+        <textarea id="geoClues" maxlength="800" placeholder="摘錄書件中提及之水源保護區、活動斷層、生態保育區與鄰近學校/住宅等敏感受體線索；供後續至官方圖資進行法定比對（限 800 字內）..."></textarea>
+      </label>
+      <label>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+          <span>D. 工程活動對環境因子之衝擊途徑分析（對應 Prompt D，供步驟 ⑤ 範疇矩陣因果判定之理論參考）</span>
+          <span id="charCount_impactPaths" class="char-counter">0 / 800 字</span>
+        </div>
+        <textarea id="impactPaths" maxlength="800" placeholder="摘錄書件對於空氣品質、水質、噪音振動、生態、交通與生活環境之潛在衝擊途徑分析與因果關聯，作為範疇矩陣標註之依據（限 800 字內）..."></textarea>
+      </label>
+      <label>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+          <span>E. 人機批判與防範幻覺：AI 曾提出哪些尚未證實的結論？（標註資料盲點，防範模型幻覺，以 800 字為限）</span>
+          <span id="charCount_gaps" class="char-counter">0 / 800 字</span>
+        </div>
+        <textarea id="gaps" maxlength="800" placeholder="紀錄 NotebookLM 曾提出但原文中並未記載、缺乏數據佐證或屬於 AI 自行推測之疑點與結論（標註資料盲點，防範模型幻覺，以 800 字為限）..."></textarea>
+      </label>
+    </section>
+
+    <!-- ③ 個人概念檢核 -->
+    <section id="quiz" class="panel hidden">
+      <h2>
+        ③ 個人概念檢核（形成性評量 5 題）
+        <span id="saveStatusQuiz" class="save-indicator">🟢 已即時自動儲存</span>
+      </h2>
+      <div class="hint" style="margin-bottom:12px;">【教學目標】：即時檢核法律效力、矩陣符號與 AI 邊界觀念，答錯者即時導正。</div>
+      <p>請先由組員獨立作答，檢驗個人理解程度；本機測驗成績將納入學習歷程診斷。</p>
+      <div id="questions"></div>
+      <button onclick="grade()" style="margin-top:16px;">提交檢核並計算得分</button>
+      <p id="quizresult" class="score" style="margin-top:14px;"></p>
+    </section>
+
+    <!-- ④ 環境敏感區位查核 -->
+    <section id="geo" class="panel hidden">
+      <h2>
+        ④ 環境敏感區位查核
+        <span id="saveStatusGeo" class="save-indicator">🟢 已即時自動儲存</span>
+      </h2>
+      <div class="hint" style="margin-bottom:12px;">【教學目標】：掌握環境法規空間限制要件，養成以官方空間圖資為法定唯一依據的求真態度。</div>
+      <p>請先取得案件精確基地位置，並核對官方公告及圖資系統。<b>嚴禁使用 AI 推論直接取代空間查核結果。</b></p>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:28%;">查核項目</th>
+              <th style="width:24%;">查核結果</th>
+              <th>官方來源、證據依據或查詢日期</th>
+            </tr>
+          </thead>
+          <tbody id="geoRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ⑤ 評估範疇矩陣 -->
+    <section id="matrix" class="panel hidden">
+      <h2>
+        ⑤ 評估範疇矩陣（Scoping Matrix）
+        <span id="saveStatusMatrix" class="save-indicator">🟢 已即時自動儲存</span>
+      </h2>
+      <div class="hint" style="margin-bottom:12px;">【教學目標】：將非結構化開發行為與受體因子進行矩陣化交叉分析，辨識優先調查議題。</div>
+      <p>此為課堂初步範疇界定：<b>● 優先評估</b>；<b>△ 待查證</b>；<b>— 尚無明確直接影響證據</b>。（注意：三種符號均非正式法定風險等級）</p>
+      
+      <label>案件工程活動（四項，請以「、」分隔）
+        <input id="activities" value="土方開挖、施工運輸、工程興建、營運活動">
+      </label>
+      <button class="secondary" onclick="renderMatrix()" style="margin-top:8px;">更新欄位名稱</button>
+      
+      <div style="overflow-x:auto; margin-top:16px;">
+        <table id="mtable"></table>
+      </div>
+      
+      <label>三項優先環境議題、篩選理由與後續待調查資料
+        <textarea id="priorities" placeholder="1. 議題名稱：理由與調查規劃...&#10;2. 議題名稱：理由與調查規劃...&#10;3. 議題名稱：理由與調查規劃..."></textarea>
+      </label>
+    </section>
+
+    <!-- ⑥ 報告輸出與教師評分（含系統管理者/教師歷程圖示化審閱儀表板） -->
+    <section id="report" class="panel hidden">
+      <div class="print-header no-screen">
+        <h1 style="margin:0 0 6px; font-size:18pt; color:#0f254a;">Fooyin EIA Learning Lab｜環境影響評估實務成果報告 (PDF)</h1>
+        <div style="font-size:10.5pt; color:#475569;">輔英科技大學 環境工程與科學系 120 分鐘實作教學成果｜五項提問填入之字數、WORD 或 PDF 均以 800 字為限</div>
+      </div>
+      <h2>⑥ 成果輸出與多維度評量（歷程圖示化審閱 ➔ 教師評分）</h2>
+      <div class="hint" style="margin-bottom:12px;">
+        【教學評量流程】：系統管理者與教師<b>先透過下方儀表板審閱各組「第 ② 至 ⑤ 項」填寫歷程與圖示化成果</b>，最後再進行 Rubric 百分制評分並產出正式報告。
+      </div>
+
+      <!-- 管理者與教師審閱工具列 -->
+      <div class="admin-bar">
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <span style="font-weight:700; font-size:15px;">🔍 審閱小組切換：</span>
+          <select id="adminGroupSelect" onchange="switchAdminGroup(this.value)">
+            <!-- 動態列出所有小組 -->
+          </select>
+          <span id="adminAuditTimestamp" style="font-size:12px; color:#cbd5e1;">最後更新：--</span>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <input type="file" id="importJsonFileInput" accept=".json" style="display:none;" onchange="handleImportJson(event)">
+          <button class="secondary" style="color:white; border-color:#99b6df; font-size:13px;" onclick="$('importJsonFileInput').click()">
+            📥 載入外部小組 JSON 審閱
+          </button>
+          <button class="secondary" style="color:white; border-color:#99b6df; font-size:13px;" onclick="exportJson()">
+            📦 匯出此組 JSON
+          </button>
+          <button style="background:#2563eb; color:white; font-weight:700; font-size:13px;" onclick="exportWord()">
+            📄 匯出 Word 報告 (.doc)
+          </button>
+          <button style="background:var(--g); color:#000; font-weight:700; font-size:13px;" onclick="window.print()">
+            🖨️ 列印成果 PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= 系統管理者圖示化歷程審閱區（第 ② 至 ⑤ 項） ================= -->
+      <div id="adminVisualDashboard">
+        
+        <!-- 【第 ③ 項 圖示化：理解測驗歷程與概念診斷】 -->
+        <div class="audit-section">
+          <div class="audit-title">
+            <span>③ 理解測驗歷程與觀念診斷</span>
+            <span id="visualQuizBadge" class="pill" style="margin-left:auto; font-size:13px; font-weight:700;">得分：-- / 100</span>
+          </div>
+          <div id="visualQuizQuestions" class="audit-grid">
+            <!-- 動態生成 5 題答題狀態圖示卡 -->
+          </div>
+        </div>
+
+        <!-- 【第 ④ 項 圖示化：環境敏感區位查核看板】 -->
+        <div class="audit-section">
+          <div class="audit-title">
+            <span>④ 環境敏感區位查核圖示看板（官方圖資法定核實）</span>
+          </div>
+          <div id="visualGeoGrid" class="audit-grid">
+            <!-- 動態生成 4 大敏感區位狀態卡 -->
+          </div>
+        </div>
+
+        <!-- 【第 ⑤ 項 圖示化：範疇界定矩陣熱點圖與優先議題】 -->
+        <div class="audit-section">
+          <div class="audit-title">
+            <span>⑤ 範疇評估矩陣熱點圖（Scoping Heatmap）與優先議題</span>
+            <div style="margin-left:auto; display:flex; gap:8px;" id="visualMatrixStats">
+              <!-- 動態統計 ●, △, — 數量 -->
+            </div>
+          </div>
+          <div style="overflow-x:auto; background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:12px; margin-bottom:14px;">
+            <table class="heatmap-table" id="visualMatrixTable">
+              <!-- 動態生成彩色矩陣熱點圖 -->
+            </table>
+          </div>
+          <div class="audit-card">
+            <h4 style="margin-top:0; color:#0f254a;">📌 小組篩選之 3 項優先環境議題與調查方案：</h4>
+            <div id="visualPrioritiesText" style="white-space:pre-wrap; font-size:13px; color:#334155; line-height:1.6; background:#f8fafc; padding:12px; border-radius:6px; border:1px solid #e2e8f0;">
+              尚未填寫優先環境議題。
+            </div>
+          </div>
+        </div>
+
+        <!-- 【第 ② 項 圖示化：NotebookLM 資料擷取與人機協同品質】 -->
+        <div class="audit-section">
+          <div class="audit-title">
+            <span>② NotebookLM 資料擷取與人機協同盲點反思（5 組結構化提示成果）</span>
+          </div>
+          <div class="audit-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+            <div class="audit-card">
+              <h4 style="color:#0369a1;">📄 A. 開發概要與工程規模摘要：</h4>
+              <div id="visualSummaryText" style="white-space:pre-wrap; font-size:13px; color:#334155; max-height:140px; overflow-y:auto; background:#f8fafc; padding:10px; border-radius:6px;">
+                尚未填寫。
+              </div>
+            </div>
+            <div class="audit-card">
+              <h4 style="color:#0369a1;">🗣️ B. 審查／公開會議意見追蹤：</h4>
+              <div id="visualMinutesText" style="white-space:pre-wrap; font-size:13px; color:#334155; max-height:140px; overflow-y:auto; background:#f8fafc; padding:10px; border-radius:6px;">
+                尚未填寫。
+              </div>
+            </div>
+            <div class="audit-card">
+              <h4 style="color:#047857;">🗺️ C. 書件敏感區位線索（供對照步驟 ④）：</h4>
+              <div id="visualGeoCluesText" style="white-space:pre-wrap; font-size:13px; color:#334155; max-height:140px; overflow-y:auto; background:#f8fafc; padding:10px; border-radius:6px;">
+                尚未填寫。
+              </div>
+            </div>
+            <div class="audit-card">
+              <h4 style="color:#b45309;">📈 D. 環境衝擊途徑分析（供對照步驟 ⑤）：</h4>
+              <div id="visualImpactPathsText" style="white-space:pre-wrap; font-size:13px; color:#334155; max-height:140px; overflow-y:auto; background:#f8fafc; padding:10px; border-radius:6px;">
+                尚未填寫。
+              </div>
+            </div>
+          </div>
+          <div class="callout-box" style="margin-top:12px;">
+            <b>⚠️ E. 人機批判與防範幻覺：AI 曾提出哪些尚未證實的結論？（標註資料盲點，防範模型幻覺，以 800 字為限）：</b>
+            <div id="visualGapsText" style="white-space:pre-wrap; margin-top:6px; font-size:13px; line-height:1.5;">
+              （學生尚未填寫 AI 盲點；若盲目採信 AI，教師可於下方 Rubric 給予具體警示與扣分）
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ================= 最後才進行：教師多元規準評審（Rubric） ================= -->
+      <div style="border-top:3px dashed #cbd5e1; padding-top:24px; margin-top:28px;">
+        <h3 style="color:#0f254a; font-size:20px; display:flex; align-items:center; gap:8px;">
+          <span>📝 教師多元規準評核（Rubric 評量規準）</span>
+          <span class="pill" style="background:#e0f2fe; color:#0369a1; font-size:12px;">審核完畢後進行評定</span>
+        </h3>
+        <p class="hint">請參考上方完整的「圖示化成果看板」，針對本組之引用客觀度、圖資真實度、矩陣因果嚴謹性與 AI 盲點反思進行百分制評分：</p>
+        
+        <div id="rubric"></div>
+        
+        <label>教師專業回饋講評
+          <textarea id="feedback" placeholder="教師針對本組人機協同品質、圖資嚴謹度與矩陣分析之回饋評語..."></textarea>
+        </label>
+        
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-top:16px;">
+          <p style="margin:0;"><b>多元規準合計得分：</b><span class="score" id="total">0</span>／100 分</p>
+          <button onclick="saveCurrentTeacherGrading()" style="background:#059669; font-weight:700;">
+            💾 儲存評分與講評至此組歷程
+          </button>
+        </div>
+      </div>
+
+      <!-- 小組整合報告文字預覽 -->
+      <h3 style="margin-top:32px;">小組完整 EIA 前置評估成果報告預覽</h3>
+      <pre id="reportPreview" style="white-space:pre-wrap; overflow-wrap:anywhere; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:18px; font-size:13px; line-height:1.6;"></pre>
+    </section>
+  </div>
+
+  <footer>
+    <b>Fooyin EIA Learning Lab</b>｜輔英科技大學 環境工程與科學系 課程實作系統<br>
+    教學設計：NotebookLM 智慧閱讀 × 官方空間圖資求真 × 範疇界定 × 歷程圖示化與多元評量
+  </footer>
+</main>
+
+<script>
+const DEADLINE = Date.parse('2026-11-05T23:59:59+08:00');
+const expired = Date.now() > DEADLINE;
+
+if (expired) {
+  document.getElementById('active').remove();
+  document.getElementById('expired').classList.remove('hidden');
+} else {
+  const sections = ['curriculum', 'home', 'ai', 'quiz', 'geo', 'matrix', 'report'];
+  const labels = [
+    '🎯 課程設計與架構',
+    '① 資料匯入',
+    '② NotebookLM',
+    '③ 理解測驗',
+    '④ 圖資查核',
+    '⑤ 範疇矩陣',
+    '⑥ 成果／評分'
+  ];
+  const $ = id => document.getElementById(id);
+  const DB_KEY = 'fooyin_eia_groups_db_v2';
+  const CURRENT_GROUP_KEY = 'fooyin_eia_current_group_id';
+
+  // -------------------------------------------------------------
+  // 多組別資料庫管理模組 (Multi-Group Data Persistence)
+  // -------------------------------------------------------------
+  function getGroupsDB() {
+    try {
+      const data = localStorage.getItem(DB_KEY);
+      if (data) return JSON.parse(data);
+    } catch(e) {}
+    
+    // 初始化預設組別範例資料 (提供第一組範本，方便教學與演示)
+    const initialDB = {
+      "G01": {
+        group: "G01",
+        case: "高雄某科學園區擴建計畫環境影響評估案（示範案例）",
+        sources: "環評說明書初稿｜第三章 開發行為及工程內容｜2026/10/24｜https://eiadoc.moenv.gov.tw\n環境部環評委員專案小組初審會議紀錄｜2026/10/20",
+        summary: "本案開發基地位於南部地區，主要工程活動包含基地土方開挖平整（約15萬立方公尺）、施工期重型卡車運輸、廠房鋼骨結構興建，以及營運期高科技製程排氣與廢水排放。",
+        minutes: "1. 審查會委員關切：周邊鄰近區域之施工揚塵管制與交通衝擊安全維護。\n2. 民眾公聽會發言：下游居民關切放流水放流口位置是否影響既有灌溉取水。",
+        geoClues: "書件第 4-12 頁提及基地東側約 2 公里內疑似有斷層帶分布，且基地南側約 400 公尺處有國小敏感受體；但書件未明確列出各筆地號之空間套疊精確圖層，需進一步查核官方 GIS 系統。",
+        impactPaths: "1. 土方開挖與施工運輸：產生高濃度裸露揚塵（PM10 / PM2.5）與施工重型車輛噪音，直接衝擊下風處國小與社區。\n2. 基地整地降雨逕流：初期若無妥善沉砂池，高濁度逕流水可能流入排水系統。\n3. 營運期高科技廠房：穩定排放製程尾氣與常態性廢水，對受納水體具長期涵容累積效應。",
+        gaps: "NotebookLM 曾摘要推論「此區地質脆弱必發生土壤液化」，但經查原文僅建議進行補充地盤鑽探，並無該絕對定論，AI 推測有誇大之虞，需以官方圖資核實。",
+        activities: "土方開挖、施工運輸、工程興建、營運活動",
+        priorities: "1. 空氣品質（PM10 / PM2.5）：施工期土方運輸裸露揚塵影響下風處受體。\n2. 河川水質：整地排水逕流懸浮固體物及營運廢水排放對受納水體涵容影響。\n3. 交通衝擊：尖峰時段大型重型施工車輛進出對聯外道路服務水準之干擾。",
+        feedback: "小組對於 NotebookLM 的推論盲點指出得相當精確，官方圖資核實完整，矩陣因果分析符合工程實務邏輯！",
+        quiz: "80",
+        quizAnswers: [1, 2, 0, 1, 2],
+        geo: [
+          { name: "飲用水水源水質保護區", status: "未涉及（已查核確認）", evidence: "查詢環境部水源保護區圖資平台（GIS），基地位於集水區範圍外 2.5 公里處。" },
+          { name: "活動斷層地質敏感區", status: "涉及（已查核確認）", evidence: "比對地質調查及礦業管理中心圖層，基地東緣約 150 公尺有旗山活動斷層敏感帶通過。" },
+          { name: "自然生態保育區位", status: "未涉及（已查核確認）", evidence: "經國土管理署敏感區位系統套疊，無重疊各類野生動物保護區或重要棲息環境。" },
+          { name: "居民／學校等周邊敏感受體", status: "涉及（已查核確認）", evidence: "基地下風處約 400 公尺處有一所國小及住宅社區，施工期須特別加強降噪與空品防制措施。" }
+        ],
+        matrix: [
+          { name: "空氣品質", ratings: ["●", "●", "△", "△"] },
+          { name: "河川與水質", ratings: ["●", "—", "△", "●"] },
+          { name: "噪音振動", ratings: ["△", "●", "●", "—"] },
+          { name: "陸域與水域生態", ratings: ["△", "—", "△", "—"] },
+          { name: "道路與交通運輸", ratings: ["—", "●", "△", "●"] },
+          { name: "周邊居民生活環境", ratings: ["△", "●", "●", "△"] }
+        ],
+        rubric: [
+          { name: "書件摘要與客觀引用力", max: 25, score: 23 },
+          { name: "官方敏感區位查核真實度", max: 25, score: 24 },
+          { name: "範疇矩陣因果判定嚴謹性", max: 30, score: 28 },
+          { name: "優先議題與後續調查規劃", max: 10, score: 9 },
+          { name: "AI 查核能力與工程倫理反思", max: 10, score: 10 }
+        ],
+        lastSaved: new Date().toISOString()
+      },
+      "G02": {
+        group: "G02",
+        case: "離岸風力發電陸上變電站與輸電線路興建工程",
+        sources: "公開環境影響說明書｜第二章｜2026/10/22",
+        summary: "開發內容包含高壓變電所一座及地下電纜管路埋設工程。",
+        minutes: "地方民意代表要求地下管線路徑需避開學校與重要信仰中心。",
+        geoClues: "變電所選址於一般農業區旁，書件說明無涉及特定水土保持區，地下電纜路徑需比對市區敏感受體。",
+        impactPaths: "施工期道路開挖造成交通瓶頸與路面振動；營運期變壓器產生低頻噪音與極低頻電磁場。",
+        gaps: "AI 推斷電磁場必定超過國際標準，但經查原書件預測值遠低於環保署防護限制值。",
+        activities: "管線開挖、地基工程、機電安裝、變電營運",
+        priorities: "1. 噪音振動：變壓器低頻噪音。\n2. 交通維持：開挖期交通阻斷。\n3. 電磁波防護：周邊敏感受體距離。",
+        feedback: "",
+        quiz: "100",
+        quizAnswers: [1, 2, 0, 1, 2],
+        geo: [
+          { name: "飲用水水源水質保護區", status: "未涉及（已查核確認）", evidence: "eland 圖資確認無重疊" },
+          { name: "活動斷層地質敏感區", status: "未涉及（已查核確認）", evidence: "距最近斷層大於 10 公里" },
+          { name: "自然生態保育區位", status: "未涉及（已查核確認）", evidence: "非生態敏感帶" },
+          { name: "居民／學校等周邊敏感受體", status: "涉及（已查核確認）", evidence: "距離住宅區約 80 公尺" }
+        ],
+        matrix: [
+          { name: "空氣品質", ratings: ["△", "△", "—", "—"] },
+          { name: "河川與水質", ratings: ["—", "—", "—", "—"] },
+          { name: "噪音振動", ratings: ["●", "●", "—", "●"] },
+          { name: "陸域與水域生態", ratings: ["—", "—", "—", "—"] },
+          { name: "道路與交通運輸", ratings: ["●", "△", "—", "—"] },
+          { name: "周邊居民生活環境", ratings: ["△", "△", "—", "●"] }
+        ],
+        rubric: [
+          { name: "書件摘要與客觀引用力", max: 25, score: 0 },
+          { name: "官方敏感區位查核真實度", max: 25, score: 0 },
+          { name: "範疇矩陣因果判定嚴謹性", max: 30, score: 0 },
+          { name: "優先議題與後續調查規劃", max: 10, score: 0 },
+          { name: "AI 查核能力與工程倫理反思", max: 10, score: 0 }
+        ],
+        lastSaved: new Date().toISOString()
+      }
+    };
+
+    // 檢查舊版資料遷移
+    try {
+      const old = localStorage.getItem('fooyin-eia-lab-2026');
+      if (old) {
+        const oldObj = JSON.parse(old);
+        const oldG = (oldObj.fields && oldObj.fields.group) || 'G01';
+        initialDB[oldG] = Object.assign(initialDB[oldG] || {}, oldObj.fields, {
+          quiz: oldObj.quiz || '0',
+          geo: oldObj.geo || initialDB['G01'].geo,
+          matrix: oldObj.matrix || initialDB['G01'].matrix,
+          rubric: oldObj.rubric || initialDB['G01'].rubric,
+          lastSaved: oldObj.exportedAt || new Date().toISOString()
+        });
+      }
+    } catch(e) {}
+
+    saveGroupsDB(initialDB);
+    return initialDB;
+  }
+
+  function saveGroupsDB(db) {
+    try {
+      localStorage.setItem(DB_KEY, JSON.stringify(db));
+    } catch(e) {
+      console.error('儲存本機資料庫失敗：', e);
+    }
+  }
+
+  function getCurrentGroupId() {
+    return localStorage.getItem(CURRENT_GROUP_KEY) || 'G01';
+  }
+
+  function setCurrentGroupId(id) {
+    localStorage.setItem(CURRENT_GROUP_KEY, id);
+  }
+
+  // -------------------------------------------------------------
+  // UI 導航與分頁切換
+  // -------------------------------------------------------------
+  $('tabs').innerHTML = sections.map((s, i) => {
+    const isCurriculum = s === 'curriculum';
+    const isReport = s === 'report';
+    const activeClass = i === 0 ? 'active' : 'secondary';
+    const customClass = isCurriculum ? 'curriculum-tab' : (isReport ? 'admin-tab' : '');
+    return `<button class="tab-btn ${activeClass} ${customClass}" data-tab="${s}">${labels[i]}</button>`;
+  }).join('');
+
+  window.switchTab = (targetId) => {
+    sections.forEach(s => {
+      const el = $(s);
+      if (el) el.classList.toggle('hidden', s !== targetId);
+    });
+    document.querySelectorAll('[data-tab]').forEach(btn => {
+      const isTarget = btn.dataset.tab === targetId;
+      btn.classList.toggle('active', isTarget);
+      btn.classList.toggle('secondary', !isTarget);
+    });
+    if (targetId === 'report') {
+      refreshAdminDashboard();
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  document.querySelectorAll('[data-tab]').forEach(b => {
+    b.onclick = () => switchTab(b.dataset.tab);
+  });
+
+  // -------------------------------------------------------------
+  // 提示詞工程模組 (Prompt Engineering)
+  // -------------------------------------------------------------
+  const promptList = [
+    ['A｜開發概要與工程活動（對應下方「A. 開發概要」）', '請僅根據上傳的環評書件，整理開發單位、計畫基地位置、主要工程活動（區分施工期與營運期）、工程規模與土方量，逐項附文件來源；沒有資料請說「文件未提供」。'],
+    ['B｜審查與公聽會議追蹤（對應下方「B. 會議意見追蹤」）', '請依書件中之公開會議紀錄，表列提出者意見、開發單位承諾或回應對策、後續待查事項與引用頁碼，並明確區分「專案小組審查會」與「民眾公開說明會」之性質。'],
+    ['C｜敏感區位與受體線索（對應下方「C. 敏感區位線索」➔ 供步驟 ④ 圖資核實）', '請檢索書件中提及之水源保護區、活動斷層、自然生態保育區及鄰近敏感受體（學校、醫院、住宅）之既有說明與線索；標註引用頁碼，不得自行推斷空間套疊結果。'],
+    ['D｜衝擊途徑與因果分析（對應下方「D. 衝擊途徑分析」➔ 供步驟 ⑤ 矩陣判定）', '請依書件內容，分析主要工程活動對空氣品質、水質、噪音振動、生態、交通與生活環境之可能影響途徑與減輕對策；逐項註明出處。'],
+    ['E｜人機批判與防範幻覺：AI 曾提出哪些尚未證實的結論？（標註資料盲點，防範模型幻覺，以 800 字為限）', '請檢視上方所有回答，挑出 NotebookLM 的回答中是否有「原文未記載、無明確數據支持、或由 AI 主觀推測」之疑點或武斷結論？請標註資料盲點，防範模型幻覺，逐項列出待查證清單（各提問填寫以 800 字為限）。']
+  ];
+
+  $('prompts').innerHTML = promptList.map(([a, b], idx) => `
+    <div class="panel" style="margin:10px 0; padding:16px; background:#f8fafc; border:1px solid #e2e8f0;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <b style="color:var(--n);">${a}</b>
+        <span class="pill" style="font-size:11px; background:#e0f2fe; color:#0369a1;">可一鍵複製</span>
+      </div>
+      <p style="margin:6px 0 10px; font-size:14px; color:#334155;">${b}</p>
+      <button class="secondary" style="padding:6px 12px; font-size:13px;" data-copy="${idx}">📋 複製提示詞</button>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('[data-copy]').forEach(b => {
+    b.onclick = () => {
+      const text = promptList[Number(b.dataset.copy)][1];
+      navigator.clipboard?.writeText(text);
+      const originalText = b.textContent;
+      b.textContent = '✅ 已複製！';
+      setTimeout(() => { b.textContent = originalText; }, 1500);
+    };
+  });
+
+  // -------------------------------------------------------------
+  // 概念檢核 5 題與診斷模組 (Formative Assessment)
+  // -------------------------------------------------------------
+  const qs = [
+    ['如果環評 PDF 未提及水源保護區，應如何判斷是否涉及？', ['可以判定為完全未涉及', '應查閱環境部或相關官方 GIS 圖資核對地號', 'NotebookLM 未提及即代表安全'], 1],
+    ['環評範疇矩陣中的「●」記號在課堂初步評估代表什麼？', ['已構成法定重大環境衝擊', '監測值已確定超過環評標準', '屬於優先需要深入評估或調查的關鍵議題'], 2],
+    ['AI（NotebookLM）引用書件頁碼產生摘要後，工程師仍應如何處理？', ['逐一翻閱對應原文頁碼進行交叉比對查證', '既然已附頁碼便無須再確認，可直接採信', '可直接作為主管機關法定審查結論'], 0],
+    ['地質學上的「活動斷層線」與法規上的「活動斷層地質敏感區」是否相同？', ['完全相同，兩者圖資可直接通用', '兩者法定定義與範圍不同，應至地調所專屬系統分別查核', '只要基地距離斷層線大於 1 公里即自動免查'], 1],
+    ['在專業 EIA 評估報告中，若特定環境因子暫時缺少現況調查數據，應如何處理？', ['自行代入鄰近地區合理數值以求完整', '直接判定為「尚無環境影響」', '忠實標註為「待查證／缺漏資料」，並列入後續調查計畫'], 2]
+  ];
+
+  $('questions').innerHTML = qs.map((q, i) => `
+    <div class="panel" style="margin:10px 0; padding:16px; border:1px solid #e2e8f0;">
+      <b style="font-size:15px; color:var(--n);">${i + 1}. ${q[0]}</b>
+      <div style="margin-top:8px;">
+        ${q[1].map((v, j) => `
+          <label style="font-weight:400; display:flex; align-items:center; gap:8px; margin-top:6px; cursor:pointer;">
+            <input style="width:auto; margin:0;" type="radio" name="q${i}" value="${j}" onchange="autoSave()"> ${v}
+          </label>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  window.grade = () => {
+    let n = 0;
+    qs.forEach((q, i) => {
+      const v = document.querySelector(`input[name=q${i}]:checked`);
+      if (v && +v.value === q[2]) n++;
+    });
+    $('quizresult').innerHTML = `得分：<b>${n * 20}</b> 分（答對 ${n} / 5 題）<br><span style="font-size:14px; font-weight:normal; color:#475569;">💡 診斷提示：若有答錯題目，請務必重新檢視官方圖資定義與 AI 邊界規範，再進行後續章節。</span>`;
+    sessionStorage.setItem('quiz', String(n * 20));
+    autoSave();
+  };
+
+  // -------------------------------------------------------------
+  // 敏感區位與範疇矩陣模組
+  // -------------------------------------------------------------
+  const geos = ['飲用水水源水質保護區', '活動斷層地質敏感區', '自然生態保育區位', '居民／學校等周邊敏感受體'];
+  $('geoRows').innerHTML = geos.map((v, i) => `
+    <tr>
+      <td><b>${v}</b></td>
+      <td>
+        <select id="status${i}" onchange="autoSave()">
+          <option value="△ 待查證">△ 待查證</option>
+          <option value="涉及（已查核確認）">涉及（已查核確認）</option>
+          <option value="未涉及（已查核確認）">未涉及（已查核確認）</option>
+        </select>
+      </td>
+      <td>
+        <textarea id="evidence${i}" style="min-height:50px;" placeholder="請填寫官方系統名稱、公告字號、查詢日期或檢索地號依據..."></textarea>
+      </td>
+    </tr>
+  `).join('');
+
+  const factors = ['空氣品質', '河川與水質', '噪音振動', '陸域與水域生態', '道路與交通運輸', '周邊居民生活環境'];
+
+  window.renderMatrix = () => {
+    let acts = $('activities').value.split('、').map(s => s.trim()).filter(Boolean).slice(0, 4);
+    while (acts.length < 4) acts.push('活動' + (acts.length + 1));
+    $('mtable').innerHTML = `
+      <thead>
+        <tr>
+          <th style="width:24%;">環境因子＼工程行為</th>
+          ${acts.map(a => `<th>${a.replaceAll('<', '&lt;')}</th>`).join('')}
+        </tr>
+      </thead>
+      <tbody>
+        ${factors.map((f, i) => `
+          <tr>
+            <th>${f}</th>
+            ${acts.map((a, j) => `
+              <td>
+                <select id="m${i}_${j}" onchange="autoSave()">
+                  <option value="△">△ 待查證</option>
+                  <option value="●">● 優先評估</option>
+                  <option value="—">— 暫無證據</option>
+                </select>
+              </td>
+            `).join('')}
+          </tr>
+        `).join('')}
+      </tbody>
+    `;
+  };
+  renderMatrix();
+
+  // -------------------------------------------------------------
+  // 評量規準 (Rubric) 模組
+  // -------------------------------------------------------------
+  const rub = [
+    ['書件摘要與客觀引用力', 25],
+    ['官方敏感區位查核真實度', 25],
+    ['範疇矩陣因果判定嚴謹性', 30],
+    ['優先議題與後續調查規劃', 10],
+    ['AI 查核能力與工程倫理反思', 10]
+  ];
+
+  $('rubric').innerHTML = rub.map((r, i) => `
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; background:#f8fafc; padding:8px 14px; border-radius:8px; border:1px solid #e2e8f0;">
+      <span style="font-weight:600; font-size:14px; color:#1e293b;">${r[0]}（上限 ${r[1]} 分）</span>
+      <input type="number" min="0" max="${r[1]}" id="score${i}" value="0" style="width:90px; text-align:right; font-weight:700; margin:0;" oninput="updateRubricTotal()">
+    </div>
+  `).join('');
+
+  window.updateRubricTotal = () => {
+    let sum = 0;
+    rub.forEach((r, i) => {
+      const val = Math.min(r[1], Math.max(0, Number($('score' + i)?.value) || 0));
+      sum += val;
+    });
+    $('total').textContent = sum;
+  };
+
+  // -------------------------------------------------------------
+  // 學生表單收集與載入函式 (Collect & Populate)
+  // -------------------------------------------------------------
+  function getSelectedQuizAnswers() {
+    return qs.map((q, i) => {
+      const checked = document.querySelector(`input[name=q${i}]:checked`);
+      return checked ? Number(checked.value) : null;
+    });
+  }
+
+  // 5 種 NotebookLM 提問專屬欄位（填寫、存檔、Word 與 PDF 均以 800 字為限）
+  const countFields = ['summary', 'minutes', 'geoClues', 'impactPaths', 'gaps'];
+
+  function collectCurrentFormData() {
+    const gId = ($('group').value || getCurrentGroupId() || 'G01').trim().toUpperCase();
+    const ids = ['case', 'sources', 'summary', 'minutes', 'geoClues', 'impactPaths', 'gaps', 'activities', 'priorities', 'feedback'];
+    const fields = Object.fromEntries(ids.map(k => [k, $(k) ? $(k).value : '']));
+    fields.group = gId;
+
+    // 嚴格限制 5 種提問填入之字數以 800 字為限
+    countFields.forEach(k => {
+      if (fields[k] && fields[k].length > 800) fields[k] = fields[k].slice(0, 800);
+    });
+
+    return {
+      group: gId,
+      ...fields,
+      quiz: sessionStorage.getItem('quiz') || '0',
+      quizAnswers: getSelectedQuizAnswers(),
+      geo: geos.map((name, i) => ({
+        name,
+        status: $('status' + i) ? $('status' + i).value : '△ 待查證',
+        evidence: $('evidence' + i) ? $('evidence' + i).value : ''
+      })),
+      matrix: factors.map((name, i) => ({
+        name,
+        ratings: [0, 1, 2, 3].map(j => $('m' + i + '_' + j) ? $('m' + i + '_' + j).value : '△')
+      })),
+      rubric: rub.map((r, i) => ({
+        name: r[0],
+        max: r[1],
+        score: Math.min(r[1], Math.max(0, Number($('score' + i)?.value) || 0))
+      })),
+      lastSaved: new Date().toISOString()
+    };
+  }
+
+  function populateFormData(data) {
+    if (!data) return;
+    $('group').value = data.group || 'G01';
+    $('case').value = data.case || '';
+    $('sources').value = data.sources || '';
+    $('summary').value = data.summary || '';
+    $('minutes').value = data.minutes || '';
+    if ($('geoClues')) $('geoClues').value = data.geoClues || '';
+    if ($('impactPaths')) $('impactPaths').value = data.impactPaths || '';
+    $('gaps').value = data.gaps || '';
+    $('activities').value = data.activities || '土方開挖、施工運輸、工程興建、營運活動';
+    $('priorities').value = data.priorities || '';
+    $('feedback').value = data.feedback || '';
+
+    // 恢復矩陣欄位
+    renderMatrix();
+
+    // 恢復敏感區位
+    (data.geo || []).forEach((v, i) => {
+      if ($('status' + i)) $('status' + i).value = v.status;
+      if ($('evidence' + i)) $('evidence' + i).value = v.evidence || '';
+    });
+
+    // 恢復矩陣勾選
+    (data.matrix || []).forEach((v, i) => {
+      (v.ratings || []).forEach((val, j) => {
+        if ($('m' + i + '_' + j)) $('m' + i + '_' + j).value = val;
+      });
+    });
+
+    // 恢復測驗勾選與得分
+    if (data.quiz) {
+      sessionStorage.setItem('quiz', data.quiz);
+      $('quizresult').innerHTML = `得分：<b>${data.quiz}</b> 分<br><span style="font-size:14px; font-weight:normal; color:#475569;">💡 診斷提示：已從本機資料庫自動載入本組測驗紀錄。</span>`;
+    }
+    if (data.quizAnswers && Array.isArray(data.quizAnswers)) {
+      data.quizAnswers.forEach((ans, i) => {
+        if (ans !== null && ans !== undefined) {
+          const radio = document.querySelector(`input[name=q${i}][value="${ans}"]`);
+          if (radio) radio.checked = true;
+        }
+      });
+    }
+
+    // 恢復評量分數
+    (data.rubric || []).forEach((v, i) => {
+      if ($('score' + i)) $('score' + i).value = v.score;
+    });
+    updateRubricTotal();
+    updateCharCounters();
+  }
+
+  // -------------------------------------------------------------
+  // 字數計數與 800 字限制檢測模組 (Character Count & Limit)
+  // -------------------------------------------------------------
+  function updateCharCounters() {
+    countFields.forEach(id => {
+      const el = $(id);
+      const counter = $('charCount_' + id);
+      if (el && counter) {
+        const len = (el.value || '').length;
+        counter.textContent = `${len} / 800 字`;
+        counter.classList.toggle('near-limit', len >= 700 && len < 800);
+        counter.classList.toggle('at-limit', len >= 800);
+      }
+    });
+  }
+
+  // -------------------------------------------------------------
+  // 自動儲存與多組管理模組 (Auto-Save & Multi-Group Switcher)
+  // -------------------------------------------------------------
+  function updateSaveIndicators(text) {
+    const timeStr = new Date().toLocaleTimeString('zh-TW');
+    const msg = text || `🟢 已即時自動儲存（${timeStr}）`;
+    ['saveStatusHome', 'saveStatusAi', 'saveStatusQuiz', 'saveStatusGeo', 'saveStatusMatrix'].forEach(id => {
+      const el = $(id);
+      if (el) el.textContent = msg;
+    });
+  }
+
+  window.autoSave = () => {
+    const currentData = collectCurrentFormData();
+    const gId = currentData.group;
+    const db = getGroupsDB();
+    db[gId] = currentData;
+    saveGroupsDB(db);
+    setCurrentGroupId(gId);
+    updateSaveIndicators();
+    updateGroupDropdowns();
+    updateCharCounters();
+  };
+
+  function updateGroupDropdowns() {
+    const db = getGroupsDB();
+    const currentG = getCurrentGroupId();
+    const gKeys = Object.keys(db).sort();
+    
+    // 首頁群組下拉選單
+    const sel1 = $('groupSelector');
+    if (sel1) {
+      sel1.innerHTML = gKeys.map(k => `
+        <option value="${k}" ${k === currentG ? 'selected' : ''}>小組 ${k}（${db[k].case ? db[k].case.slice(0, 14) + '...' : '新小組'}）</option>
+      `).join('') + `<option value="_new">➕ 建立新組別...</option>`;
+    }
+
+    // 管理者後台群組下拉選單
+    const sel2 = $('adminGroupSelect');
+    if (sel2) {
+      sel2.innerHTML = gKeys.map(k => `
+        <option value="${k}" ${k === currentG ? 'selected' : ''}>組別 ${k}：${db[k].case ? db[k].case.slice(0, 18) + '...' : '無案件名稱'}</option>
+      `).join('');
+    }
+  }
+
+  // 首頁切換組別事件
+  $('groupSelector').onchange = (e) => {
+    const val = e.target.value;
+    if (val === '_new') {
+      const newName = prompt('請輸入新小組代碼（例如 G03）：', 'G03');
+      if (newName) {
+        const cleanG = newName.trim().toUpperCase();
+        const db = getGroupsDB();
+        if (!db[cleanG]) {
+          db[cleanG] = { group: cleanG, activities: '土方開挖、施工運輸、工程興建、營運活動', lastSaved: new Date().toISOString() };
+          saveGroupsDB(db);
+        }
+        setCurrentGroupId(cleanG);
+        populateFormData(db[cleanG]);
+        updateGroupDropdowns();
+      }
+    } else {
+      // 先儲存目前小組再切換
+      autoSave();
+      setCurrentGroupId(val);
+      const db = getGroupsDB();
+      populateFormData(db[val]);
+      updateGroupDropdowns();
+    }
+  };
+
+  // 監聽小組代碼 input 變更
+  $('group').onchange = () => {
+    autoSave();
+  };
+
+  // -------------------------------------------------------------
+  // 系統管理者／教師審閱儀表板模組 (Admin Review Visual Dashboard)
+  // -------------------------------------------------------------
+  window.switchAdminGroup = (groupId) => {
+    setCurrentGroupId(groupId);
+    const db = getGroupsDB();
+    if (db[groupId]) {
+      populateFormData(db[groupId]);
+      refreshAdminDashboard();
+    }
+  };
+
+  window.refreshAdminDashboard = () => {
+    const currentG = getCurrentGroupId();
+    const db = getGroupsDB();
+    const data = db[currentG] || collectCurrentFormData();
+
+    // 更新時間標記
+    $('adminAuditTimestamp').textContent = `最後填寫：${data.lastSaved ? new Date(data.lastSaved).toLocaleString('zh-TW') : '剛剛'}`;
+    
+    // 1. 【第 ③ 項 測驗診斷圖示化】
+    $('visualQuizBadge').textContent = `測驗得分：${data.quiz || 0} / 100 分`;
+    $('visualQuizQuestions').innerHTML = qs.map((q, i) => {
+      const userAns = (data.quizAnswers && data.quizAnswers[i] !== undefined && data.quizAnswers[i] !== null) 
+        ? data.quizAnswers[i] 
+        : null;
+      const isCorrect = userAns === q[2];
+      const answered = userAns !== null;
+      
+      let badgeHtml = '';
+      if (!answered) {
+        badgeHtml = '<span class="badge-status-warn">⏳ 尚未作答</span>';
+      } else if (isCorrect) {
+        badgeHtml = '<span class="badge-status-safe">✅ 正確掌握</span>';
+      } else {
+        badgeHtml = '<span class="badge-status-danger">❌ 觀念偏差</span>';
+      }
+
+      return `
+        <div class="audit-card">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+            <b style="font-size:13px; color:#0f254a;">第 ${i + 1} 題：${q[0].slice(0, 24)}...</b>
+            ${badgeHtml}
+          </div>
+          <p class="hint" style="margin-top:6px; font-size:12px;">
+            學生選擇：${answered ? q[1][userAns] : '無'}<br>
+            標準觀念：${q[1][q[2]]}
+          </p>
+        </div>
+      `;
+    }).join('');
+
+    // 2. 【第 ④ 項 敏感區位查核圖示卡】
+    $('visualGeoGrid').innerHTML = (data.geo || geos.map(name => ({ name, status: '△ 待查證', evidence: '' }))).map((g) => {
+      let badge = '<span class="badge-status-warn">△ 待查證</span>';
+      if (g.status.includes('涉及') && !g.status.includes('未涉及')) {
+        badge = '<span class="badge-status-danger">🔴 涉及敏感區</span>';
+      } else if (g.status.includes('未涉及')) {
+        badge = '<span class="badge-status-safe">🟢 未涉及區位</span>';
+      }
+
+      return `
+        <div class="audit-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <b style="font-size:14px; color:#0f254a;">${g.name}</b>
+            ${badge}
+          </div>
+          <p class="hint" style="font-size:12px; margin:4px 0 0;">
+            <b>查核證據與圖資依據：</b><br>
+            <span style="color:#334155;">${g.evidence ? g.evidence.replaceAll('\n', '<br>') : '（尚未填寫佐證來源）'}</span>
+          </p>
+        </div>
+      `;
+    }).join('');
+
+    // 3. 【第 ⑤ 項 範疇界定矩陣熱點圖與統計】
+    let countPriority = 0, countVerify = 0, countNone = 0;
+    const acts = (data.activities || '土方開挖、施工運輸、工程興建、營運活動').split('、').map(s=>s.trim()).filter(Boolean).slice(0, 4);
+    while (acts.length < 4) acts.push('活動' + (acts.length + 1));
+
+    const matrixRows = (data.matrix || factors.map(name => ({ name, ratings: ['△','△','△','△'] })));
+    matrixRows.forEach(row => {
+      (row.ratings || []).forEach(r => {
+        if (r === '●') countPriority++;
+        else if (r === '△') countVerify++;
+        else countNone++;
+      });
+    });
+
+    $('visualMatrixStats').innerHTML = `
+      <span class="stat-pill" style="color:#b91c1c; background:#fee2e2; border-color:#fca5a5;">● 優先評估：${countPriority} 項</span>
+      <span class="stat-pill" style="color:#b45309; background:#fef3c7; border-color:#fde047;">△ 待查證：${countVerify} 項</span>
+      <span class="stat-pill" style="color:#475569; background:#f1f5f9; border-color:#cbd5e1;">— 暫無證據：${countNone} 項</span>
+    `;
+
+    $('visualMatrixTable').innerHTML = `
+      <thead>
+        <tr>
+          <th style="width:26%; text-align:left;">環境因子＼工程行為</th>
+          ${acts.map(a => `<th>${a.replaceAll('<', '&lt;')}</th>`).join('')}
+        </tr>
+      </thead>
+      <tbody>
+        ${matrixRows.map(row => `
+          <tr>
+            <th style="text-align:left;">${row.name}</th>
+            ${(row.ratings || ['△','△','△','△']).map(r => {
+              let cls = 'cell-verify';
+              if (r === '●') cls = 'cell-priority';
+              else if (r === '—') cls = 'cell-none';
+              return `<td class="${cls}">${r === '●' ? '● 優先' : (r === '△' ? '△ 待查' : '— 無')}</td>`;
+            }).join('')}
+          </tr>
+        `).join('')}
+      </tbody>
+    `;
+
+    $('visualPrioritiesText').textContent = data.priorities || '（尚未列出優先環境議題）';
+
+    // 4. 【第 ② 項 NotebookLM 摘要與人機協同品質】
+    $('visualSummaryText').textContent = data.summary ? `[${data.summary.length} / 800 字]\n${data.summary.slice(0, 800)}` : '（尚未填寫開發概要）';
+    $('visualMinutesText').textContent = data.minutes ? `[${data.minutes.length} / 800 字]\n${data.minutes.slice(0, 800)}` : '（尚未填寫會議意見）';
+    if ($('visualGeoCluesText')) $('visualGeoCluesText').textContent = data.geoClues ? `[${data.geoClues.length} / 800 字]\n${data.geoClues.slice(0, 800)}` : '（尚未填寫書件敏感區位線索）';
+    if ($('visualImpactPathsText')) $('visualImpactPathsText').textContent = data.impactPaths ? `[${data.impactPaths.length} / 800 字]\n${data.impactPaths.slice(0, 800)}` : '（尚未填寫衝擊途徑分析）';
+    $('visualGapsText').textContent = data.gaps ? `[${data.gaps.length} / 800 字]\n${data.gaps.slice(0, 800)}` : '（尚未記錄 AI 盲點；若未做查證即全盤採信，請教師於下方 Rubric 給予指導）';
+
+    // 5. 更新教師評分表單與總結報告預覽
+    (data.rubric || []).forEach((r, i) => {
+      if ($('score' + i)) $('score' + i).value = r.score;
+    });
+    $('feedback').value = data.feedback || '';
+    updateRubricTotal();
+    generateReportPreview(data);
+  };
+
+  function generateReportPreview(o) {
+    const total = (o.rubric || []).reduce((s, r) => s + (Number(r.score) || 0), 0);
+    $('reportPreview').textContent = 
+`============================================================
+【Fooyin EIA Learning Lab｜環境影響評估實務成果報告】
+============================================================
+審核組別：${o.group || '未填寫'}
+測驗得分：${o.quiz || 0} 分
+報告時間：${new Date().toLocaleString('zh-TW')}
+
+【一、開發案件背景】
+${o.case || '（無備註）'}
+
+【二、官方資料與書件來源清單】
+${o.sources || '（未登記來源）'}
+
+【三、NotebookLM 輔助書件摘要與工程活動（Prompt A，字數：${(o.summary || '').length} / 800 字）】
+${(o.summary || '（尚未填寫）').slice(0, 800)}
+
+【四、各界審查與公聽會議意見追蹤（Prompt B，字數：${(o.minutes || '').length} / 800 字）】
+${(o.minutes || '（尚未填寫）').slice(0, 800)}
+
+【五、書件敏感區位線索與待查清單（Prompt C ➔ 供步驟 ④ 圖資核實，字數：${(o.geoClues || '').length} / 800 字）】
+${(o.geoClues || '（尚未填寫）').slice(0, 800)}
+
+【六、工程衝擊途徑因果分析（Prompt D ➔ 供步驟 ⑤ 矩陣判定，字數：${(o.impactPaths || '').length} / 800 字）】
+${(o.impactPaths || '（尚未填寫）').slice(0, 800)}
+
+【七、人機批判與防範幻覺：AI 曾提出哪些尚未證實的結論？（Prompt E：標註資料盲點，防範模型幻覺，字數：${(o.gaps || '').length} / 800 字）】
+${(o.gaps || '（尚未填寫）').slice(0, 800)}
+
+【八、環境敏感區位官方圖資查核】
+${(o.geo || []).map(v => `・${v.name}：[${v.status}] 佐證依據：${v.evidence || '無'}`).join('\n')}
+
+【九、環境影響範疇界定矩陣 (Scoping Matrix)】
+工程活動：${o.activities || $('activities').value}
+${(o.matrix || []).map(x => `・${x.name} 影響判定：${(x.ratings || []).join(' ｜ ')}`).join('\n')}
+
+【十、優先環境議題與調查對策】
+${o.priorities || '（尚未填寫）'}
+
+============================================================
+【十一、教師多元規準評核 (Rubric Evaluation)】
+評核總分：${total} / 100 分
+向度明細：
+${(o.rubric || []).map(r => `  - ${r.name}：${r.score} / ${r.max} 分`).join('\n')}
+教師講評：
+${o.feedback || '（尚無講評）'}
+============================================================`;
+  }
+
+  // 儲存教師評分回資料庫
+  window.saveCurrentTeacherGrading = () => {
+    const currentG = getCurrentGroupId();
+    const db = getGroupsDB();
+    if (!db[currentG]) db[currentG] = collectCurrentFormData();
+
+    db[currentG].rubric = rub.map((r, i) => ({
+      name: r[0],
+      max: r[1],
+      score: Math.min(r[1], Math.max(0, Number($('score' + i)?.value) || 0))
+    }));
+    db[currentG].feedback = $('feedback').value;
+    db[currentG].lastSaved = new Date().toISOString();
+
+    saveGroupsDB(db);
+    generateReportPreview(db[currentG]);
+    alert(`✅ 已成功儲存【小組 ${currentG}】的教師評分與講評！\n總分：${$('total').textContent} 分`);
+  };
+
+  // 匯出小組 JSON
+  window.exportJson = () => {
+    const currentG = getCurrentGroupId();
+    const db = getGroupsDB();
+    const obj = db[currentG] || collectCurrentFormData();
+    const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `Fooyin_EIA_${obj.group || 'Group'}_${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
+
+  // 匯出 Word 報告 (.doc，支援微軟 Word 開啟與排版，嚴格依 800 字限制輸出)
+  window.exportWord = () => {
+    const currentG = getCurrentGroupId();
+    const db = getGroupsDB();
+    const o = db[currentG] || collectCurrentFormData();
+    const total = (o.rubric || []).reduce((s, r) => s + (Number(r.score) || 0), 0);
+
+    const docContent = `
+      <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+      <head>
+        <meta charset='utf-8'>
+        <title>Fooyin EIA Report - ${o.group || 'Group'}</title>
+        <style>
+          body { font-family: '微軟正黑體', 'Segoe UI', Arial, sans-serif; font-size: 11pt; line-height: 1.5; color: #1e293b; }
+          h1 { font-size: 20pt; color: #0f254a; text-align: center; margin-bottom: 4px; }
+          .subtitle { text-align: center; color: #64748b; font-size: 11pt; margin-bottom: 24px; }
+          h2 { font-size: 14pt; color: #0f254a; border-bottom: 2px solid #0f254a; padding-bottom: 4px; margin-top: 20px; }
+          h3 { font-size: 12pt; color: #1e3a6a; margin-top: 14px; }
+          table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+          th, td { border: 1px solid #94a3b8; padding: 6px 10px; font-size: 10pt; text-align: left; }
+          th { background-color: #f1f5f9; color: #0f254a; }
+          .highlight-box { background-color: #fffbeb; border: 1px solid #fcd34d; padding: 10px; margin: 10px 0; }
+          .meta-table td { border: none; padding: 4px; font-size: 10.5pt; }
+          .word-limit-note { font-size: 9pt; color: #64748b; font-style: italic; }
+        </style>
+      </head>
+      <body>
+        <h1>Fooyin EIA Learning Lab｜環境影響評估實務成果報告</h1>
+        <div class="subtitle">輔英科技大學 環境工程與科學系 120 分鐘實作教學成果</div>
+
+        <table class="meta-table">
+          <tr><td><b>小組代碼：</b>${o.group || '未填寫'}</td><td><b>概念檢核得分：</b>${o.quiz || 0} / 100 分</td></tr>
+          <tr><td><b>匯出時間：</b>${new Date().toLocaleString('zh-TW')}</td><td><b>評估案件：</b>${(o.case || '未填寫').replaceAll('<', '&lt;')}</td></tr>
+        </table>
+
+        <h2>一、官方公開資料出處清冊</h2>
+        <p style="white-space: pre-wrap;">${(o.sources || '未登記來源').replaceAll('<', '&lt;')}</p>
+
+        <h2>二、NotebookLM 5 組結構化資料擷取（各項以 800 字為限）</h2>
+        
+        <h3>A. 開發概要與具體工程活動 <span class="word-limit-note">（字數：${(o.summary || '').length} / 800 字）</span></h3>
+        <p style="white-space: pre-wrap;">${(o.summary || '未填寫').slice(0, 800).replaceAll('<', '&lt;')}</p>
+
+        <h3>B. 審查／公開會議意見追蹤與回應 <span class="word-limit-note">（字數：${(o.minutes || '').length} / 800 字）</span></h3>
+        <p style="white-space: pre-wrap;">${(o.minutes || '未填寫').slice(0, 800).replaceAll('<', '&lt;')}</p>
+
+        <h3>C. 書件敏感區位與保護對象線索 <span class="word-limit-note">（字數：${(o.geoClues || '').length} / 800 字，供官方 GIS 比對）</span></h3>
+        <p style="white-space: pre-wrap;">${(o.geoClues || '未填寫').slice(0, 800).replaceAll('<', '&lt;')}</p>
+
+        <h3>D. 工程活動對環境因子之衝擊途徑分析 <span class="word-limit-note">（字數：${(o.impactPaths || '').length} / 800 字，供範疇矩陣比對）</span></h3>
+        <p style="white-space: pre-wrap;">${(o.impactPaths || '未填寫').slice(0, 800).replaceAll('<', '&lt;')}</p>
+
+        <div class="highlight-box">
+          <h3 style="margin-top:0; color:#b45309;">⚠️ E. 人機批判與防範幻覺：AI 曾提出哪些尚未證實的結論？（標註資料盲點，防範模型幻覺） <span class="word-limit-note">（字數：${(o.gaps || '').length} / 800 字）</span></h3>
+          <p style="white-space: pre-wrap; margin-bottom:0;">${(o.gaps || '未填寫').slice(0, 800).replaceAll('<', '&lt;')}</p>
+        </div>
+
+        <h2>三、環境敏感區位官方 GIS 圖資查核</h2>
+        <table>
+          <thead><tr><th>查核項目</th><th>查核結果</th><th>官方圖資佐證依據與查詢日期</th></tr></thead>
+          <tbody>
+            ${(o.geo || []).map(g => `
+              <tr>
+                <td><b>${g.name}</b></td>
+                <td>${g.status}</td>
+                <td>${(g.evidence || '無').replaceAll('<', '&lt;')}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <h2>四、環境影響範疇界定矩陣 (Scoping Matrix)</h2>
+        <p>工程活動：${(o.activities || $('activities').value).replaceAll('<', '&lt;')}</p>
+        <table>
+          <thead>
+            <tr>
+              <th>環境因子＼工程行為</th>
+              ${(o.activities || $('activities').value).split('、').map(a => `<th>${a.replaceAll('<', '&lt;')}</th>`).join('')}
+            </tr>
+          </thead>
+          <tbody>
+            ${(o.matrix || []).map(row => `
+              <tr>
+                <th>${row.name}</th>
+                ${(row.ratings || []).map(r => `<td>${r === '●' ? '● 優先' : (r === '△' ? '△ 待查' : '— 無')}</td>`).join('')}
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <h2>五、三項優先環境議題與調查方案</h2>
+        <p style="white-space: pre-wrap;">${(o.priorities || '未填寫').replaceAll('<', '&lt;')}</p>
+
+        <h2>六、教師多元規準評核 (Rubric Evaluation)</h2>
+        <table>
+          <thead><tr><th>評量向度</th><th>滿分</th><th>得分</th></tr></thead>
+          <tbody>
+            ${(o.rubric || []).map(r => `
+              <tr><td>${r.name}</td><td>${r.max} 分</td><td><b>${r.score} 分</b></td></tr>
+            `).join('')}
+            <tr><th colspan="2">多元規準合計總分</th><th>${total} / 100 分</th></tr>
+          </tbody>
+        </table>
+        <p><b>教師講評：</b></p>
+        <p style="white-space: pre-wrap; background:#f8fafc; padding:8px; border:1px solid #cbd5e1;">${(o.feedback || '尚無講評').replaceAll('<', '&lt;')}</p>
+      </body>
+      </html>
+    `;
+
+    const blob = new Blob(['\ufeff' + docContent], { type: 'application/msword' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `Fooyin_EIA_${o.group || 'Group'}_Report_${new Date().toISOString().slice(0, 10)}.doc`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
+
+  // 匯入外部學生 JSON
+  window.handleImportJson = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const importedData = JSON.parse(e.target.result);
+        const gName = (importedData.group || 'IMPORTED_' + Date.now().toString().slice(-4)).toUpperCase();
+        importedData.group = gName;
+        const db = getGroupsDB();
+        db[gName] = importedData;
+        saveGroupsDB(db);
+        setCurrentGroupId(gName);
+        populateFormData(importedData);
+        updateGroupDropdowns();
+        refreshAdminDashboard();
+        alert(`🎉 成功匯入【小組 ${gName}】的學習歷程資料！\n已即時切換至該組並展開圖示化審閱看板。`);
+      } catch(err) {
+        alert('匯入失敗：請確認所選檔案為標準的 EIA 小組 JSON 格式。');
+      }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+  };
+
+  // -------------------------------------------------------------
+  // 初始化系統
+  // -------------------------------------------------------------
+  const db = getGroupsDB();
+  const currentG = getCurrentGroupId();
+  if (db[currentG]) {
+    populateFormData(db[currentG]);
+  } else {
+    autoSave();
+  }
+  updateGroupDropdowns();
+  updateCharCounters();
+
+  // 監聽各欄位自動儲存與即時字數統計
+  document.querySelectorAll('input, textarea, select').forEach(el => {
+    el.addEventListener('change', autoSave);
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.addEventListener('blur', autoSave);
+      el.addEventListener('input', () => {
+        if (countFields.includes(el.id)) updateCharCounters();
+      });
+    }
+  });
+}
+</script>
+</body>
+</html>

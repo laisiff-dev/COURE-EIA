@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
@@ -35,19 +35,44 @@
         <button class="survey-trigger-btn" id="surveyTriggerBtn" onclick="if(window.openCardModal) window.openCardModal('kab_survey', 'kab-survey')">
           <i class="fa-solid fa-clipboard-check"></i> KAB 期初/期末學習問卷
         </button>
+        <button class="eia-lab-pill-btn" id="eiaLabPillBtn" onclick="window.switchMainSystemView('lab')" title="切換至 Fooyin EIA 實作教學系統">
+          <i class="fa-solid fa-flask-vial"></i> <span>Fooyin EIA 實作系統</span>
+          <span class="pill-badge-pulse">120min 微型專題</span>
+        </button>
       </div>
     </div>
   </header>
+ 
+  <!-- Top System Navigation Portal Bar: Switch between 18-Week Course and EIA Learning Lab -->
+  <nav class="system-nav-portal" id="systemNavPortal">
+    <div class="system-nav-container">
+      <div class="system-nav-tabs">
+        <button class="sys-tab-btn active" id="tabNavCourse" onclick="window.switchMainSystemView('course')">
+          <i class="fa-solid fa-book-open"></i> 📚 18 週雙欄課程大綱與教材庫
+        </button>
+        <button class="sys-tab-btn" id="tabNavLab" onclick="window.switchMainSystemView('lab')">
+          <i class="fa-solid fa-flask-vial"></i> 🔬 Fooyin EIA 實作教學系統 (Learning Lab)
+          <span class="sys-tab-tag">微型實作</span>
+        </button>
+      </div>
+      <div class="system-nav-quick-links">
+        <span class="sys-nav-hint"><i class="fa-solid fa-circle-check" style="color:#10b981;"></i> 系統已掛載連線</span>
+        <a href="eia-lab/index.html" target="_blank" class="sys-direct-link" title="在新分頁中獨立開啟 EIA 實作系統">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> 獨立新分頁開啟 Lab
+        </a>
+      </div>
+    </div>
+  </nav>
 
   <!-- Main Content Layout Area -->
-  <main class="main-container">
+  <main class="main-container" id="courseMainContainer">
 
     <!-- Notice Box Card (Yellow Accent Strip - Matching 1789274543302.jpg) -->
     <div class="notice-card">
       <div class="notice-accent"></div>
       <div class="notice-content">
         <i class="fa-solid fa-circle-info notice-icon"></i>
-        <span><strong>這裡是本課的教材網站</strong>——每週教材會陸續上架，收藏這一頁就夠。公告與作業繳交仍在 <a href="https://ea7.fy.edu.tw/fy/portalidx.jsp?token=62EFBAB4F5DE03E09DB5429B28EDE059&fnc=BK232" target="_blank" class="eclass-link">eclass 課程頁 <i class="fa-solid fa-arrow-up-right-from-square"></i></a>。</span>
+        <span><strong>這裡是本課的教材網站</strong>——每週教材會陸續上架，公告與作業繳交在 <a href="https://ea7.fy.edu.tw/fy/portalidx.jsp?token=62EFBAB4F5DE03E09DB5429B28EDE059&fnc=BK232" target="_blank" class="eclass-link">eclass 課程頁 <i class="fa-solid fa-arrow-up-right-from-square"></i></a>；上機微型專題請點擊進入 <a href="javascript:void(0)" onclick="window.switchMainSystemView('lab')" class="eclass-link" style="color:#0284c7; font-weight:700;"><i class="fa-solid fa-flask-vial"></i> Fooyin EIA 實作教學系統 (Learning Lab)</a>。</span>
       </div>
     </div>
 
@@ -106,6 +131,34 @@
             <li><a href="https://doi.org/10.1016/j.eiar.2011.08.006" target="_blank" rel="noopener noreferrer" style="color:#fde047; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Morgan, R. K. (2012) EIA Rev. (Elsevier DOI)</a></li>
             <li><a href="https://doi.org/10.1016/S0195-9255(02)00094-8" target="_blank" rel="noopener noreferrer" style="color:#fde047; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Woodfield et al. (2003) EIA Rev. (Elsevier DOI)</a></li>
           </ul>
+        </div>
+
+        <!-- Column 4: Fooyin EIA Learning Lab Interactive System -->
+        <div style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(245,158,11,0.5); padding:14px; border-radius:10px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 4px 16px rgba(0,0,0,0.2);">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h4 style="margin:0; color:#ffd874; font-size:0.95rem; display:flex; align-items:center; gap:6px;">
+                <i class="fa-solid fa-flask-vial" style="color:#f59e0b;"></i> 4. Fooyin EIA 實作系統 (Lab)
+              </h4>
+              <span style="background:#f59e0b; color:#78350f; font-size:0.72rem; font-weight:800; padding:2px 6px; border-radius:8px;">120min 微型專題</span>
+            </div>
+            <ul style="margin:0; padding-left:0; list-style:none; font-size:0.83rem; line-height:1.75; color:#cbd5e1;">
+              <li><i class="fa-solid fa-check" style="color:#10b981;"></i> 模組 ①：出處登錄與多組存檔 (G01~G10)</li>
+              <li><i class="fa-solid fa-check" style="color:#10b981;"></i> 模組 ②：NotebookLM 5組 Prompt 檢索</li>
+              <li><i class="fa-solid fa-check" style="color:#10b981;"></i> 模組 ③：5 題概念檢核 (形成性診斷)</li>
+              <li><i class="fa-solid fa-check" style="color:#10b981;"></i> 模組 ④：官方 GIS 敏感區圖資核實</li>
+              <li><i class="fa-solid fa-check" style="color:#10b981;"></i> 模組 ⑤：6×4 範疇界定矩陣與優先議題</li>
+              <li><i class="fa-solid fa-check" style="color:#10b981;"></i> 模組 ⑥：圖示歷程、Rubrics 與 Word/PDF</li>
+            </ul>
+          </div>
+          <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+            <button onclick="window.switchMainSystemView('lab')" style="flex:1; background:linear-gradient(135deg, #f59e0b, #d97706); color:#fff; border:none; padding:7px 12px; border-radius:6px; font-weight:800; font-size:0.82rem; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 2px 6px rgba(245,158,11,0.3);">
+              <i class="fa-solid fa-play"></i> 切換內嵌實作
+            </button>
+            <a href="eia-lab/index.html" target="_blank" style="background:rgba(255,255,255,0.12); color:#7dd3fc; border:1px solid rgba(125,211,252,0.4); padding:7px 10px; border-radius:6px; font-weight:700; font-size:0.82rem; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> 新分頁
+            </a>
+          </div>
         </div>
       </div>
 
@@ -194,7 +247,6 @@
         </div>
       </div>
 
-
     <!-- Two-Column Layout Section (二個 COLUMN 呈現) -->
     <div class="two-column-layout" id="twoColumnLayout">
       
@@ -235,6 +287,42 @@
 
   </main>
 
+  <!-- Embedded Fooyin EIA Learning Lab System View (掛載 eia-lab 系統) -->
+  <section class="eia-lab-embed-wrapper" id="eiaLabSystemContainer" style="display: none;">
+    <div class="lab-frame-header">
+      <div class="lab-frame-info">
+        <div class="lab-frame-tags">
+          <span class="lab-tag-primary"><i class="fa-solid fa-microchip"></i> 輔英科大 EIA 互動實作系統</span>
+          <span class="lab-tag-secondary"><i class="fa-solid fa-stopwatch"></i> 120 分鐘微型專題</span>
+          <span class="lab-tag-accent"><i class="fa-solid fa-database"></i> 多組別即時自動存檔</span>
+        </div>
+        <h2 class="lab-frame-title">
+          <i class="fa-solid fa-flask-vial" style="color: #ffd874;"></i> Fooyin EIA Learning Lab｜環境影響評估實作教學系統
+        </h2>
+        <p class="lab-frame-desc">
+          NotebookLM 智能檢索 × 官方圖資求真 × 範疇界定矩陣 × 歷程圖示化與多元評量
+        </p>
+      </div>
+      <div class="lab-frame-actions">
+        <button class="lab-action-btn btn-back-course" onclick="window.switchMainSystemView('course')">
+          <i class="fa-solid fa-arrow-left"></i> <span>返回 18 週課綱</span>
+        </button>
+        <button class="lab-action-btn" onclick="window.reloadLabFrame()" title="重新整理 Lab 畫面">
+          <i class="fa-solid fa-rotate-right"></i> <span>重新載入</span>
+        </button>
+        <button class="lab-action-btn" onclick="window.toggleLabFullscreen()" id="btnLabFullscreen" title="全螢幕專注實作">
+          <i class="fa-solid fa-expand"></i> <span>全螢幕模式</span>
+        </button>
+        <a href="eia-lab/index.html" target="_blank" class="lab-action-btn btn-external" title="另開獨立視窗全頁操作">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> <span>獨立新視窗</span>
+        </a>
+      </div>
+    </div>
+    <div class="lab-frame-body" id="labFrameBody">
+      <iframe id="eiaLabFrame" src="eia-lab/index.html" class="eia-lab-iframe" title="Fooyin EIA Learning Lab 實作系統"></iframe>
+    </div>
+  </section>
+
   <!-- Footer (Matching 1789274543302.jpg) -->
   <footer class="app-footer">
     <div class="footer-container">
@@ -256,7 +344,7 @@
             </span>
           </div>
 
-          <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px;">
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:16px;">
             <!-- Column 1: Taiwan MOJ / MOENV National Laws -->
             <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(56,189,248,0.25); padding:14px; border-radius:10px;">
               <h4 style="margin:0 0 10px 0; color:#38bdf8; font-size:0.95rem; display:flex; align-items:center; gap:6px;">
@@ -264,23 +352,7 @@
               </h4>
               <ul style="margin:0; padding-left:0; list-style:none; font-size:0.84rem; line-height:1.8;">
                 <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090001" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 《環境影響評估法》(法務部全國法規庫 Pcode:O0090001)</a></li>
-                <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090002" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 《環境影響評估施行細則》(Pcode:O0090002)</a></li>
-                <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090005" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 《開發行為應實施環評認定標準》(Pcode:O0090005)</a></li>
-                <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090013" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 《環境現況差異分析作業要點》(Pcode:O0090013)</a></li>
-                <li><a href="https://www.moenv.gov.tw/" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 中華民國環境部全球資訊網 (MOENV Portal)</a></li>
-                <li><a href="https://eia.moenv.gov.tw/" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 環境部環評評估書件查詢系統</a></li>
-              </ul>
-            </div>
-
-            <!-- Column 2: US EPA -->
-            <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(52,211,153,0.25); padding:14px; border-radius:10px;">
-              <h4 style="margin:0 0 10px 0; color:#34d399; font-size:0.95rem; display:flex; align-items:center; gap:6px;">
-                <i class="fa-solid fa-flag-usa"></i> 2. 美國環境保護局 (US EPA SCRAM)
-              </h4>
-              <ul style="margin:0; padding-left:0; list-style:none; font-size:0.84rem; line-height:1.8;">
-                <li><a href="https://www.epa.gov/scram/clean-air-act-permit-modeling-guidance" target="_blank" rel="noopener noreferrer" style="color:#6ee7b7; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> 40 CFR Part 51 Appendix W Guidelines</a></li>
-                <li><a href="https://www.epa.gov/scram/air-quality-dispersion-modeling-screening-models" target="_blank" rel="noopener noreferrer" style="color:#6ee7b7; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> US EPA Screening Procedures (EPA-454/R-92-019)</a></li>
-                <li><a href="https://www.epa.gov/air-emissions-factors-and-quantification/ap-42-compilation-air-emissions-factors" target="_blank" rel="noopener noreferrer" style="color:#6ee7b7; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> US EPA AP-42 Compilation of Emission Factors</a></li>
+                <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=O0090002" target="_blank" rel="noopener noreferrer" styl                <li><a href="https://www.epa.gov/air-emissions-factors-and-quantification/ap-42-compilation-air-emissions-factors" target="_blank" rel="noopener noreferrer" style="color:#6ee7b7; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> US EPA AP-42 Compilation of Emission Factors</a></li>
                 <li><a href="https://www.epa.gov/scram/air-quality-dispersion-modeling-preferred-and-recommended-models#aermod" target="_blank" rel="noopener noreferrer" style="color:#6ee7b7; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> US EPA AERMOD User Guide (EPA-454/B-21-001)</a></li>
               </ul>
             </div>
@@ -298,14 +370,42 @@
                 <li><a href="https://doi.org/10.1016/S0195-9255(02)00094-8" target="_blank" rel="noopener noreferrer" style="color:#fde047; text-decoration:underline;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Woodfield et al. (2003) EIA Rev. (Elsevier DOI)</a></li>
               </ul>
             </div>
+
+            <!-- Column 4: Fooyin EIA Learning Lab Interactive System -->
+            <div style="background:rgba(255,255,255,0.06); border:1.5px solid rgba(245,158,11,0.5); padding:14px; border-radius:10px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 4px 16px rgba(0,0,0,0.2);">
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <h4 style="margin:0; color:#ffd874; font-size:0.95rem; display:flex; align-items:center; gap:6px;">
+                    <i class="fa-solid fa-flask-vial" style="color:#f59e0b;"></i> 4. Fooyin EIA 實作系統 (Lab)
+                  </h4>
+                  <span style="background:#f59e0b; color:#78350f; font-size:0.72rem; font-weight:800; padding:2px 6px; border-radius:8px;">120min 微型專題</span>
+                </div>
+                <ul style="margin:0; padding-left:0; list-style:none; font-size:0.83rem; line-height:1.75; color:#cbd5e1;">
+                  <li><i class="fa-solid fa-check" style="color:#10b981;"></i> 模組 ①：出處登錄與多組存檔 (G01~G10)</li>
+                  <li><i class="fa-solid fa-check" style="color:#10b981;"></i> 模組 ②：NotebookLM 5組 Prompt 檢索</li>
+                  <li><i class="fa-solid fa-check" style="color:#10b981;"></i> 模組 ③：5 題概念檢核 (形成性診斷)</li>
+                  <li><i class="fa-solid fa-check" style="color:#10b981;"></i> 模組 ④：官方 GIS 敏感區圖資核實</li>
+                  <li><i class="fa-solid fa-check" style="color:#10b981;"></i> 模組 ⑤：6×4 範疇界定矩陣與優先議題</li>
+                  <li><i class="fa-solid fa-check" style="color:#10b981;"></i> 模組 ⑥：圖示歷程、Rubrics 與 Word/PDF</li>
+                </ul>
+              </div>
+              <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+                <button onclick="window.switchMainSystemView('lab')" style="flex:1; background:linear-gradient(135deg, #f59e0b, #d97706); color:#fff; border:none; padding:7px 12px; border-radius:6px; font-weight:800; font-size:0.82rem; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 2px 6px rgba(245,158,11,0.3);">
+                  <i class="fa-solid fa-play"></i> 切換內嵌實作
+                </button>
+                <a href="eia-lab/index.html" target="_blank" style="background:rgba(255,255,255,0.12); color:#7dd3fc; border:1px solid rgba(125,211,252,0.4); padding:7px 10px; border-radius:6px; font-weight:700; font-size:0.82rem; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i> 新分頁
+                </a>
+              </div>
+            </div>
           </div>
 
           <div style="margin-top:14px; background:rgba(2,132,199,0.15); border-left:4px solid #38bdf8; padding:10px 14px; border-radius:0 6px 6px 0; font-size:0.83rem; color:#e0f2fe;">
             <i class="fa-solid fa-shield-halved"></i> <strong>聲明</strong>：國內法規連結全面更新為法務部全國法規資料庫 (law.moj.gov.tw)，確保 100% 穩定開啓；講義中每一數學公式旁均設有直連出處超連結。
           </div>
         </div>
+  </footer>
 
-</footer>
 
   <!-- Modal Backdrop Container -->
   <div class="modal-backdrop" id="modalBackdrop">

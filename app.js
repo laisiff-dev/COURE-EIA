@@ -2194,12 +2194,126 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     } else if (modalType.startsWith('ai_module_')) {
       const num = modalType.replace('ai_module_', '');
+      const aiModuleDetails = {
+        '1': {
+          title: 'W04 【AI 模組 1】NotebookLM 秒級解碼非結構化環評書件',
+          tag: '非結構化書件檢索 × 來源頁碼溯源',
+          desc: '運用 Google NotebookLM 建立專案知識庫，將動輒數百頁之環評說明書、各界審查意見進行結構化提問，並標記精確原文頁碼標籤，克服長篇書件閱讀障礙。',
+          labStep: '步驟 ②：結構化 Prompt 演練',
+          actionText: '開啟 NotebookLM 實作沙盒'
+        },
+        '2': {
+          title: 'W06 【AI 模組 2】AERMOD 與 RPI 實機除錯對抗遊戲',
+          tag: 'AI 幻覺抓錯 × 專業公式檢驗',
+          desc: '針對生成式 AI 可能捏造過期法規、錯置大氣逆溫層參數或算錯水質 RPI 點數之漏洞進行挑錯對抗，建立「以環工專業破解 AI 幻覺」之求真批判能力。',
+          labStep: '步驟 ③：概念檢核與除錯防弊',
+          actionText: '進入除錯對抗檢定'
+        },
+        '3': {
+          title: 'W08 【AI 模組 3】Leopold 範疇界定衝擊矩陣生成器',
+          tag: 'Leopold 矩陣 × 因果交叉識別',
+          desc: '以 6 大環境因子（物理、空氣、水質、生態、景觀、社會）× 4 項工程活動（土方、整地、施工、營運）進行 24 格衝擊交叉識別，迅速聚焦顯著優先議題。',
+          labStep: '步驟 ⑤：6×4 範疇界定矩陣',
+          actionText: '開啟範疇矩陣分析面板'
+        },
+        '4': {
+          title: 'W12 【AI 模組 4】環境管理計畫 (EMP) 與減輕對策 AI 生成',
+          tag: 'EMP 撰寫 × 承諾標準對照',
+          desc: '針對各環境受體潛在衝擊，運用結構化提示詞生成符合環評施行細則之減輕對策清單，並比對法定最低標準與自主承諾方案之具體可行性。',
+          labStep: '步驟 ⑤：減輕對策提煉',
+          actionText: '生成 EMP 減輕對策'
+        },
+        '5': {
+          title: 'W13 【AI 模組 5】三維決策模型實作面板 (3D Matrix)',
+          tag: '生態基流 (X) × 民意 (Y) × 退場機制 (Z)',
+          desc: '整合 1.08cms 生態基流量、在地反對民意與環現差退場機制，在 3D 決策模型中平衡工程開發與環境永續之最佳折衷方案。',
+          labStep: '步驟 ⑤ & ⑥：決策模型整合',
+          actionText: '操作 3D 決策模型'
+        },
+        '6': {
+          title: 'W14 【AI 模組 6】AI 模擬跨立場審查攻防競技場',
+          tag: '多角色質詢 × 答辯對照表編撰',
+          desc: '由 AI 扮演生態學者、地質專家、空污委員與居民自救會長進行高壓質詢，實戰模擬現場答辯並即時修訂「委員意見答辯對照表」。',
+          labStep: '步驟 ⑥：跨立場模擬審查',
+          actionText: '進入模擬審查攻防'
+        },
+        '7': {
+          title: 'W17 【AI 模組 7】碳足跡盤查與 ISO 14064 整合評估',
+          tag: '溫室氣體盤查 × 淨零排放抵換',
+          desc: '結合環評施工營運階段範疇一、範疇二溫室氣體排放係數，利用 AI 自動計算排碳當量並規劃相應之林相撫育與碳抵換路徑。',
+          labStep: '步驟 ⑤：碳排因子計算',
+          actionText: '開啟碳足跡分析模組'
+        },
+        '8': {
+          title: 'W18 【AI 模組 8】期末專案成果評估與 Rubric 多元診斷',
+          tag: '小組成果發表 × Rubric 100% 規準評分',
+          desc: '整合全學期調查書件、圖資查核、衝擊矩陣與 EMP 提案，產出標準 EIA 前置評估 Word/JSON 報告，並透過圖示化儀表板進行 Rubric 評分。',
+          labStep: '步驟 ⑥：歷程儀表板與成果報告',
+          actionText: '產出綜合評量報告'
+        }
+      };
+
+      const mod = aiModuleDetails[num] || {
+        title: `【AI 模組 ${num}】生成式 AI 輔助環評專案沙盒`,
+        tag: '輔英科技大學 EIA 創新教學',
+        desc: '本單元引導同學運用 ChatGPT / NotebookLM 進行大檔數據萃取、GIS 圖資核實與減輕對策草案生成。請同學於 eclass 上傳 AI Prompt 歷程日誌。',
+        labStep: 'EIA 實作系統微型專題',
+        actionText: '開啟實作系統'
+      };
+
       contentHtml = `
-        <h2 class="modal-title"><i class="fa-solid fa-robot" style="color:#0284c7;"></i> 【AI 模組 ${num}】生成式 AI 輔助環評專案沙盒</h2>
-        <p class="modal-subtitle">輔英科技大學 EIA 課程 AI 創新教學實驗單元</p>
-        <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 18px; border-radius: 8px; margin-bottom: 16px;">
-          <p style="font-weight:700; color:#0b3c5d;">🤖 模組功能與演練指示：</p>
-          <p style="font-size:0.9rem; color:#475569; line-height:1.6;">本單元引導同學運用 ChatGPT / NotebookLM 進行大檔數據萃取、AERMOD/AQUATOX 模擬輔助與減輕對策草案生成。請同學於 eclass 上傳 AI Prompt 歷程日誌。</p>
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+          <div>
+            <span style="background:rgba(2,132,199,0.12); color:#0284c7; padding:3px 10px; border-radius:12px; font-size:0.75rem; font-weight:800; border:1px solid rgba(2,132,199,0.3);">
+              ⚡ ${mod.tag}
+            </span>
+            <h2 class="modal-title" style="margin:8px 0 4px; font-size:1.35rem; color:#0b3c5d;">
+              <i class="fa-solid fa-robot" style="color:#0284c7;"></i> ${mod.title}
+            </h2>
+            <p class="modal-subtitle">輔英科技大學 環境工程與科學系 賴文亮教授｜EIA 雙欄課程實務演練</p>
+          </div>
+          <span style="background:#fef3c7; color:#92400e; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:12px; border:1px solid #fde047;">
+            ${mod.labStep}
+          </span>
+        </div>
+
+        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; padding: 18px; border-radius: 10px; margin-bottom: 18px;">
+          <p style="font-weight:800; color:#0b3c5d; margin-top:0; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-circle-info" style="color:#0284c7;"></i> 模組功能與演練指示：
+          </p>
+          <p style="font-size:0.92rem; color:#334155; line-height:1.7; margin:0;">
+            ${mod.desc}
+          </p>
+        </div>
+
+        <!-- Direct Mount Connection to Fooyin EIA Learning Lab -->
+        <div style="background: linear-gradient(135deg, #0b2244 0%, #153460 100%); color: #ffffff; border-radius: 12px; padding: 20px; border: 1px solid #38bdf8; box-shadow: 0 4px 20px rgba(11, 34, 68, 0.25);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px;">
+            <div>
+              <div style="font-size:0.78rem; color:#7dd3fc; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">
+                <i class="fa-solid fa-flask-vial"></i> 已掛載實作系統 (Embedded Lab System)
+              </div>
+              <h3 style="margin:4px 0 0; color:#ffd874; font-size:1.15rem; font-weight:800;">
+                Fooyin EIA Learning Lab｜環境影響評估實作教學系統
+              </h3>
+            </div>
+            <span style="background:rgba(245,158,11,0.25); color:#fde68a; border:1px solid rgba(245,158,11,0.4); padding:3px 10px; border-radius:20px; font-size:0.75rem; font-weight:800;">
+              對應：${mod.labStep}
+            </span>
+          </div>
+
+          <p style="font-size:0.86rem; color:#cbd5e1; line-height:1.6; margin:0 0 16px;">
+            本課程已將完整的 120 分鐘上機實作系統無縫掛載於本教材網站。您可以直接在本站畫面中切換至內嵌實作視窗，亦可在獨立新分頁中全螢幕操作，各組數據均會即時於本機安全保存。
+          </p>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button onclick="if(window.closeCardModal) window.closeCardModal(); window.switchMainSystemView('lab');" style="flex:1; min-width:200px; background:linear-gradient(135deg, #f59e0b, #d97706); color:#fff; border:none; padding:10px 18px; border-radius:8px; font-weight:800; font-size:0.9rem; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 3px 10px rgba(245,158,11,0.4); transition:transform 0.15s;">
+              <i class="fa-solid fa-play"></i> <span>立即切換至站內 EIA 實作系統</span>
+            </button>
+            <a href="eia-lab/index.html" target="_blank" style="background:rgba(255,255,255,0.12); color:#ffffff; border:1px solid rgba(255,255,255,0.25); padding:10px 16px; border-radius:8px; font-weight:700; font-size:0.88rem; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:6px; transition:background 0.2s;">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> 獨立新分頁開啟
+            </a>
+          </div>
         </div>
       `;
     } else {
@@ -2234,6 +2348,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // EXPOSE GLOBALLY ON WINDOW
   window.openCardModal = openCardModal;
+  window.closeCardModal = function() {
+    if (modalBackdrop) {
+      modalBackdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  };
 
   // Modal Close Listeners
   if (modalCloseBtn && modalBackdrop) {
@@ -2348,6 +2468,163 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial Render
   renderTwoColumns();
 });
+
+// ==========================================================================
+// Fooyin EIA Learning Lab System Integration (eia-lab 掛載控制器)
+// ==========================================================================
+
+window.currentSystemView = 'course'; // 'course' | 'lab'
+
+/**
+ * 切換主要系統檢視模式：
+ * @param {'course' | 'lab'} viewMode 
+ * @param {boolean} [scrollIntoView=true] 
+ */
+window.switchMainSystemView = function(viewMode, scrollIntoView = true) {
+  const courseContainer = document.getElementById('courseMainContainer');
+  const labContainer = document.getElementById('eiaLabSystemContainer');
+  const tabCourse = document.getElementById('tabNavCourse');
+  const tabLab = document.getElementById('tabNavLab');
+  const labFrame = document.getElementById('eiaLabFrame');
+
+  if (!courseContainer || !labContainer) return;
+
+  if (viewMode === 'lab') {
+    window.currentSystemView = 'lab';
+    courseContainer.style.display = 'none';
+    labContainer.style.display = 'block';
+
+    if (tabLab) tabLab.classList.add('active');
+    if (tabCourse) tabCourse.classList.remove('active');
+
+    // 確保 iframe 已載入
+    if (labFrame && !labFrame.getAttribute('src')) {
+      labFrame.src = 'eia-lab/index.html';
+    }
+
+    // 更新網址 Hash (方便直接分享或書籤)
+    if (window.location.hash !== '#lab') {
+      try {
+        history.replaceState(null, '', '#lab');
+      } catch (e) {
+        window.location.hash = 'lab';
+      }
+    }
+
+    if (scrollIntoView) {
+      const topBar = document.getElementById('systemNavPortal');
+      const offset = topBar ? topBar.offsetHeight : 0;
+      window.scrollTo({ top: offset, behavior: 'smooth' });
+    }
+  } else {
+    window.currentSystemView = 'course';
+    courseContainer.style.display = 'block';
+    labContainer.style.display = 'none';
+
+    if (tabCourse) tabCourse.classList.add('active');
+    if (tabLab) tabLab.classList.remove('active');
+
+    // 若先前在全螢幕模式，退出全螢幕
+    if (labContainer.classList.contains('is-fullscreen')) {
+      window.toggleLabFullscreen(false);
+    }
+
+    if (window.location.hash === '#lab') {
+      try {
+        history.replaceState(null, '', '#course');
+      } catch (e) {
+        window.location.hash = 'course';
+      }
+    }
+
+    if (scrollIntoView) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+};
+
+/**
+ * 重新載入 EIA Lab 內部 iframe
+ */
+window.reloadLabFrame = function() {
+  const labFrame = document.getElementById('eiaLabFrame');
+  if (labFrame) {
+    try {
+      labFrame.contentWindow.location.reload();
+    } catch (e) {
+      labFrame.src = 'eia-lab/index.html?t=' + Date.now();
+    }
+  }
+};
+
+/**
+ * 切換 EIA Lab 全螢幕沉浸式實作模式
+ * @param {boolean} [forceState]
+ */
+window.toggleLabFullscreen = function(forceState) {
+  const labContainer = document.getElementById('eiaLabSystemContainer');
+  const btn = document.getElementById('btnLabFullscreen');
+  if (!labContainer) return;
+
+  const willBeFullscreen = typeof forceState === 'boolean'
+    ? forceState
+    : !labContainer.classList.contains('is-fullscreen');
+
+  if (willBeFullscreen) {
+    labContainer.classList.add('is-fullscreen');
+    document.body.classList.add('lab-fullscreen-active');
+    if (btn) {
+      btn.innerHTML = '<i class="fa-solid fa-compress"></i> <span>結束全螢幕 (Esc)</span>';
+      btn.classList.add('active');
+    }
+  } else {
+    labContainer.classList.remove('is-fullscreen');
+    document.body.classList.remove('lab-fullscreen-active');
+    if (btn) {
+      btn.innerHTML = '<i class="fa-solid fa-expand"></i> <span>全螢幕模式</span>';
+      btn.classList.remove('active');
+    }
+  }
+};
+
+// 鍵盤 Esc 監聽，退出 Lab 全螢幕
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const labContainer = document.getElementById('eiaLabSystemContainer');
+    if (labContainer && labContainer.classList.contains('is-fullscreen')) {
+      window.toggleLabFullscreen(false);
+    }
+  }
+});
+
+// 初始化路由判斷 (根據網址 Hash 或 Query 參數自動開啟指定視圖)
+function initSystemMountRouting() {
+  const hash = window.location.hash.toLowerCase();
+  const urlParams = new URLSearchParams(window.location.search);
+  const viewParam = urlParams.get('view');
+
+  if (hash === '#lab' || hash === '#eia-lab' || viewParam === 'lab') {
+    window.switchMainSystemView('lab', false);
+  } else {
+    window.switchMainSystemView('course', false);
+  }
+}
+
+window.addEventListener('hashchange', function() {
+  const hash = window.location.hash.toLowerCase();
+  if (hash === '#lab' || hash === '#eia-lab') {
+    if (window.currentSystemView !== 'lab') window.switchMainSystemView('lab', true);
+  } else if (hash === '#course' || hash === '' || hash === '#two-col' || hash === '#syllabus') {
+    if (window.currentSystemView !== 'course') window.switchMainSystemView('course', true);
+  }
+});
+
+// 確保在 DOM Ready 後執行路由初始化
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initSystemMountRouting);
+} else {
+  initSystemMountRouting();
+}
 
 // Global Event Delegation for Course Cards
 let isCardDelegationAttached = false;
